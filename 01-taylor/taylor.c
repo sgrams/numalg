@@ -9,13 +9,13 @@
 /*
  * Computes factorial
  *
- * @arg    int64_t n
- * @retval int64_t result
+ * @arg    gint64 n
+ * @retval gint64 result
  *
  */
-int64_t factorial (int64_t n) {
-  int64_t i;
-  int64_t result = 1;
+gint64 factorial (gint64 n) {
+  gint64 i;
+  gint64 result = 1;
 
   if (n <= 1) {
     return 1;

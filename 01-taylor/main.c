@@ -4,15 +4,15 @@
  *  main.c
  *  Stanisław Grams
  */
-#include <stdint.h>
+#include <glib.h>
 /*
  * Entrypoint of the program
  *
- * @arg    int32_t  argc
- * @arg    int8_t **argv
- * @retval int32_t
+ * @arg    gint32   argc
+ * @arg    gchar  **argv
+ * @retval gint32
  *
  */
-int32_t main (int32_t argc, char **argv) {
+gint32 main (gint32 argc, gchar **argv) {
   return 0;
 }
