@@ -18,7 +18,7 @@
 char *
 taylor_print (__float128 numb) {
   char buf[MAX_BUF];
-  quadmath_snprintf (buf, MAX_BUF * sizeof (char), "%.10Qf", numb);
+  quadmath_snprintf (buf, MAX_BUF * sizeof (char), "%."STR_MAX_PREC"Qf", numb);
   return g_strdup_printf ("%s", buf);
 }
 
@@ -31,7 +31,7 @@ taylor_print (__float128 numb) {
  *
  */
 __float128
-taylor_func1 (__float128 x) {
+taylor_func0 (__float128 x) {
   return (__float128)expq ((__float128)sinq (x));
 }
 
@@ -41,31 +41,46 @@ taylor_func1 (__float128 x) {
  * ((-1)^n / (2n+1)! * x ^(2n+1))^n / (2n+1)!
  *
  * @arg    __float128 x
- * @arg    __float128 precision
+ * @retval __float128 result
+ *
+ */
+__float128
+taylor_func1 (__float128 x) {
+  return taylor_exp (taylor_sin (x)); 
+}
+
+/*
+ * Computes e ^ sin x by
+ * calculating Taylor series formula:
+ * ((-1)^n / (2n+1)! * x ^(2n+1))^n / (2n+1)!
+ * 
+ * but in a reversed way
+ *
+ * @arg    __float128 x
  * @retval __float128 result
  *
  */
 __float128
 taylor_func2 (__float128 x) {
-  return taylor_exp(taylor_sin (x)); 
+  return taylor_exp_rev (taylor_sin_rev (x)); 
 }
 
 /*
  * Computes factorial
  *
- * @arg    gint64 n
- * @retval gint64 result
+ * @arg    __float128 n
+ * @retval __float128 result
  *
  */
 __float128
-taylor_fac (gint64 n) {
-  gint64 i;
-  gint64 result = 1;
+taylor_fac (__float128 n) {
+  __float128 result = 1.0Q;
+  __float128 i;
 
-  if (n <= 1) {
-    return 1;
+  if (n <= 1.0Q) {
+    return 1.0Q;
   }
-  for (i = 1; i <= n; i++)
+  for (i = 1.0Q; i <= n; i++)
   {
     result *= i;
   }
@@ -83,8 +98,8 @@ taylor_fac (gint64 n) {
  */
 __float128
 taylor_pow (__float128 x, gint64 y) {
-  gsize i;
-  __float128 result = 1.0;
+  __float128 result = 1.0Q;
+       gsize i;
 
   for (i = 0; i < y; ++i)
   {
@@ -103,11 +118,34 @@ taylor_pow (__float128 x, gint64 y) {
  *
  */
 __float128
-taylor_sin (__float128 x, __float128 precision) {
-  __float128 result      = 0.0Q;
+taylor_sin (__float128 x) {
+  __float128 result = 0.0Q;
        gsize i;
 
   for (i = 0; i < Q_SIN_STEP; ++i)
+  {
+    result += taylor_pow (-1.0Q, i) / taylor_fac (2.0Q * (__float128)i + 1.0Q)
+      * taylor_pow (x, 2.0Q * (__float128)i + 1.0Q);
+  }
+  return result;
+}
+
+/*
+ * Computes sin x
+ * by calculating Taylor series formula:
+ * (-1)^n / (2n+1)! * x ^(2n+1)
+ * in a reversed way
+ *
+ * @arg    __float128 x
+ * @retval __float128 result
+ *
+ */
+__float128
+taylor_sin_rev (__float128 x) {
+  __float128 result = 0.0Q;
+       gsize i;
+
+  for (i = Q_SIN_STEP - 1; i+1 > 0; --i)
   {
     result += taylor_pow (-1.0Q, i) / taylor_fac (2.0Q * (__float128)i + 1.0Q)
       * taylor_pow (x, 2.0Q * (__float128)i + 1.0Q);
@@ -125,11 +163,34 @@ taylor_sin (__float128 x, __float128 precision) {
  *
  */
 __float128
-taylor_exp (__float128 x, __float128 precision) {
-  __float128 result      = 0.0Q;
+taylor_exp (__float128 x) {
+  __float128 result = 0.0Q;
        gsize i;
 
   for (i = 0; i < Q_EXP_STEP; ++i)
+  {
+    result += taylor_pow (x, i) / taylor_fac (i);
+  }
+
+  return result;
+}
+
+/*
+ * Computes e^x
+ * by calculating Taylor series formula:
+ * x^k / k!
+ * in a reversed way
+ *
+ * @arg    __float128 x
+ * @retval __float128 result
+ *
+ */
+__float128
+taylor_exp_rev (__float128 x) {
+  __float128 result = 0.0Q;
+       gsize i;
+
+  for (i = Q_EXP_STEP - 1; i+1 > 0; --i)
   {
     result += taylor_pow (x, i) / taylor_fac (i);
   }
