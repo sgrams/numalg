@@ -7,7 +7,7 @@
 
 CC=gcc
 CFLAGS=-Wall -Werror -std=gnu99 $(shell pkg-config --cflags glib-2.0)
-LDFLAGS=-lm $(shell pkg-config --libs glib-2.0)
+LDFLAGS=-lm $(shell pkg-config --libs glib-2.0) -lquadmath
 
 main:	main.o taylor.o
 main.o:	main.c
