@@ -17,8 +17,8 @@
  */
 char *
 taylor_print (__float128 numb) {
-  char buf[MAX_PREC];
-  quadmath_snprintf (buf, MAX_PREC * sizeof (char), "%.32Qf", numb);
+  char buf[MAX_BUF];
+  quadmath_snprintf (buf, MAX_BUF * sizeof (char), "%.10Qf", numb);
   return g_strdup_printf ("%s", buf);
 }
 
@@ -36,14 +36,29 @@ taylor_func1 (__float128 x) {
 }
 
 /*
+ * Computes e ^ sin x by
+ * calculating Taylor series formula:
+ * ((-1)^n / (2n+1)! * x ^(2n+1))^n / (2n+1)!
+ *
+ * @arg    __float128 x
+ * @arg    __float128 precision
+ * @retval __float128 result
+ *
+ */
+__float128
+taylor_func2 (__float128 x) {
+  return taylor_exp(taylor_sin (x)); 
+}
+
+/*
  * Computes factorial
  *
  * @arg    gint64 n
  * @retval gint64 result
  *
  */
-gint64
-taylor_factorial (gint64 n) {
+__float128
+taylor_fac (gint64 n) {
   gint64 i;
   gint64 result = 1;
 
@@ -54,26 +69,7 @@ taylor_factorial (gint64 n) {
   {
     result *= i;
   }
-  return result;
-}
-
-/*
- * Result of calculating e ^ (sin x)
- * with Taylor formula extended at 0.
- *
- * @arg    __float128 x
- * @arg    __float128 precision
- * @retval __float128 result
- *
- */
-__float128 maclaurin_func (__float128 x, __float128 precision) {
-  int i;
-  __float128 result = 0;
-
-  for (i = 0; i < 19; i++)
-  {
-  }
-  return result;
+  return (__float128) result;
 }
 
 /*
@@ -81,7 +77,7 @@ __float128 maclaurin_func (__float128 x, __float128 precision) {
  * with basic multiplication.
  *
  * @arg    __float128 x
- * @arg    gint64      y
+ * @arg    gint64     y
  * @retval __float128 result
  *
  */
@@ -94,5 +90,49 @@ taylor_pow (__float128 x, gint64 y) {
   {
     result *= x;
   }
+  return result;
+}
+
+/*
+ * Computes sin x
+ * by calculating Taylor series formula:
+ * (-1)^n / (2n+1)! * x ^(2n+1)
+ *
+ * @arg    __float128 x
+ * @retval __float128 result
+ *
+ */
+__float128
+taylor_sin (__float128 x, __float128 precision) {
+  __float128 result      = 0.0Q;
+       gsize i;
+
+  for (i = 0; i < Q_SIN_STEP; ++i)
+  {
+    result += taylor_pow (-1.0Q, i) / taylor_fac (2.0Q * (__float128)i + 1.0Q)
+      * taylor_pow (x, 2.0Q * (__float128)i + 1.0Q);
+  }
+  return result;
+}
+
+/*
+ * Computes e^x
+ * by calculating Taylor series formula:
+ * x^k / k!
+ *
+ * @arg    __float128 x
+ * @retval __float128 result
+ *
+ */
+__float128
+taylor_exp (__float128 x, __float128 precision) {
+  __float128 result      = 0.0Q;
+       gsize i;
+
+  for (i = 0; i < Q_EXP_STEP; ++i)
+  {
+    result += taylor_pow (x, i) / taylor_fac (i);
+  }
+
   return result;
 }

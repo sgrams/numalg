@@ -8,6 +8,7 @@
 #include <glib.h>
 #include <quadmath.h>
 #include "taylor.h"
+
 /*
  * Entrypoint of the program
  *
@@ -18,11 +19,16 @@
  */
 gint32 main (gint32 argc, gchar **argv) {
   gchar      *str;
-  __float128  numb = taylor_func1 (2.2Q);
+  __float128  numb;
 
+  numb = taylor_func1 (2.4825777279Q);
   str = taylor_print (numb);
   printf ("%s\n", str);
+  free (str);
 
+  numb = taylor_func2 (2.4825777279Q);
+  str = taylor_print (numb);
+  printf ("%s\n", str);
   free (str);
   return 0;
 }
