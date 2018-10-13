@@ -6,5 +6,6 @@
  */
 #ifndef TAYLOR_H_
 #define TAYLOR_H_
+#include <stdint.h>
 int64_t factorial (int64_t n);
 #endif // TAYLOR_H_
