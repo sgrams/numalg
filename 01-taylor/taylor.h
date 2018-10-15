@@ -18,8 +18,6 @@
 #define   Q_EXP_STEP Q_MAX_STEP
 #define   Q_SIN_STEP Q_EXP_STEP
 
-#define   Q_SUM_STEP 0.000001Q
-
 // Defining basic functions to operate on 128 bit
 // floating-point precision numbers
 char       *taylor_print (__float128 numb);

@@ -30,13 +30,14 @@
 #define  DEFAULT_OUTPUT_FILEPATH DEFAULT_M16_OUTPUT_FILEPATH
 
 #define  DEFAULT_MAX_STEPS 16
-#define  DEFAULT_INTERVAL_MIN -1.2Q
+#define  DEFAULT_INTERVAL_MIN -2.0Q
 #define  DEFAULT_MAX_ELEMENTS 2400000
+#define  DEFAULT_STEP_SIZE 0.00001Q
 
 gint32     max_steps    = DEFAULT_MAX_STEPS;
 gint32     max_elements = DEFAULT_MAX_ELEMENTS;
 __float128 interval_min = DEFAULT_INTERVAL_MIN;
-__float128 step_size    = Q_SUM_STEP;
+__float128 step_size    = DEFAULT_STEP_SIZE;
 
 /*
  * Calculate and write to buffer
@@ -300,14 +301,14 @@ gint32 main (gint32 argc, gchar **argv) {
   // Create thread for worker_func3
   ret = pthread_create (&threads[3], NULL, worker_func2, (void *)array[3]);
   if (ret) {
-    fprintf (stdout, "Unable to create thread for worker_func2: %i\n", ret);
+    fprintf (stdout, "Unable to create thread for worker_func3: %i\n", ret);
     exit (-1);
   }
 
 // Create thread for worker_func4
   ret = pthread_create (&threads[4], NULL, worker_func2, (void *)array[4]);
   if (ret) {
-    fprintf (stdout, "Unable to create thread for worker_func2: %i\n", ret);
+    fprintf (stdout, "Unable to create thread for worker_func4: %i\n", ret);
     exit (-1);
   }
 
@@ -343,7 +344,7 @@ gint32 main (gint32 argc, gchar **argv) {
       average_diff += (fabsq(array[0][i]-array[1][i])/(__float128)(i+1.0Q));
     }
     average_calculation_str = taylor_print (average_diff);
-    fprintf (stdout, "func1() avg. absolute diff to func0() with M=%i is %s.\n", max_steps, average_calculation_str);
+    fprintf (stdout, "func1() avg. absolute diff to func0() with M=%i is\n%s\n", max_steps, average_calculation_str);
     g_free (average_calculation_str);
     
     average_diff = 0.0Q;
@@ -352,7 +353,7 @@ gint32 main (gint32 argc, gchar **argv) {
       average_diff += (fabsq(array[0][i]-array[2][i])/(__float128)(i+1.0Q));
     }
     average_calculation_str = taylor_print (average_diff);
-    fprintf (stdout, "func2() avg. absolute diff to func0() with M=%i is %s.\n", max_steps, average_calculation_str);
+    fprintf (stdout, "func2() avg. absolute diff to func0() with M=%i is\n%s\n", max_steps, average_calculation_str);
     g_free (average_calculation_str);
 
     average_diff = 0.0Q;
@@ -361,7 +362,7 @@ gint32 main (gint32 argc, gchar **argv) {
       average_diff += (fabsq(array[0][i]-array[3][i])/(__float128)(i+1.0Q));
     }
     average_calculation_str = taylor_print (average_diff);
-    fprintf (stdout, "func3() avg. absolute diff to func0() with M=%i is %s.\n", max_steps, average_calculation_str);
+    fprintf (stdout, "func3() avg. absolute diff to func0() with M=%i is\n%s\n", max_steps, average_calculation_str);
     g_free (average_calculation_str);
     
     average_diff = 0.0Q;
@@ -370,9 +371,8 @@ gint32 main (gint32 argc, gchar **argv) {
       average_diff += (fabsq(array[0][i]-array[4][i])/(__float128)(i+1.0Q));
     }
     average_calculation_str = taylor_print (average_diff);
-    fprintf (stdout, "func4() avg. absolute diff to func0() with M=%i is %s.\n", max_steps, average_calculation_str);
+    fprintf (stdout, "func4() avg. absolute diff to func0() with M=%i is\n%s\n", max_steps, average_calculation_str);
     g_free (average_calculation_str);
-
   }
 
   // Free all of array elements

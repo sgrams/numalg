@@ -30,8 +30,6 @@ __float128 step_size, gint32 max_elements) {
   gchar       *str_4;
   gchar       *str_5;
   gchar       *str_6;
-  gchar       *str_7;
-  gchar       *str_8;
 
   for (i = 0; i < max_elements; numb += step_size, i++)
   {
@@ -39,14 +37,12 @@ __float128 step_size, gint32 max_elements) {
     str_2 = taylor_print (array[0][i]);                      // (2)  e^sinx (func0)
     str_3 = taylor_print (array[1][i]);                      // (3)  e^sinx (func1)
     str_4 = taylor_print (array[2][i]);                      // (4)  e^sinx (func2)
-    str_5 = taylor_print (fabsq(array[1][i]-array[2][i]));   // (5)  e^sinx (abs(func1 - func2))
-    str_6 = taylor_print (array[3][i]);                      // (6)  e^sinx (func3)
-    str_7 = taylor_print (array[4][i]);                      // (7)  e^sinx (func4)
-    str_8 = taylor_print (fabsq(array[3][i] - array[4][i])); // (8)  e^sinx (abs(func3 - func4))
+    str_5 = taylor_print (array[3][i]);                      // (6)  e^sinx (func3)
+    str_6 = taylor_print (array[4][i]);                      // (7)  e^sinx (func4)
 
-    fprintf (file, "%s,%s,%s,%s,%s,%s,%s,%s\n",
-      str_1, str_2, str_3, str_4,
-      str_5, str_6, str_7, str_8
+    fprintf (file, "%s,%s,%s,%s,%s,%s\n",
+      str_1, str_2, str_3,
+      str_4, str_5, str_6
       );
     if (i % 10000 == 0) {
       util_print_progressbar ((gint32) (((__float128)i / (__float128)max_elements)*100.0f));
@@ -57,8 +53,6 @@ __float128 step_size, gint32 max_elements) {
     g_free (str_4);
     g_free (str_5);
     g_free (str_6);
-    g_free (str_7);
-    g_free (str_8);
   }
   util_print_progressbar (100);
   printf ("\n");
