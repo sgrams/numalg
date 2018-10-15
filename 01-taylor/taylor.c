@@ -45,8 +45,8 @@ taylor_func0 (__float128 x) {
  *
  */
 __float128
-taylor_func1 (__float128 x) {
-  return taylor_exp (taylor_sin (x)); 
+taylor_func1 (__float128 x, gint32 max_steps) {
+  return taylor_exp (taylor_sin (x, max_steps), max_steps); 
 }
 
 /*
@@ -57,12 +57,13 @@ taylor_func1 (__float128 x) {
  * but in a reversed way
  *
  * @arg    __float128 x
+ * @arg        gint32 max_steps
  * @retval __float128 result
  *
  */
 __float128
-taylor_func2 (__float128 x) {
-  return taylor_exp_rev (taylor_sin_rev (x)); 
+taylor_func2 (__float128 x, gint32 max_steps) {
+  return taylor_exp_rev (taylor_sin_rev (x, max_steps), max_steps); 
 }
 
 /*
@@ -114,15 +115,16 @@ taylor_pow (__float128 x, gint64 y) {
  * (-1)^n / (2n+1)! * x ^(2n+1)
  *
  * @arg    __float128 x
+ * @arg        gint32 max_steps
  * @retval __float128 result
  *
  */
 __float128
-taylor_sin (__float128 x) {
+taylor_sin (__float128 x, gint32 max_steps) {
   __float128 result = 0.0Q;
        gsize i;
 
-  for (i = 0; i < Q_SIN_STEP; ++i)
+  for (i = 0; i < max_steps; ++i)
   {
     result += taylor_pow (-1.0Q, i) / taylor_fac (2.0Q * (__float128)i + 1.0Q)
       * taylor_pow (x, 2.0Q * (__float128)i + 1.0Q);
@@ -137,19 +139,29 @@ taylor_sin (__float128 x) {
  * in a reversed way
  *
  * @arg    __float128 x
+ * @arg        gint32 max_steps
  * @retval __float128 result
  *
  */
 __float128
-taylor_sin_rev (__float128 x) {
-  __float128 result = 0.0Q;
-       gsize i;
-
-  for (i = Q_SIN_STEP - 1; i+1 > 0; --i)
+taylor_sin_rev (__float128 x, gint32 max_steps) {
+  __float128 *array = g_malloc0 (max_steps * sizeof (__float128));
+  __float128  result = 0.0Q;
+        gsize i;
+  
+  for (i = 0; i < max_steps; ++i)
   {
-    result += taylor_pow (-1.0Q, i) / taylor_fac (2.0Q * (__float128)i + 1.0Q)
-      * taylor_pow (x, 2.0Q * (__float128)i + 1.0Q);
+    array[i] = (__float128)(taylor_pow (-1.0Q, i) / taylor_fac (2.0Q * (__float128)i + 1.0Q)
+      * taylor_pow (x, 2.0Q * (__float128)i + 1.0Q));
   }
+
+  for (i = max_steps - 1; i+1 > 0; --i)
+  {
+    result += array[i];
+  }
+
+  g_free (array);
+
   return result;
 }
 
@@ -159,15 +171,16 @@ taylor_sin_rev (__float128 x) {
  * x^k / k!
  *
  * @arg    __float128 x
+ * @arg        gint32 max_steps
  * @retval __float128 result
  *
  */
 __float128
-taylor_exp (__float128 x) {
+taylor_exp (__float128 x, gint32 max_steps) {
   __float128 result = 0.0Q;
        gsize i;
 
-  for (i = 0; i < Q_EXP_STEP; ++i)
+  for (i = 0; i < max_steps; ++i)
   {
     result += taylor_pow (x, i) / taylor_fac (i);
   }
@@ -182,18 +195,27 @@ taylor_exp (__float128 x) {
  * in a reversed way
  *
  * @arg    __float128 x
+ * @arg        gint32 max_steps
  * @retval __float128 result
  *
  */
 __float128
-taylor_exp_rev (__float128 x) {
-  __float128 result = 0.0Q;
-       gsize i;
-
-  for (i = Q_EXP_STEP - 1; i+1 > 0; --i)
+taylor_exp_rev (__float128 x, gint32 max_steps) {
+  __float128 *array = g_malloc0 (max_steps * sizeof (__float128));
+  __float128  result = 0.0Q;
+        gsize i;
+  
+  for (i = 0; i < max_steps; ++i)
   {
-    result += taylor_pow (x, i) / taylor_fac (i);
+    array[i] = (__float128)(taylor_pow (x, i) / taylor_fac (i));
   }
+
+  for (i = max_steps - 1; i+1 > 0; i--)
+  {
+    result += array[i];
+  }
+
+  g_free (array);
 
   return result;
 }

@@ -14,8 +14,9 @@
 
 #define STR_MAX_PREC "64"
 
-#define   Q_EXP_STEP 16
-#define   Q_SIN_STEP 16
+#define   Q_MAX_STEP 4
+#define   Q_EXP_STEP Q_MAX_STEP
+#define   Q_SIN_STEP Q_EXP_STEP
 #define   Q_SUM_STEP 0.000001Q
 
 #define INTERVAL_MIN -1.2Q
@@ -30,13 +31,13 @@ char       *taylor_print (__float128 numb);
 // mathematical operations.
 __float128  taylor_fac     (__float128 n);
 __float128  taylor_pow     (__float128 x, gint64 y);
-__float128  taylor_sin     (__float128 x);
-__float128  taylor_sin_rev (__float128 x);
-__float128  taylor_exp     (__float128 x);
-__float128  taylor_exp_rev (__float128 x);
+__float128  taylor_sin     (__float128 x, gint32 max_steps);
+__float128  taylor_sin_rev (__float128 x, gint32 max_steps);
+__float128  taylor_exp     (__float128 x, gint32 max_steps);
+__float128  taylor_exp_rev (__float128 x, gint32 max_steps);
 
 // Functions realising given task
 __float128  taylor_func0 (__float128 x);
-__float128  taylor_func1 (__float128 x);
-__float128  taylor_func2 (__float128 x);
+__float128  taylor_func1 (__float128 x, gint32 max_steps);
+__float128  taylor_func2 (__float128 x, gint32 max_steps);
 #endif // TAYLOR_H_

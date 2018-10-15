@@ -15,8 +15,8 @@ util.o: util.c
 taylor.o: taylor.c
 
 clean: 
-	rm -f main main.o taylor.o
+	rm -f main main.o taylor.o util.o
 run: main
 	./main
 rmobj:
-	rm -f main.o taylor.o
+	rm -f main.o taylor.o util.o
