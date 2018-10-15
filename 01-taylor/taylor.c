@@ -12,7 +12,7 @@
  * Ended with '\0'.
  *
  * @arg    __float128  numb
- * @retval   char     *out
+ * @retval char        *out
  *
  */
 char *
@@ -64,6 +64,36 @@ taylor_func1 (__float128 x, gint32 max_steps) {
 __float128
 taylor_func2 (__float128 x, gint32 max_steps) {
   return taylor_exp_rev (taylor_sin_rev (x, max_steps), max_steps); 
+}
+
+/*
+ * Computes e ^ sin x by
+ * calculating Taylor series formula:
+ * ((-1)^n / (2n+1)! * x ^(2n+1))^n / (2n+1)!
+ * 
+ * @arg    __float128 x
+ * @arg        gint32 max_steps
+ * @retval __float128 result
+ *
+ */
+__float128
+taylor_func3 (__float128 x, gint32 max_steps) {
+  return taylor_exp_prev (taylor_sin_prev (x, max_steps), max_steps); 
+}
+
+/*
+ * Computes e ^ sin x by
+ * calculating Taylor series formula:
+ * ((-1)^n / (2n+1)! * x ^(2n+1))^n / (2n+1)!
+ * 
+ * @arg    __float128 x
+ * @arg        gint32 max_steps
+ * @retval __float128 result
+ *
+ */
+__float128
+taylor_func4 (__float128 x, gint32 max_steps) {
+  return taylor_exp_prev_rev (taylor_sin_prev_rev (x, max_steps), max_steps); 
 }
 
 /*
@@ -166,6 +196,62 @@ taylor_sin_rev (__float128 x, gint32 max_steps) {
 }
 
 /*
+ * Computes sin x
+ * by calculating Taylor series formula:
+ * (-1)^n / (2n+1)! * x ^(2n+1)
+ * based on previous result
+ * 
+ * @arg    __float128 x
+ * @arg        gint32 max_steps
+ * @retval __float128 result
+ *
+ */
+__float128
+taylor_sin_prev (__float128 x, gint32 max_steps) {
+  __float128 result = x;
+       gsize i;
+
+  for (i = 0; i < max_steps; ++i)
+  {
+    result *= taylor_pow (-1.0Q, i) * x * x / (2.0Q * i - 1.0Q);
+  }
+  return result;
+}
+
+/*
+ * Computes sin x
+ * by calculating Taylor series formula:
+ * (-1)^n / (2n+1)! * x ^(2n+1)
+ * based on previous result, in a reversed way
+ *
+ * @arg    __float128 x
+ * @arg        gint32 max_steps
+ * @retval __float128 result
+ *
+ */
+__float128
+taylor_sin_prev_rev (__float128 x, gint32 max_steps) {
+  __float128 *array = g_malloc0 (max_steps * sizeof (__float128));
+  __float128  result = 0.0Q;
+        gsize i;
+  
+  array[0] = x;
+  for (i = 1; i < max_steps; ++i)
+  {
+    array[i] = array[i-1] * taylor_pow (-1.0Q, i) * x * x / (2.0Q * i - 1.0Q);
+  }
+
+  for (i = max_steps - 1; i+1 > 0; --i)
+  {
+    result += array[i];
+  }
+
+  g_free (array);
+
+  return result;
+}
+
+/*
  * Computes e^x
  * by calculating Taylor series formula:
  * x^k / k!
@@ -208,6 +294,63 @@ taylor_exp_rev (__float128 x, gint32 max_steps) {
   for (i = 0; i < max_steps; ++i)
   {
     array[i] = (__float128)(taylor_pow (x, i) / taylor_fac (i));
+  }
+
+  for (i = max_steps - 1; i+1 > 0; i--)
+  {
+    result += array[i];
+  }
+
+  g_free (array);
+
+  return result;
+}
+
+/*
+ * Computes e^x
+ * by calculating Taylor series formula:
+ * x^k / k!
+ * based on previous result
+ * 
+ * @arg    __float128 x
+ * @arg        gint32 max_steps
+ * @retval __float128 result
+ *
+ */
+__float128
+taylor_exp_prev (__float128 x, gint32 max_steps) {
+  __float128 result = 1.0Q;
+       gsize i;
+
+  for (i = 1; i < max_steps; ++i)
+  {
+    result += result * (x / i);
+  }
+
+  return result;
+}
+
+/*
+ * Computes e^x
+ * by calculating Taylor series formula:
+ * x^k / k!
+ * based on previous result, in a reversed way
+ *
+ * @arg    __float128 x
+ * @arg        gint32 max_steps
+ * @retval __float128 result
+ *
+ */
+__float128
+taylor_exp_prev_rev (__float128 x, gint32 max_steps) {
+  __float128 *array = g_malloc0 (max_steps * sizeof (__float128));
+  __float128  result = 1.0Q;
+        gsize i;
+  
+  array[0] = 1.0Q;
+  for (i = 1; i < max_steps; ++i)
+  {
+    array[i] = array[i-1] * (x / i);
   }
 
   for (i = max_steps - 1; i+1 > 0; i--)
