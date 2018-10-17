@@ -1,0 +1,93 @@
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+ 
+\newenvironment{theorem}[2][Twierdzenie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Pytanie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{hypothesis}[2][Hipoteza]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemat]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Ćwiczenie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Uwaga]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Założenie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Wniosek]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+ 
+\begin{document}
+
+\title{Implementacja rozwinięć wybranych funkcji\\w szereg Maclaurina}
+\author{Grams, Stanisław}
+
+\maketitle
+
+\section{Sumowanie szeregów potęgowych}
+
+\subsection{Rozwinięcia funkcji w szereg Maclaurina}
+$$ \forall{x} \sin x = \sum_{n=0}^{\infty} \frac{(-1)^n}{(2n+1)!} x^{2n+1} = x - \frac{x^3}{3!} + \frac{x^5}{5!} - ...$$
+$$ \forall {x} \exp{x} = \sum_{n=0}^{\infty} \frac{x^n}{n!} = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + ...$$
+
+\subsection{O implementacji}
+Program "taylor" został napisany w języku C z użyciem bibliotek "quadmath.h", "pthread.h" oraz "glib.h" pozwalających na użycie 128-bitowych zmiennych typu zmiennoprzecinkowego, wielowątkowości oraz ułatwiających pracę z tablicami znaków.\\
+Wyniki działania są zapisywane do poszczególnych plików \textit{*.csv}.
+
+\subsection{Wyniki}
+Program uruchamiano na przedziale $x \in [-10; 9.99999]$ dla kolejnych parametrów $M = 4, 8, 16, 32, 64$. Z powodu braku wspomagania koprocesora zmiennoprzecinkowego dla typu poczwórnej precyzji obliczenia zajmowały dużo czasu (dla M=256 nawet 16 godzin!).
+
+\subsection{Konkluzje po implementacji i przeprowadzeniu doświadczeń}
+\subsubsection{Odpowiedzi na postawione hipotezy}
+
+\begin{hypothesis}{1}
+Sumowanie od końca daje dokładniejsze wyniki niż sumowanie od początku.
+\end{hypothesis}
+Hipoteza, dla zaimplementowanych funkcji, na przedziale $x \in [-10; 9.99999]$, jest prawdziwa \textbf{jedynie} w pierwszym przypadku, tj. sumując elementy szeregu potęgowego obliczane bezpośrednio ze wzoru Taylora w kolejności od końca.
+
+\begin{hypothesis}{2}
+Używając rozwinięcia wokół 0 (szereg Maclaurina), przy tej samej liczbie składników szeregu dokładniejsze wyniki uzyskujemy przy małych argumentach.
+\end{hypothesis}
+Zaimplementowane funkcje pokazują, że na przedziale $x \in [-10; 9.99999]$ hipoteza jest prawdziwa, co możemy łatwo zauważyć na wykresie "01\_functions\_m002", gdzie funkcje 1,2,3 oraz 4 zbiegają się z wykresem funkcji 0 tylko w okolicach zera oraz w całkowitych wielokrotnościach liczby $2\pi$ (ze względu na użyte sprowadzenie do przedziału $[-2\pi;2\pi]$.
+
+\begin{hypothesis}{3}
+Sumowanie elementów obliczanych na podstawie poprzedniego daje dokładniejsze wyniki niż obliczanych bezpośrednio ze wzoru.
+\end{hypothesis}
+Zaimplementowane funkcje pokazują, że na przedziale $x \in [-10;9.99999]$ hipoteza jest \\prawdziwa, co więcej, możemy powiedzieć, że w przypadku użycia typu \_\_float128, funkcje te mają podobną dokładność co funkcja 2 (szereg Maclaurina, sumowanie od końca).
+Dowodem niech będzie wynik średnich różnic w stosunku do obliczeń popełnionych funkcjami wbudowanymi:\\
+\texttt{
+func1() avg. absolute diff to func0() with M=16 is\\
+0.0000000000016539521796360597985907078303108796753612877507503184\\
+func2() avg. absolute diff to func0() with M=16 is\\
+0.0000000000016539521796360597985908280055981357440636938642850951\\
+func3() avg. absolute diff to func0() with M=16 is\\
+0.0000000000016539521796360597985908280055981357440636938642850951\\
+func4() avg. absolute diff to func0() with M=16 is\\
+0.0000000000016539521796360597985908280055981357440636938642850951
+}\\
+Na powyższych wynikach, dla parametru M=16, zauważyć możemy dokładność co do 33 miejsc po przecinku.
+
+\subsubsection{Odpowiedzi na postawione pytania}
+\begin{question}{1}
+Jak zależy dokładność obliczeń (błąd) od liczby sumowanych składników?
+\end{question}
+Im wyższa liczba sumowanych składników (parametr M), tym większa dokładność obliczeń (niższy błąd bezwzględny do obliczeń wykonanych przez funkcje wbudowane), oraz tym dłuższy czas wykonania programu.
+
+\subsection{Spostrzeżenia}
+\begin{enumerate}
+    \item Użycie \_\_float128 - typu bez wspomagania wbudowanego koprocesora znacznie zwiększa czas działania programu.
+    \item Spośród zbadanych parametrów wystarczająca dokładność uzyskiwana jest już od M=32.
+    \item Sprowadzanie argumentu do przedziału $[-2\pi;2\pi]$ zwiększa dokładność obliczeń oraz przyspiesza ich czas.
+    \item Znaczący przyrost wydajności uzyskać można przez podzielenie obliczeń pomiędzy kilka wątków.
+\end{enumerate}
+
+\subsection{Wykresy}
+Wykresy oraz wyniki średnich arytmetycznych załączono w katalogu \textit{report/plots/}.
+Użyto oprogramowania \textit{Octave} wraz z pakietem \textit{gnuplot}. Skrypty załączono w katalogu \textit{scripts/}.
+
+\end{document}

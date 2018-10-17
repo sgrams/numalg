@@ -1,0 +1,131 @@
+╭─sjg@z580.fmdx.pl ~/git/numalg/01-taylor  ‹master*› 
+╰─➤  ./taylor -m2 -av
+Runtime parameters:
+  step_size    = 0.000010
+  interval_min = -10.000000
+  max_elements = 2000000
+  max_steps    = 2
+  printing to output_m2.csv file
+Processing data...
+100% [#################################################]]
+
+Saving data to output_m2.csv file.
+100% [#################################################]]
+func1() avg. absolute diff to func0() with M=2 is
+59.3339895330225836281544890774598384759877398858728756327438333743
+func2() avg. absolute diff to func0() with M=2 is
+59.3339895330225836281544890774598384759877398858728756327438333743
+func3() avg. absolute diff to func0() with M=2 is
+59.3339895330225836281544890774598384759877398858728756327438333743
+func4() avg. absolute diff to func0() with M=2 is
+59.3339895330225836281544890774598384759877398858728756327438333743
+
+╭─sjg@z580.fmdx.pl ~/git/numalg/01-taylor  ‹master*›
+╰─➤  ./taylor -m4 -av
+Runtime parameters:
+  step_size    = 0.000010
+  interval_min = -10.000000
+  max_elements = 2000000
+  max_steps    = 4
+  printing to output_m4.csv file
+Processing data...
+100% [#################################################]]
+
+Saving data to output_m4.csv file.
+100% [#################################################]]
+func1() avg. absolute diff to func0() with M=4 is
+404.9760074147450942456784374165062770703655188353516044508467568164
+func2() avg. absolute diff to func0() with M=4 is
+404.9760074147450942456784374165062277665589425221137662178114266422
+func3() avg. absolute diff to func0() with M=4 is
+404.9760074147450942456784374165062277665589425221137662178114266422
+func4() avg. absolute diff to func0() with M=4 is
+404.9760074147450942456784374165062277665589425221137662178114266422
+
+╭─sjg@z580.fmdx.pl ~/git/numalg/01-taylor  ‹master*›
+╰─➤  ./taylor -m8 -av
+Runtime parameters:
+  step_size    = 0.000010
+  interval_min = -10.000000
+  max_elements = 2000000
+  max_steps    = 8
+  printing to output_m8.csv file
+Processing data...
+100% [#################################################]]
+
+Saving data to output_m8.csv file.
+100% [#################################################]]
+func1() avg. absolute diff to func0() with M=8 is
+0.0132297884070975360160937423645654871997083289067683142857653817
+func2() avg. absolute diff to func0() with M=8 is
+0.0132297884070975360160937423645664125488612962114945872751674830
+func3() avg. absolute diff to func0() with M=8 is
+0.0132297884070975360160937423645664125488612962114945872751674830
+func4() avg. absolute diff to func0() with M=8 is
+0.0132297884070975360160937423645664125488612962114945872751674830
+
+╭─sjg@z580.fmdx.pl ~/git/numalg/01-taylor  ‹master*›
+╰─➤  ./taylor -m16 -av
+Runtime parameters:
+  step_size    = 0.000010
+  interval_min = -10.000000
+  max_elements = 2000000
+  max_steps    = 16
+  printing to output_m16.csv file
+Processing data...
+100% [#################################################]]
+
+Saving data to output_m16.csv file.
+100% [#################################################]]
+func1() avg. absolute diff to func0() with M=16 is
+0.0000000000016539521796360597985907078303108796753612877507503184
+func2() avg. absolute diff to func0() with M=16 is
+0.0000000000016539521796360597985908280055981357440636938642850951
+func3() avg. absolute diff to func0() with M=16 is
+0.0000000000016539521796360597985908280055981357440636938642850951
+func4() avg. absolute diff to func0() with M=16 is
+0.0000000000016539521796360597985908280055981357440636938642850951
+
+╭─sjg@z580.fmdx.pl ~/git/numalg/01-taylor  ‹master*›
+╰─➤  ./taylor -m32 -av
+Runtime parameters:
+  step_size    = 0.000010
+  interval_min = -10.000000
+  max_elements = 2000000
+  max_steps    = 32
+  printing to output_m32.csv file
+Processing data...
+100% [#################################################]]
+
+Saving data to output_m32.csv file.
+100% [#################################################]]
+func1() avg. absolute diff to func0() with M=32 is
+0.0000000000000000000000000000000142705623909509553332707796713186
+func2() avg. absolute diff to func0() with M=32 is
+0.0000000000000000000000000000000145513200077730225500534400863519
+func3() avg. absolute diff to func0() with M=32 is
+0.0000000000000000000000000000000145513200077730225500534400863519
+func4() avg. absolute diff to func0() with M=32 is
+0.0000000000000000000000000000000145513200077730225500534400863519
+
+╭─sjg@z580.fmdx.pl ~/git/numalg/01-taylor  ‹master*›
+╰─➤  ./taylor -m64 -av
+Runtime parameters:
+  step_size    = 0.000010
+  interval_min = -10.000000
+  max_elements = 2000000
+  max_steps    = 64
+  printing to output_m64.csv file
+Processing data...
+100% [#################################################]]
+
+Saving data to output_m64.csv file.
+100% [#################################################]]
+func1() avg. absolute diff to func0() with M=64 is
+0.0000000000000000000000000000000142705623909509553332707796713186
+func2() avg. absolute diff to func0() with M=64 is
+0.0000000000000000000000000000000145511262991640028881741215408072
+func3() avg. absolute diff to func0() with M=64 is
+0.0000000000000000000000000000000145511262991640028881741215408072
+func4() avg. absolute diff to func0() with M=64 is
+0.0000000000000000000000000000000145511262991640028881741215408072
