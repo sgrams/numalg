@@ -381,7 +381,9 @@ gint32 main (gint32 argc, gchar **argv) {
   for (i = 0; i < MAX_RESULTS; i++) {
     g_free (array[i]);
   }
-  fclose (output_file);
+  g_free (array);
+  g_free (output_filepath);
 
+  fclose (output_file);
   pthread_exit (NULL);
 }
