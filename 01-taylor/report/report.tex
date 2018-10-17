@@ -4,6 +4,7 @@
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
+\usepackage{siunitx}
  
 \newenvironment{theorem}[2][Twierdzenie]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
@@ -45,7 +46,7 @@ Program \textit{„taylor”} został napisany w języku C z użyciem bibliotek:
 Wyniki działania programu zapisywane są do poszczególnych plików \textit{*.csv}.
 
 \subsection{Wyniki}
-Program uruchamiano na przedziale $x \in [-10; 9.99999]$ dla kolejnych parametrów\\$M = 4, 8, 16, 32, 64$. Z powodu braku wspomagania koprocesora zmiennoprzecinkowego dla typu poczwórnej precyzji, obliczenia zajmowały bardzo dużo czasu (dla $M = 256$ nawet 16 godzin!).
+Program uruchamiano na przedziale $x \in [-10; 9.99999]$ dla kolejnych parametrów\\$M = 4, 8, 16, 32, 64$ z krokiem $0.00001$ (\num{2e-6} elementów). Z powodu braku wspomagania koprocesora zmiennoprzecinkowego dla typu poczwórnej precyzji, obliczenia zajmowały bardzo dużo czasu (dla $M = 256$ nawet \textbf{16} godzin!).
 
 \subsection{Konkluzje po implementacji i przeprowadzeniu doświadczeń}
 \subsubsection{Odpowiedzi na postawione hipotezy}
@@ -65,7 +66,7 @@ Zaimplementowane funkcje potwierdzają hipotezę na przedziale $x \in [-10; 9.99
 Sumowanie elementów obliczanych na podstawie poprzedniego daje dokładniejsze wyniki niż obliczanych bezpośrednio ze wzoru.
 \end{hypothesis}
 Zaimplementowane funkcje pokazują, że na przedziale $x \in [-10;9.99999]$ hipoteza jest \\prawdziwa, co więcej, możemy powiedzieć, że w przypadku użycia typu $\_\_float128$, funkcje te mają taką samą dokładność, jak funkcja 2 (szereg Maclaurina, sumowanie od końca).\\
-Dowodem niech będzie wynik średnich różnic w stosunku do obliczeń popełnionych funkcjami wbudowanymi:\\
+Dowodem niech będą wyniki średnich arytmetycznych różnic w stosunku do obliczeń popełnionych funkcjami wbudowanymi:\\
 \noindent\texttt{func1() avg. absolute diff to func0() with M=16 is}\\
 \textsc{\textbf{0.000000000001653952179636059798590}7078303108796753612877507503184}\\
 \texttt{func2() avg. absolute diff to func0() with M=16 is}\\
