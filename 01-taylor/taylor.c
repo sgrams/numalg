@@ -1,18 +1,18 @@
 /*
- * This file is part of 01-taylor task.
+ *  This file is part of 01-taylor task.
  *
- * taylor.c
- * Stanisław Grams
+ *  taylor.c
+ *  Stanisław Grams
  */
 #include "taylor.h"
 
 /*
- * Returns 128 bit floating-point number
- * into a 32 byte long string of pointers.
- * Ended with '\0'.
+ * Converts 128 bit floating-point number
+ * into a maximally MAX_BUF long char *.
+ * Ends with '\0'.
  *
  * @arg    __float128  numb
- * @retval char        *out
+ * @retval char       *out
  *
  */
 char *
@@ -53,11 +53,10 @@ taylor_func1 (__float128 x, gint32 max_steps) {
  * Computes e ^ sin x by
  * calculating Taylor series formula:
  * ((-1)^n / (2n+1)! * x ^(2n+1))^n / (2n+1)!
- * 
- * but in a reversed way
+ * with reversed summing
  *
  * @arg    __float128 x
- * @arg        gint32 max_steps
+ * @arg    gint32     max_steps
  * @retval __float128 result
  *
  */
@@ -72,7 +71,7 @@ taylor_func2 (__float128 x, gint32 max_steps) {
  * ((-1)^n / (2n+1)! * x ^(2n+1))^n / (2n+1)!
  * 
  * @arg    __float128 x
- * @arg        gint32 max_steps
+ * @arg    gint32     max_steps
  * @retval __float128 result
  *
  */
@@ -85,15 +84,36 @@ taylor_func3 (__float128 x, gint32 max_steps) {
  * Computes e ^ sin x by
  * calculating Taylor series formula:
  * ((-1)^n / (2n+1)! * x ^(2n+1))^n / (2n+1)!
+ * with reversed summing
  * 
  * @arg    __float128 x
- * @arg        gint32 max_steps
+ * @arg    gint32     max_steps
  * @retval __float128 result
  *
  */
 __float128
 taylor_func4 (__float128 x, gint32 max_steps) {
   return taylor_exp_prev_rev (taylor_sin_prev_rev (x, max_steps), max_steps); 
+}
+
+/*
+ * Optimizes argument for sin(x) function
+ * basing on it's periodicity
+ * 
+ * @arg    __float128 x
+ * @retval __float128 x
+ * 
+ */
+__float128 taylor_optimize_arg (__float128 x) {
+  while (x > (2.0Q * MY_PIq))
+  {
+    x -= (2.0Q * MY_PIq);
+  }
+  while (x < (-2.0Q * MY_PIq))
+  {  
+    x += (2.0Q * MY_PIq);
+  }
+  return x;
 }
 
 /*
@@ -129,14 +149,15 @@ taylor_fac (__float128 n) {
  */
 __float128
 taylor_pow (__float128 x, gint64 y) {
-  __float128 result = 1.0Q;
-       gsize i;
-
-  for (i = 0; i < y; ++i)
-  {
-    result *= x;
+  if (y == 0) {
+    return 1.0Q;
   }
-  return result;
+
+  if (y % 2) {
+    return x * taylor_pow (x, (y - 1.0Q) / 2.0Q) * taylor_pow (x, (y - 1.0Q) / 2.0Q);
+  }
+
+  return taylor_pow (x, y / 2.0Q) * taylor_pow (x, y / 2.0Q);
 }
 
 /*
@@ -145,7 +166,7 @@ taylor_pow (__float128 x, gint64 y) {
  * (-1)^n / (2n+1)! * x ^(2n+1)
  *
  * @arg    __float128 x
- * @arg        gint32 max_steps
+ * @arg    gint32     max_steps
  * @retval __float128 result
  *
  */
@@ -169,7 +190,7 @@ taylor_sin (__float128 x, gint32 max_steps) {
  * in a reversed way
  *
  * @arg    __float128 x
- * @arg        gint32 max_steps
+ * @arg    gint32     max_steps
  * @retval __float128 result
  *
  */
@@ -202,7 +223,7 @@ taylor_sin_rev (__float128 x, gint32 max_steps) {
  * based on previous result
  * 
  * @arg    __float128 x
- * @arg        gint32 max_steps
+ * @arg    gint32     max_steps
  * @retval __float128 result
  *
  */
@@ -225,7 +246,7 @@ taylor_sin_prev (__float128 x, gint32 max_steps) {
  * based on previous result, in a reversed way
  *
  * @arg    __float128 x
- * @arg        gint32 max_steps
+ * @arg    gint32     max_steps
  * @retval __float128 result
  *
  */
@@ -257,7 +278,7 @@ taylor_sin_prev_rev (__float128 x, gint32 max_steps) {
  * x^k / k!
  *
  * @arg    __float128 x
- * @arg        gint32 max_steps
+ * @arg    gint32     max_steps
  * @retval __float128 result
  *
  */
@@ -281,7 +302,7 @@ taylor_exp (__float128 x, gint32 max_steps) {
  * in a reversed way
  *
  * @arg    __float128 x
- * @arg        gint32 max_steps
+ * @arg    gint32     max_steps
  * @retval __float128 result
  *
  */
@@ -313,7 +334,7 @@ taylor_exp_rev (__float128 x, gint32 max_steps) {
  * based on previous result
  * 
  * @arg    __float128 x
- * @arg        gint32 max_steps
+ * @arg    gint32     max_steps
  * @retval __float128 result
  *
  */
@@ -337,7 +358,7 @@ taylor_exp_prev (__float128 x, gint32 max_steps) {
  * based on previous result, in a reversed way
  *
  * @arg    __float128 x
- * @arg        gint32 max_steps
+ * @arg    gint32     max_steps
  * @retval __float128 result
  *
  */

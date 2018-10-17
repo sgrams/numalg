@@ -11,6 +11,11 @@
 
 // Defining macros
 #define      MAX_BUF 1024
+#define      MAX_ARRAY_SIZE 8192
+
+// definition of PI with accuracy to 64th decimal places
+// copied from https://www.piday.org/million/
+#define      MY_PIq 3.1415926535897932384626433832795028841971693993751058209749445923Q
 
 #define STR_MAX_PREC "64"
 
@@ -24,7 +29,10 @@ char       *taylor_print (__float128 numb);
 
 // Redefinition of math functions using basic
 // mathematical operations.
+__float128  taylor_optimize_arg (__float128 x);
+
 __float128  taylor_fac          (__float128 n);
+__float128  taylor_fac_subfunc  (gint64 n, gint64 *array);
 __float128  taylor_pow          (__float128 x, gint64 y);
 
 __float128  taylor_sin          (__float128 x, gint32 max_steps);

@@ -30,8 +30,8 @@
 #define  DEFAULT_OUTPUT_FILEPATH DEFAULT_M16_OUTPUT_FILEPATH
 
 #define  DEFAULT_MAX_STEPS 16
-#define  DEFAULT_INTERVAL_MIN -2.0Q
-#define  DEFAULT_MAX_ELEMENTS 2400000
+#define  DEFAULT_INTERVAL_MIN -10
+#define  DEFAULT_MAX_ELEMENTS 2000000
 #define  DEFAULT_STEP_SIZE 0.00001Q
 
 gint32     max_steps    = DEFAULT_MAX_STEPS;
@@ -45,7 +45,7 @@ __float128 step_size    = DEFAULT_STEP_SIZE;
  * of a given number of elements
  * 
  * @arg    __float128 *buffer
- * @retval     gint32
+ * @retval gint32
  *
  */
 void * worker_func0 (void *buffer) {
@@ -68,7 +68,7 @@ void * worker_func0 (void *buffer) {
  * of a given number of elements
  * 
  * @arg    __float128 *buffer
- * @retval     gint32
+ * @retval gint32
  *
  */
 void * worker_func1 (void *buffer) {
@@ -78,7 +78,7 @@ void * worker_func1 (void *buffer) {
 
   for (i = 0, iter = interval_min; i < max_elements; iter += step_size, i++)
   {
-    array[i] = taylor_func1 (iter, max_steps);
+    array[i] = taylor_func1 (taylor_optimize_arg(iter), max_steps);
   }
   buffer = array;
 
@@ -91,7 +91,7 @@ void * worker_func1 (void *buffer) {
  * of a given number of elements
  * 
  * @arg    __float128 *buffer
- * @retval     gint32
+ * @retval gint32
  *
  */
 void * worker_func2 (void *buffer) {
@@ -101,7 +101,7 @@ void * worker_func2 (void *buffer) {
 
   for (i = 0, iter = interval_min; i < max_elements; iter += step_size, i++)
   {
-    array[i] = taylor_func2 (iter, max_steps);
+    array[i] = taylor_func2 (taylor_optimize_arg(iter), max_steps);
   }
   buffer = array;
 
@@ -114,7 +114,7 @@ void * worker_func2 (void *buffer) {
  * of a given number of elements
  * 
  * @arg    __float128 *buffer
- * @retval     gint32
+ * @retval gint32
  *
  */
 void * worker_func3 (void *buffer) {
@@ -124,7 +124,7 @@ void * worker_func3 (void *buffer) {
 
   for (i = 0, iter = interval_min; i < max_elements; iter += step_size, i++)
   {
-    array[i] = taylor_func3 (iter, max_steps);
+    array[i] = taylor_func3 (taylor_optimize_arg(iter), max_steps);
   }
   buffer = array;
 
@@ -137,7 +137,7 @@ void * worker_func3 (void *buffer) {
  * of a given number of elements
  * 
  * @arg    __float128 *buffer
- * @retval     gint32
+ * @retval gint32
  *
  */
 void * worker_func4 (void *buffer) {
@@ -147,7 +147,7 @@ void * worker_func4 (void *buffer) {
 
   for (i = 0, iter = interval_min; i < max_elements; iter += step_size, i++)
   {
-    array[i] = taylor_func4 (iter, max_steps);
+    array[i] = taylor_func4 (taylor_optimize_arg(iter), max_steps);
   }
   buffer = array;
 
@@ -177,7 +177,7 @@ gint32 main (gint32 argc, gchar **argv) {
   __float128    average_diff;
   __float128    step_size_given;
   __float128    interval_min_given;
-  __float128  **array;
+  __float128  **array;              // Contains the output of calculations.
 
   pthread_t     threads[MAX_THREADS];
   FILE         *output_file;
@@ -334,14 +334,16 @@ gint32 main (gint32 argc, gchar **argv) {
     printf ("Unable to open file! Exiting...\n");
     return 1;
   }
-
   util_save_array (output_file, array, interval_min, step_size, max_elements);
 
+  // Perform and show average differences between
+  // func1, func2, func, func4 functions
+  // and results of func0
   if (average_calculation_flag) {
     average_diff = 0.0Q;
     for (i = 0; i < max_elements; ++i)
     {
-      average_diff += (fabsq(array[0][i]-array[1][i])/(__float128)(i+1.0Q));
+      average_diff += (fabsq (array[0][i] - array[1][i]) / (__float128)(i + 1.0Q));
     }
     average_calculation_str = taylor_print (average_diff);
     fprintf (stdout, "func1() avg. absolute diff to func0() with M=%i is\n%s\n", max_steps, average_calculation_str);
@@ -350,7 +352,7 @@ gint32 main (gint32 argc, gchar **argv) {
     average_diff = 0.0Q;
     for (i = 0; i < max_elements; ++i)
     {
-      average_diff += (fabsq(array[0][i]-array[2][i])/(__float128)(i+1.0Q));
+      average_diff += (fabsq (array[0][i] - array[2][i]) / (__float128)(i + 1.0Q));
     }
     average_calculation_str = taylor_print (average_diff);
     fprintf (stdout, "func2() avg. absolute diff to func0() with M=%i is\n%s\n", max_steps, average_calculation_str);
@@ -359,7 +361,7 @@ gint32 main (gint32 argc, gchar **argv) {
     average_diff = 0.0Q;
     for (i = 0; i < max_elements; ++i)
     {
-      average_diff += (fabsq(array[0][i]-array[3][i])/(__float128)(i+1.0Q));
+      average_diff += (fabsq (array[0][i] - array[3][i]) / (__float128)(i + 1.0Q));
     }
     average_calculation_str = taylor_print (average_diff);
     fprintf (stdout, "func3() avg. absolute diff to func0() with M=%i is\n%s\n", max_steps, average_calculation_str);
@@ -368,7 +370,7 @@ gint32 main (gint32 argc, gchar **argv) {
     average_diff = 0.0Q;
     for (i = 0; i < max_elements; ++i)
     {
-      average_diff += (fabsq(array[0][i]-array[4][i])/(__float128)(i+1.0Q));
+      average_diff += (fabsq (array[0][i] - array[4][i]) / (__float128)(i + 1.0Q));
     }
     average_calculation_str = taylor_print (average_diff);
     fprintf (stdout, "func4() avg. absolute diff to func0() with M=%i is\n%s\n", max_steps, average_calculation_str);

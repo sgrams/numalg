@@ -11,6 +11,7 @@
 #include <quadmath.h>
 #include "glib.h"
 
+#define MAX_RESULTS        6
 #define PROGRESSBAR_STRING "#################################################"
 #define PROGRESSBAR_WIDTH  50
 
