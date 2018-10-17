@@ -46,7 +46,7 @@ Program \textit{„taylor”} został napisany w języku C z użyciem bibliotek:
 Wyniki działania programu zapisywane są do poszczególnych plików \textit{*.csv}.
 
 \subsection{Wyniki}
-Program uruchamiano na przedziale $x \in [-10; 9.99999]$ dla kolejnych parametrów\\$M = 4, 8, 16, 32, 64$ z krokiem $0.00001$ (\num{2e-6} elementów). Z powodu braku wspomagania koprocesora zmiennoprzecinkowego dla typu poczwórnej precyzji, obliczenia zajmowały bardzo dużo czasu (dla $M = 256$ nawet \textbf{16} godzin!).
+Program uruchamiano na przedziale $x \in [-10; 9.99999]$ dla kolejnych parametrów\\$M = 4, 8, 16, 32, 64$ z krokiem $0.00001$ (\num{2e6} elementów). Z powodu braku wspomagania koprocesora zmiennoprzecinkowego dla typu poczwórnej precyzji, obliczenia zajmowały bardzo dużo czasu (dla $M = 256$ nawet \textbf{16} godzin!).
 
 \subsection{Konkluzje po implementacji i przeprowadzeniu doświadczeń}
 \subsubsection{Odpowiedzi na postawione hipotezy}
@@ -85,7 +85,7 @@ Im wyższa liczba sumowanych składników (parametr M), tym większa dokładnoś
 
 \subsection{Spostrzeżenia}
 \begin{enumerate}
-    \item Użycie \_\_float128 — typu nie wspieranego przez wbudowany koprocesor znacznie zwiększa czas działania programu.
+    \item Użycie \_\_float128 – typu nie wspieranego przez wbudowany koprocesor znacznie zwiększa czas działania programu.
     \item Spośród zbadanych parametrów wystarczająca dokładność uzyskiwana jest już od $M = 32$.
     \item Sprowadzanie argumentu do przedziału $[-2\pi;2\pi]$ zwiększa dokładność obliczeń, przyspiesza ich czas oraz zwiększa stabilność programu.
     \item Znaczący przyrost wydajności można uzyskać przez podzielenie obliczeń pomiędzy kilka wątków.
