@@ -5,7 +5,7 @@
 #  Stanisław Grams
 ##
 CC=g++
-CFLAGS=-Wall -Werror -D_GNU_SOURCE -g -std=gnu99
+CFLAGS=-Wall -Werror -D_GNU_SOURCE -g -std=c++0x
 
 # main targets
 all: main.o gauss.o util.o

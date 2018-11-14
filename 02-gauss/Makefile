@@ -5,7 +5,7 @@
 #  Stanisław Grams
 ##
 CC=g++
-CFLAGS=-Wall -Werror  -std=c++0x
+CFLAGS=-Wall -Werror -std=c++0x
 
 SRCDIR=src
 OUTNAME=gauss
