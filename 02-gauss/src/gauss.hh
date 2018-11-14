@@ -26,6 +26,14 @@ class MyMatrix {
         matrix[i] = new T[width];
       }
     }
+    ~MyMatrix () {
+      for (int i = 0; i < this->width; i++)
+      {
+        delete[] this->matrix[i];
+      }
+      delete[] this->matrix;
+      delete[] this->results;
+    }
     int get_width () {
       return this->width;
     }
@@ -66,10 +74,10 @@ class MyMatrix {
       }
     }
     // basic backsub (without pivoting)
-    T backsub () {
-      T n = this->width;
-      T *solution;
-      solution = new T[this->width];
+    T* backsub () {
+      T  n        = this->width;
+      T *solution = new T[this->width];
+      
       for (int i = n - 1; i >= 0; --i) 
       {
        solution[i] = this->results[i];
