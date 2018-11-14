@@ -74,20 +74,55 @@ class MyMatrix {
       }
     }
     // basic backsub (without pivoting)
+<<<<<<< Updated upstream
     T* backsub () {
       T  n        = this->width;
       T *solution = new T[this->width];
       
+=======
+    T* backsub (T** MATRIX) {
+      T n = this->width;
+      T *solution;
+      solution = new T[this->width];
+>>>>>>> Stashed changes
       for (int i = n - 1; i >= 0; --i) 
       {
        solution[i] = this->results[i];
         for (int j = i + 1; j < n; ++j) 
         {
-          solution[i] = solution[i] - this->matrix[i][j] * solution[j];
+          solution[i] = solution[i] - MATRIX[i][j] * solution[j];
         }
-        solution[i] /= this->matrix[i][i];
+        solution[i] /= MATRIX[i][i];
       }
       return solution;
+    }
+
+    T* gaussian_no_pivoting() {
+      T** partial;
+      partial = new T*[this->width]; // to row reduce to upper triangular
+      for (int i = 0; i < this->width; i++)
+      {
+        partial[i] = new T[this->width];
+      }
+      partial = this->matrix;
+      // code here
+      T nMinus1 = this->width - 1;
+      T n = this->width;
+      for (int i = 0; i < nMinus1; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+          // calculate the ratio
+          T ratio = partial[j][i] / partial[i][i];
+          for (int k = i; k < n; ++k) {
+            // modify matrix entry
+            partial[j][k] = partial[j][k] - ratio * partial[i][k];
+          }
+            
+          // modify result vector
+          this->results[j] = this->results[j] - ratio * this->results[i];
+          T rjAfter = this->results[j];
+        }
+      }
+      return backsub(partial);
     }
 };
 
