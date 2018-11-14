@@ -11,9 +11,9 @@ int main (int argc, char *argv[]) {
   MyMatrix<float>* matrix = new MyMatrix<float>(3);
   matrix->fill();
   matrix->print();
-  float *tab;
-  tab=matrix->gaussian_no_pivoting();
-  for (int i=0; i<3; i++) cout<<tab[i]<<endl;
+  float* Tab;
+  Tab=matrix->gaussian_no_pivoting();
+  for (int i=0; i<3; i++) cout<<Tab[i]<<endl;
 
   delete[] Tab;
   delete matrix;
