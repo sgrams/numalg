@@ -13,6 +13,9 @@ int main (int argc, char *argv[]) {
   matrix->print();
   float* Tab;
   Tab=matrix->gaussian_no_pivoting();
+  cout<<"Po gaussie macierz: "<<endl;
+  matrix->print();
+  cout<<"Po gaussie wektor: "<<endl;
   for (int i=0; i<3; i++) cout<<Tab[i]<<endl;
 
   delete[] Tab;
