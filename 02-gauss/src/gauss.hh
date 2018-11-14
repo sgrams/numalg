@@ -74,17 +74,10 @@ class MyMatrix {
       }
     }
     // basic backsub (without pivoting)
-<<<<<<< Updated upstream
-    T* backsub () {
+    T* backsub (T** MATRIX) {
       T  n        = this->width;
       T *solution = new T[this->width];
       
-=======
-    T* backsub (T** MATRIX) {
-      T n = this->width;
-      T *solution;
-      solution = new T[this->width];
->>>>>>> Stashed changes
       for (int i = n - 1; i >= 0; --i) 
       {
        solution[i] = this->results[i];
