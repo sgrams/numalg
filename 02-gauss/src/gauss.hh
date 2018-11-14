@@ -65,6 +65,22 @@ class MyMatrix {
         }
       }
     }
+    
+    T backsub() {
+      T n=this->width;
+      T *solution;
+      solution = new T[this->width];
+      for (int i = n - 1; i >= 0; --i) 
+      {
+       solution[i] = this->results[i];
+      for (int j = i + 1; j < n; ++j) 
+        {
+           solution[i] = solution[i] - this->matrix[i][j] * solution[j];
+        }
+        solution[i] /= this->matrix[i][i];
+      }
+      return solution;
+    }
 };
 
 #endif // _GAUSS_GAUSS_H
