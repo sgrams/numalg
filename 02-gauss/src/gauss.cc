@@ -1,2 +1,2 @@
 #include "gauss.hh"
-// implementacje innych, rownie przydatnych funkcji (np statycznych)
+// implementations of other, also very useful, functions alike some static functions...
