@@ -19,4 +19,4 @@ util.o: util.cc
 .PHONY: clean
 clean:  rmobj
 rmobj:
-	rm -f main.o xor.o util.o
+	rm -f main.o gauss.o util.o
