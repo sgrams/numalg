@@ -9,16 +9,17 @@ using namespace std;
 int main (int argc, char *argv[]) {
   
   MyMatrix<float>* matrix = new MyMatrix<float>(3);
-  matrix->fill();
-  matrix->print();
-  float* Tab;
-  Tab=matrix->gaussian_no_pivoting();
-  cout<<"Po gaussie macierz: "<<endl;
-  matrix->print();
-  cout<<"Po gaussie wektor: "<<endl;
-  for (int i=0; i<3; i++) cout<<Tab[i]<<endl;
 
-  delete[] Tab;
+  matrix->fill_matrix ();
+  matrix->fill_vector_X ();
+  matrix->fill_vector_B ();
+
+  matrix->print_matrix ();
+  cout << endl;
+  matrix->print_vector_X ();
+  cout << endl;
+  matrix->print_vector_B ();
+  
   delete matrix;
   return 0;
 }

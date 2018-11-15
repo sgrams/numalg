@@ -12,13 +12,16 @@ template <typename T>
 class MyMatrix {
   private:
     T** matrix;
-    T*  results;
+    T*  vector_X;
+    T*  vector_B;
+
     int width;
   public:
     MyMatrix (int width) {
-      this->width   = width;
-      this->matrix  = new T*[width];
-      this->results = new T[width];
+      this->width    = width;
+      this->matrix   = new T*[width];
+      this->vector_X = new T[width];
+      this->vector_B = new T[width];
 
       // create a square matrix of specified width
       for (int i = 0; i < width; i++)
@@ -32,19 +35,35 @@ class MyMatrix {
         delete[] this->matrix[i];
       }
       delete[] this->matrix;
-      delete[] this->results;
+      delete[] this->vector_X;
+      delete[] this->vector_B;
     }
+
     int get_width () {
       return this->width;
     }
-    T* get_results () {
-      return this->results;
-    };
     T** get_matrix () {
       return this->matrix;
     };
+    T* get_vector_X () {
+      return this->vector_X;
+    };
+    T* get_vector_B () {
+      return this->vector_B;
+    };
+
+    void set_vector_X (T* vector) {
+      this->vector_X = vector;
+    }
+    void set_vector_B (T* vector) {
+      this->vector_B = vector;
+    }
+    void set_matrix (T** matrix) {
+      this->matrix = matrix;
+    }
+
     // prints matrix
-    void print () {
+    void print_matrix () {
       for (int i = 0; i < width; ++i)
       {
         for (int j = 0; j < width; ++j)
@@ -56,8 +75,20 @@ class MyMatrix {
         }
       }
     }
-    // fills the matrix with random data
-    void fill () {
+    void print_vector_X () {
+      for (int i = 0; i < width; ++i)
+      {
+        cout << this->vector_X[i] << endl;
+      }
+    }
+    void print_vector_B () {
+      for (int i = 0; i < width; ++i)
+      {
+        cout << this->vector_B[i] << endl;
+      }
+    }
+    // fills matrix A with randomized data
+    void fill_matrix () {
       T num;
       random_device rd;
       mt19937 eng(rd());
@@ -73,50 +104,34 @@ class MyMatrix {
         }
       }
     }
-    // basic backsub (without pivoting)
-    T* backsub (T** MATRIX) {
-      T  n        = this->width;
-      T *solution = new T[this->width];
-      
-      for (int i = n - 1; i >= 0; --i) 
+    // fills vector X with randomized data
+    void fill_vector_X () {
+      T num;
+      random_device rd;
+      mt19937 eng(rd());
+      uniform_int_distribution<> distr (RANDOMIZE_MIN_NUM, RANDOMIZE_MAX_NUM);
+
+      for (int i = 0; i < width; ++i)
       {
-       solution[i] = this->results[i];
-        for (int j = i + 1; j < n; ++j) 
-        {
-          solution[i] = solution[i] - MATRIX[i][j] * solution[j];
-        }
-        solution[i] /= MATRIX[i][i];
+        num = distr (eng);
+        num /= RANDOMIZE_MAX_NUM;
+        this->vector_X[i] = num;
       }
-      return solution;
+    }
+    // fills vector B by solving B=A*X
+    void fill_vector_B () {
+      for (int i = 0; i < width; ++i)
+      {
+        this->vector_B[i] = 0;
+        for (int j = 0; j < width; ++j)
+        {
+          this->vector_B[i] += this->matrix[i][j] * this->vector_X[j];
+        }
+      }
     }
 
     T* gaussian_no_pivoting() {
-      T** partial;
-      partial = new T*[this->width]; // to row reduce to upper triangular
-      for (int i = 0; i < this->width; i++)
-      {
-        partial[i] = new T[this->width];
-      }
-      partial = this->matrix;
-      // code here
-      T nMinus1 = this->width - 1;
-      T n = this->width;
-      for (int i = 0; i < nMinus1; ++i) {
-        for (int j = i + 1; j < n; ++j) {
-          // calculate the ratio
-          T ratio = partial[j][i] / partial[i][i];
-          for (int k = i; k < n; ++k) {
-            // modify matrix entry
-            partial[j][k] = partial[j][k] - ratio * partial[i][k];
-          }
-            
-          // modify result vector
-          this->results[j] = this->results[j] - ratio * this->results[i];
-          T rjAfter = this->results[j];
-        }
-      }
-      return backsub(partial);
+      return this->vector_X;
     }
 };
-
 #endif // _GAUSS_GAUSS_H
