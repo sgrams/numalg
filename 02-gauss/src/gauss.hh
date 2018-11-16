@@ -4,6 +4,7 @@ using namespace std;
 #include <iostream>
 #include <ctime>
 #include <random>
+#include<algorithm>
 
 #define RANDOMIZE_MIN_NUM -65536
 #define RANDOMIZE_MAX_NUM  65535
@@ -130,8 +131,64 @@ class MyMatrix {
       }
     }
 
+    T* backsub_no_pivoting(T** A, T* b) {
+      T* solution = new T[width];
+      const auto n = width;
+
+      for (int i = n - 1; i >= 0; --i)
+      {
+        solution[i] = b[i];
+         for (int j = i+1; j < n; ++j)
+         {
+           solution[i] = solution[i] - A[i][j] * solution[j];
+         }
+         solution[i] /= A[i][i];
+      }
+
+      for (int i = 0; i < width; ++i)
+       {
+         cout << solution[i]  << " "  << endl;
+       }
+
+      return solution;
+    }
+  
     T* gaussian_no_pivoting() {
-      return this->vector_X;
+
+      // create copy of matrix and vector b
+      T** A = new T*[width];
+      T* b = new T[width];
+      
+      for (int i = 0; i < width; ++i)
+      {
+        A[i] = new T[width];
+      }
+
+      for (int i = 0; i <width; ++i)
+      {
+        b[i] = this->vector_B[i];
+        for(int j = 0; j < width; ++j)
+          A[i][j] = this->matrix[i][j];
+      }
+    
+      const auto m = width - 1;
+      const auto n = width;
+
+      for(int i = 0; i < m; ++i)
+      {
+        for (int j = i + 1; j < n; ++j)
+        {
+          auto ratio = A[j][i] / A[i][i];
+          for (int k = i; k < n; ++k)
+          {
+            A[j][k] = A[j][k] - ratio * A[i][k];
+          }
+          b[j] = b[j] - ratio * b[i];
+          auto rjAfter = b[j];
+        }
+      }
+     
+    return backsub_no_pivoting(A, b);
     }
 };
 #endif // _GAUSS_GAUSS_H
