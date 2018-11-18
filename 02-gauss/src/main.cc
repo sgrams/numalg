@@ -35,6 +35,14 @@ int main (int argc, char *argv[]) {
     cout << ret_vec[i] << endl;
   }
   cout << endl << endl;
+  delete[] ret_vec;
+
+  cout << endl << endl << "Vector X after Gauss_Full_Pivoting" << endl;
+  ret_vec = matrix->gaussian_full_pivoting ();
+  for (int i = 0; i < 3; ++i) {
+    cout << ret_vec[i] << endl;
+  }
+  cout << endl << endl;
 
   delete matrix;
   delete[] ret_vec;
