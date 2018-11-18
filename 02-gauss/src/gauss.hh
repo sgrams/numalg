@@ -133,7 +133,7 @@ class MyMatrix {
 
     T* backsub_no_pivoting(T** A, T* b) {
       T* solution = new T[width];
-      const auto n = width;
+      T n = width;
 
       for (int i = n - 1; i >= 0; --i)
       {
@@ -171,20 +171,20 @@ class MyMatrix {
           A[i][j] = this->matrix[i][j];
       }
     
-      const auto m = width - 1;
-      const auto n = width;
+      T m = width - 1;
+      T n = width;
 
       for(int i = 0; i < m; ++i)
       {
         for (int j = i + 1; j < n; ++j)
         {
-          auto ratio = A[j][i] / A[i][i];
+          T ratio = A[j][i] / A[i][i];
           for (int k = i; k < n; ++k)
           {
             A[j][k] = A[j][k] - ratio * A[i][k];
           }
           b[j] = b[j] - ratio * b[i];
-          auto rjAfter = b[j];
+          T rjAfter = b[j];
         }
       }
      
