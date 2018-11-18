@@ -6,6 +6,7 @@
 ##
 CC=g++
 CFLAGS=-Wall -Werror -std=c++0x
+LDFLAGS=-lgmpxx -lgmp
 
 SRCDIR=src
 OUTNAME=gauss

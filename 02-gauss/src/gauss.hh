@@ -1,13 +1,20 @@
 #ifndef _GAUSS_GAUSS_H
 #define _GAUSS_GAUSS_H
-using namespace std;
 #include <iostream>
 #include <ctime>
 #include <random>
-#include<algorithm>
+#include <algorithm>
+#include <gmp.h>
 
 #define RANDOMIZE_MIN_NUM -65536
 #define RANDOMIZE_MAX_NUM  65535
+
+using namespace std;
+
+typedef struct TC {
+  mpq_t number;
+  int   base = 10;
+} TC_t;
 
 template <typename T>
 class MyMatrix {
@@ -78,16 +85,11 @@ class MyMatrix {
         }
       }
     }
-    void print_vector_X () {
+
+    void print_vector (T *vector, int width) {
       for (int i = 0; i < width; ++i)
       {
-        cout << this->vector_X[i] << endl;
-      }
-    }
-    void print_vector_B () {
-      for (int i = 0; i < width; ++i)
-      {
-        cout << this->vector_B[i] << endl;
+        cout << vector[i] << endl;
       }
     }
 
@@ -175,8 +177,8 @@ class MyMatrix {
       return;
     }
     
-    T absGeneric(T X) {
-      if (X < 0) X *= -1;
+    T abs_generic (T x) {
+      return x < 0 ? -x : x;
     }
 
     // gaussian elimination methods
@@ -197,26 +199,29 @@ class MyMatrix {
       return solution;
     }
 
-    T *backsub_partial_pivoting (T **A, T *b, int *piv) {
-      T* solution = new T[this->width];
-      T* solution2 = new T[this->width];
-      T n = this->width;
+    T *backsub_partial_pivoting (T **A, T *b, int *pivot) {
+      T* solution  = new T[this->width];
+      T* ret       = new T[this->width];
+      T  n         = this->width;
 
-      for (int i = n - 1; i >= 0; --i) {
-        solution[piv[i]] = b[piv[i]];
-        for (int j = i + 1; j < n; ++j) {
-            solution[piv[i]] = solution[piv[i]] - A[piv[i]][j] * solution[piv[j]];
+      for (int i = n - 1; i >= 0; --i)
+      {
+        solution[pivot[i]] = b[pivot[i]];
+        for (int j = i + 1; j < n; ++j)
+        {
+            solution[pivot[i]] = solution[pivot[i]] - A[pivot[i]][j] * solution[pivot[j]];
         }
-        solution[piv[i]] /= A[piv[i]][i];
+        solution[pivot[i]] /= A[pivot[i]][i];
       }
 
       // translate the pivots back
       for (int i = 0; i < n; ++i)
       {
-        solution2[i] = solution[piv[i]];
+        ret[i] = solution[pivot[i]];
       }
 
-      return solution2;
+      delete[] solution;
+      return ret;
     }
 
     T *gaussian_no_pivoting () {
@@ -251,46 +256,54 @@ class MyMatrix {
   T *gaussian_partial_pivoting () {
     T **A  = clone_matrix (this->matrix, this->width);
     T  *b  = clone_vector (this->vector_B, this->width);
-    T   m  = width - 1;
-    T   n  = width;
-    int piv[this->width];
+    T   m  = this->width - 1;
+    T   n  = this->width;
+    T *ret = nullptr;
 
-    for (int i = 0; i < this->width; ++i) {
-      piv[i] = i;
+    int pivot[this->width];
+
+    for (int i = 0; i < this->width; ++i)
+    {
+      pivot[i] = i;
     }
 
-    for (int i = 0; i < m; ++i) {
+    for (int i = 0; i < m; ++i)
+    {
       // do the pivot first
       T magnitude = 0;
-      int index = -1;
-      for (int j = i; j <= m; ++j) {
-        if (absGeneric(A[piv[j]][i]) > magnitude ) {
-          magnitude = absGeneric(A[piv[j]][i]);
+      int index   = -1;
+      for (int j = i; j <= m; ++j)
+      {
+        if (abs_generic (A[pivot[j]][i]) > magnitude ) {
+          magnitude = abs_generic (A[pivot[j]][i]);
           index = j;
         }
       }
 
       if (index != -1) {
-        swap(piv[i], piv[index]);
+        swap (pivot[i], pivot[index]);
       }
 
-      for (int j = i + 1; j < n; ++j) {
+      for (int j = i + 1; j < n; ++j)
+      {
         // calculate the ratio
-        T ratio = A[piv[j]][i] / A[piv[i]][i];
-
-        for (int k = i; k < n; ++k) {
+        T ratio = A[pivot[j]][i] / A[pivot[i]][i];
+        for (int k = i; k < n; ++k)
+        {
           // modify matrix entry
-          A[piv[j]][k] = A[piv[j]][k] - ratio * A[piv[i]][k];
+          A[pivot[j]][k] = A[pivot[j]][k] - ratio * A[pivot[i]][k];
         }
-
         // modify result vector
-        b[piv[j]] = b[piv[j]] - ratio * b[piv[i]];
+        b[pivot[j]] = b[pivot[j]] - ratio * b[pivot[i]];
       }
     }
 
     // call overloaded backsub for partial pivoting
-    return backsub_partial_pivoting(A, b, piv);
+    ret = backsub_partial_pivoting (A, b, pivot);
+    delete_matrix (A, this->width);
+    delete_vector (b);
 
+    return ret;
   }
 
 };

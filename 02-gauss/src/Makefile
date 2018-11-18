@@ -6,6 +6,7 @@
 ##
 CC=g++
 CFLAGS=-Wall -Werror -D_GNU_SOURCE -g -std=c++0x
+LDFLAGS=-lgmpxx -lgmp
 
 # main targets
 all: main.o gauss.o util.o
