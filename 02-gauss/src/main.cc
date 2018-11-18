@@ -27,6 +27,14 @@ int main (int argc, char *argv[]) {
   }
   cout << endl << endl;
 
+
+  cout << endl << endl << "Vector X after Gauss_Partial_Pivoting" << endl;
+  ret_vec = matrix->gaussian_partial_pivoting ();
+  for (int i = 0; i < 3; ++i) {
+    cout << ret_vec[i] << endl;
+  }
+  cout << endl << endl;
+
   delete matrix;
   delete[] ret_vec;
   return 0;
