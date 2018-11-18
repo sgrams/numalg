@@ -177,6 +177,7 @@ class MyMatrix {
     
     T absGeneric(T X) {
       if (X < 0) X *= -1;
+      return X;
     }
 
     // gaussian elimination methods
