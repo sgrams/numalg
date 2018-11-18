@@ -143,7 +143,7 @@ class MyMatrix {
       for (int i = n - 1; i >= 0; --i)
       {
         solution[i] = b[i];
-        for (int j = i+1; j < n; ++j)
+        for (int j = i + 1; j < n; ++j)
         {
           solution[i] = solution[i] - A[i][j] * solution[j];
         }
