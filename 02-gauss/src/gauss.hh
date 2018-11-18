@@ -223,15 +223,19 @@ class MyMatrix {
       return ret;
     }
 
-    T *backsub_full_pivoting (T **A, T *b, int *pivot_row, int *pivot_col) {
+    T *backsub_complete_pivoting (T **A, T *b, int *pivot_row, int *pivot_col) {
       T* solution  = new T[this->width];
       T* ret       = new T[this->width];
       T  n         = this->width;
 
-      for (int i = n - 1; i >= 0; --i) {
+      for (int i = n - 1; i >= 0; --i)
+      {
         solution[pivot_row[i]] = b[pivot_row[i]];
         for (int j = i + 1; j < n; ++j) {
-          solution[pivot_row[i]] = solution[pivot_row[i]] - A[pivot_row[i]][pivot_col[j]] * solution[pivot_row[j]];
+          solution[pivot_row[i]] =
+            solution[pivot_row[i]]
+            - A[pivot_row[i]][pivot_col[j]]
+            * solution[pivot_row[j]];
         }
         solution[pivot_row[i]] /= A[pivot_row[i]][pivot_col[i]];
       }
@@ -326,7 +330,7 @@ class MyMatrix {
     return ret;
   }
 
-  T *gaussian_full_pivoting() {
+  T *gaussian_complete_pivoting () {
     T **A  = clone_matrix (this->matrix, this->width);
     T  *b  = clone_vector (this->vector_B, this->width);
     T   m  = this->width - 1;
@@ -337,17 +341,20 @@ class MyMatrix {
     int pivot_col[this->width];
 
     // init the pivot vectors with the default (no pivots)
-    for (int i = 0; i < this->width; ++i) {
+    for (int i = 0; i < this->width; ++i)
+    {
       pivot_row[i] = i;
       pivot_col[i] = i;
     }
 
-    for (int i = 0; i < m; ++i) {
+    for (int i = 0; i < m; ++i)
+    {
       // do the pivot first
       T magnitude = 0;
       int row_index = -1;
       int col_index = -1;
-      for (int j = i; j <= m; ++j) {
+      for (int j = i; j <= m; ++j)
+      {
         for (int k = i; k <= m; ++k)
         {
           if (abs_generic(A[pivot_row[j]][pivot_row[k]]) > magnitude) {
@@ -366,25 +373,25 @@ class MyMatrix {
         swap(pivot_col[i], pivot_col[col_index]);
       }
 
-      for (int j = i + 1; j < n; ++j) {
+      for (int j = i + 1; j < n; ++j)
+      {
           // calculate the ratio
           T ratio = A[pivot_row[j]][pivot_col[i]] / A[pivot_row[i]][pivot_col[i]];
           for (int k = i; k < n; ++k) {
             // modify matrix entry
-            A[pivot_row[j]][pivot_col[k]] = A[pivot_row[j]][pivot_col[k]] - ratio * A[pivot_row[i]][pivot_col[k]];
+            A[pivot_row[j]][pivot_col[k]] = A[pivot_row[j]][pivot_col[k]]
+              - ratio * A[pivot_row[i]][pivot_col[k]];
           }
           // modify result vector
           b[pivot_row[j]] = b[pivot_row[j]] - ratio * b[pivot_row[i]];
       }
     }
 
-    ret = backsub_full_pivoting(A, b, pivot_row, pivot_col);
+    ret = backsub_complete_pivoting(A, b, pivot_row, pivot_col);
     delete_matrix (A, this->width);
     delete_vector (b);
 
     return ret;
   }
-
-
 };
 #endif // _GAUSS_GAUSS_H
