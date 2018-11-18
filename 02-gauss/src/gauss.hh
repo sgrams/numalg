@@ -174,11 +174,15 @@ class MyMatrix {
       delete[] vector;
       return;
     }
+    
+    T absGeneric(T X) {
+      if (X < 0) X *= -1;
+    }
 
     // gaussian elimination methods
     T *backsub_no_pivoting (T **A, T *b) {
-      T* solution = new T[width];
-      T n = width;
+      T* solution = new T[this->width];
+      T n = this->width;
 
       for (int i = n - 1; i >= 0; --i)
       {
@@ -193,12 +197,34 @@ class MyMatrix {
       return solution;
     }
 
+    T *backsub_partial_pivoting (T **A, T *b, int *piv) {
+      T* solution = new T[this->width];
+      T* solution2 = new T[this->width];
+      T n = this->width;
+
+      for (int i = n - 1; i >= 0; --i) {
+        solution[piv[i]] = b[piv[i]];
+        for (int j = i + 1; j < n; ++j) {
+            solution[piv[i]] = solution[piv[i]] - A[piv[i]][j] * solution[piv[j]];
+        }
+        solution[piv[i]] /= A[piv[i]][i];
+      }
+
+      // translate the pivots back
+      for (int i = 0; i < n; ++i)
+      {
+        solution2[i] = solution[piv[i]];
+      }
+
+      return solution2;
+    }
+
     T *gaussian_no_pivoting () {
       // create copy of matrix and vector b
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector_B, this->width);
-      T   m  = width - 1;
-      T   n  = width;
+      T   m  = this->width - 1;
+      T   n  = this->width;
       T *ret = nullptr;
 
       for (int i = 0; i < m; ++i)
@@ -221,5 +247,51 @@ class MyMatrix {
 
     return ret;
   }
+
+  T *gaussian_partial_pivoting () {
+    T **A  = clone_matrix (this->matrix, this->width);
+    T  *b  = clone_vector (this->vector_B, this->width);
+    T   m  = width - 1;
+    T   n  = width;
+    int piv[this->width];
+
+    for (int i = 0; i < this->width; ++i) {
+      piv[i] = i;
+    }
+
+    for (int i = 0; i < m; ++i) {
+      // do the pivot first
+      T magnitude = 0;
+      int index = -1;
+      for (int j = i; j <= m; ++j) {
+        if (absGeneric(A[piv[j]][i]) > magnitude ) {
+          magnitude = absGeneric(A[piv[j]][i]);
+          index = j;
+        }
+      }
+
+      if (index != -1) {
+        swap(piv[i], piv[index]);
+      }
+
+      for (int j = i + 1; j < n; ++j) {
+        // calculate the ratio
+        T ratio = A[piv[j]][i] / A[piv[i]][i];
+
+        for (int k = i; k < n; ++k) {
+          // modify matrix entry
+          A[piv[j]][k] = A[piv[j]][k] - ratio * A[piv[i]][k];
+        }
+
+        // modify result vector
+        b[piv[j]] = b[piv[j]] - ratio * b[piv[i]];
+      }
+    }
+
+    // call overloaded backsub for partial pivoting
+    return backsub_partial_pivoting(A, b, piv);
+
+  }
+
 };
 #endif // _GAUSS_GAUSS_H
