@@ -135,6 +135,46 @@ class MyMatrix {
       }
     }
 
+    // cloning methods for gaussian elimination methods
+    T **clone_matrix (T **matrix, int width) {
+      T **A = new T*[width];
+
+      for (int i = 0; i < width; ++i)
+      {
+        A[i] = new T[width];
+        for (int j = 0; j < width; ++j)
+        {
+          A[i][j] = matrix[i][j];
+        }
+      }
+
+      return A;
+    }
+
+    T *clone_vector (T *vector, int width) {
+      T *b = new T[width];
+      for (int i = 0; i < width; ++i)
+      {
+        b[i] = vector[i];
+      }
+
+      return b;
+    }
+
+    // delete methods for gaussian elimination methods
+    void delete_matrix (T **matrix, int width) {
+      for (int i = 0; i < width; ++i) {
+        delete[] matrix[i];
+      }
+      delete[] matrix;
+      return;
+    }
+
+    void delete_vector (T *vector) {
+      delete[] vector;
+      return;
+    }
+
     // gaussian elimination methods
     T *backsub_no_pivoting (T **A, T *b) {
       T* solution = new T[width];
@@ -152,28 +192,14 @@ class MyMatrix {
 
       return solution;
     }
-  
+
     T *gaussian_no_pivoting () {
       // create copy of matrix and vector b
-      T** A = new T*[width];
-      T* b = new T[width];
-      
-      for (int i = 0; i < width; ++i)
-      {
-        A[i] = new T[width];
-      }
-
-      for (int i = 0; i <width; ++i)
-      {
-        b[i] = this->vector_B[i];
-        for (int j = 0; j < width; ++j)
-        {
-          A[i][j] = this->matrix[i][j];
-        }
-      }
-    
-      T m = width - 1;
-      T n = width;
+      T **A  = clone_matrix (this->matrix, this->width);
+      T  *b  = clone_vector (this->vector_B, this->width);
+      T   m  = width - 1;
+      T   n  = width;
+      T *ret = nullptr;
 
       for (int i = 0; i < m; ++i)
       {
@@ -188,14 +214,10 @@ class MyMatrix {
         }
       }
     
-    T *ret = backsub_no_pivoting (A, b);
-    
-    for (int i = 0; i < width; ++i)
-    {
-      delete[] A[i];
-    }
-    delete[] A;
-    delete[] b;
+    ret = backsub_no_pivoting (A, b);
+
+    delete_matrix (A, this->width);
+    delete_vector (b);
 
     return ret;
   }
