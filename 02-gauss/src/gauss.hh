@@ -12,9 +12,9 @@ using namespace std;
 template <typename T>
 class MyMatrix {
   private:
-    T** matrix;
-    T*  vector_X;
-    T*  vector_B;
+    T **matrix;
+    T  *vector_X;
+    T  *vector_B;
 
     int width;
   public:
@@ -40,30 +40,32 @@ class MyMatrix {
       delete[] this->vector_B;
     }
 
+    // getters
     int get_width () {
       return this->width;
     }
-    T** get_matrix () {
+    T **get_matrix () {
       return this->matrix;
     };
-    T* get_vector_X () {
+    T  *get_vector_X () {
       return this->vector_X;
     };
-    T* get_vector_B () {
+    T  *get_vector_B () {
       return this->vector_B;
     };
 
-    void set_vector_X (T* vector) {
+    // setters
+    void set_vector_X (T *vector) {
       this->vector_X = vector;
     }
-    void set_vector_B (T* vector) {
+    void set_vector_B (T *vector) {
       this->vector_B = vector;
     }
-    void set_matrix (T** matrix) {
+    void set_matrix (T **matrix) {
       this->matrix = matrix;
     }
 
-    // prints matrix
+    // i/o streams operations
     void print_matrix () {
       for (int i = 0; i < width; ++i)
       {
@@ -88,6 +90,8 @@ class MyMatrix {
         cout << this->vector_B[i] << endl;
       }
     }
+
+    // data fillers
     // fills matrix A with randomized data
     void fill_matrix () {
       T num;
@@ -131,30 +135,25 @@ class MyMatrix {
       }
     }
 
-    T* backsub_no_pivoting(T** A, T* b) {
+    // gaussian elimination methods
+    T *backsub_no_pivoting (T **A, T *b) {
       T* solution = new T[width];
       T n = width;
 
       for (int i = n - 1; i >= 0; --i)
       {
         solution[i] = b[i];
-         for (int j = i+1; j < n; ++j)
-         {
-           solution[i] = solution[i] - A[i][j] * solution[j];
-         }
-         solution[i] /= A[i][i];
+        for (int j = i+1; j < n; ++j)
+        {
+          solution[i] = solution[i] - A[i][j] * solution[j];
+        }
+        solution[i] /= A[i][i];
       }
-
-      for (int i = 0; i < width; ++i)
-       {
-         cout << solution[i]  << " "  << endl;
-       }
 
       return solution;
     }
   
-    T* gaussian_no_pivoting() {
-
+    T *gaussian_no_pivoting () {
       // create copy of matrix and vector b
       T** A = new T*[width];
       T* b = new T[width];
@@ -167,14 +166,16 @@ class MyMatrix {
       for (int i = 0; i <width; ++i)
       {
         b[i] = this->vector_B[i];
-        for(int j = 0; j < width; ++j)
+        for (int j = 0; j < width; ++j)
+        {
           A[i][j] = this->matrix[i][j];
+        }
       }
     
       T m = width - 1;
       T n = width;
 
-      for(int i = 0; i < m; ++i)
+      for (int i = 0; i < m; ++i)
       {
         for (int j = i + 1; j < n; ++j)
         {
@@ -184,11 +185,19 @@ class MyMatrix {
             A[j][k] = A[j][k] - ratio * A[i][k];
           }
           b[j] = b[j] - ratio * b[i];
-          T rjAfter = b[j];
         }
       }
-     
-    return backsub_no_pivoting(A, b);
+    
+    T *ret = backsub_no_pivoting (A, b);
+    
+    for (int i = 0; i < width; ++i)
+    {
+      delete[] A[i];
     }
+    delete[] A;
+    delete[] b;
+
+    return ret;
+  }
 };
 #endif // _GAUSS_GAUSS_H
