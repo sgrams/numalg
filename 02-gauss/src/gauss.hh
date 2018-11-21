@@ -1,3 +1,11 @@
+/*
+ *  This file is part of 02-gauss task.
+ * 
+ *  src/gauss.hh
+ *  Grams, Stanislaw <sgrams@fmdx.pl>
+ *  Jezierski, Maciej <maciejjezierski4@gmail.com>
+ *  Korczakowski, Juliusz <iuliuszkor@gmail.com>
+ */
 #ifndef _GAUSS_GAUSS_H
 #define _GAUSS_GAUSS_H
 #include <iostream>
@@ -11,12 +19,48 @@
 
 using namespace std;
 
-typedef struct TC {
-  mpq_t number;
-  int   base = 10;
-} TC_t;
+class MyType {
+  public:
+    // structure that holds the number in rational form
+    mpq_t value;
 
-template <typename T>
+    // constructors and deconstructors
+    MyType ();
+    MyType (const int equ);
+    MyType (const float equ);
+    MyType (const double equ);
+    MyType (const MyType &set);
+    
+    ~MyType ();
+
+    // overloading mathematical operators
+    void   operator =  (const int set);
+    void   operator =  (const float set);
+    void   operator =  (const double set);
+    void   operator =  (const MyType &equ);
+    MyType operator +  (const MyType &add);
+    MyType operator -  (const MyType &sub);
+    MyType operator *  (const MyType &mul);
+    MyType operator /  (const MyType &mul);
+
+    void   operator *= (const MyType &muls);
+    void   operator -= (const MyType &subs);
+    void   operator += (const MyType &adds);
+    void   operator /= (const MyType &divs);
+
+    // overloading boolean operators
+    bool   operator <  (const MyType &sma);
+    bool   operator >  (const MyType &big);
+    bool   operator <= (const MyType &soe);
+    bool   operator >= (const MyType &boe);
+    bool   operator == (const MyType &equ);
+    bool   operator != (const MyType &inq);
+
+    // overloading i/o
+    friend ostream& operator << (ostream &os, const MyType &mt);
+
+};
+template <class T>
 class MyMatrix {
   private:
     T **matrix;
@@ -106,6 +150,9 @@ class MyMatrix {
         for (int j = 0; j < width; ++j)
         {
           num = distr (eng);
+          if (num == 0) {
+            num += 1;
+          }
           num /= RANDOMIZE_MAX_NUM;
           this->matrix[i][j] = num;
         }
@@ -178,13 +225,17 @@ class MyMatrix {
     }
     
     T abs_generic (T x) {
-      return x < 0 ? -x : x;
+      T ret = x;
+      if (x < 0) {
+        ret = x * -1;
+      }
+      return ret;
     }
 
     // gaussian elimination methods
     T *backsub_no_pivoting (T **A, T *b) {
-      T* solution = new T[this->width];
-      T n = this->width;
+      T*  solution = new T[this->width];
+      int n = this->width;
 
       for (int i = n - 1; i >= 0; --i)
       {
@@ -200,9 +251,9 @@ class MyMatrix {
     }
 
     T *backsub_partial_pivoting (T **A, T *b, int *pivot) {
-      T* solution  = new T[this->width];
-      T* ret       = new T[this->width];
-      T  n         = this->width;
+      T*  solution  = new T[this->width];
+      T*  ret       = new T[this->width];
+      int n         = this->width;
 
       for (int i = n - 1; i >= 0; --i)
       {
@@ -224,9 +275,9 @@ class MyMatrix {
     }
 
     T *backsub_complete_pivoting (T **A, T *b, int *pivot_row, int *pivot_col) {
-      T* solution  = new T[this->width];
-      T* ret       = new T[this->width];
-      T  n         = this->width;
+      T*  solution  = new T[this->width];
+      T*  ret       = new T[this->width];
+      int n         = this->width;
 
       for (int i = n - 1; i >= 0; --i)
       {
@@ -253,9 +304,10 @@ class MyMatrix {
       // create copy of matrix and vector b
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector_B, this->width);
-      T   m  = this->width - 1;
-      T   n  = this->width;
       T *ret = nullptr;
+
+      int m  = this->width - 1;
+      int n  = this->width;
 
       for (int i = 0; i < m; ++i)
       {
@@ -281,9 +333,10 @@ class MyMatrix {
   T *gaussian_partial_pivoting () {
     T **A  = clone_matrix (this->matrix, this->width);
     T  *b  = clone_vector (this->vector_B, this->width);
-    T   m  = this->width - 1;
-    T   n  = this->width;
     T *ret = nullptr;
+
+    int m  = this->width - 1;
+    int n  = this->width;
 
     int pivot[this->width];
 
@@ -333,9 +386,10 @@ class MyMatrix {
   T *gaussian_complete_pivoting () {
     T **A  = clone_matrix (this->matrix, this->width);
     T  *b  = clone_vector (this->vector_B, this->width);
-    T   m  = this->width - 1;
-    T   n  = this->width;
     T *ret = nullptr;
+
+    int m  = this->width - 1;
+    int n  = this->width;
 
     int pivot_row[this->width];
     int pivot_col[this->width];
@@ -366,11 +420,11 @@ class MyMatrix {
       }
 
       if (row_index != -1) {
-        swap(pivot_row[i], pivot_row[row_index]);
+        swap (pivot_row[i], pivot_row[row_index]);
       }
 
       if (col_index != -1) {
-        swap(pivot_col[i], pivot_col[col_index]);
+        swap (pivot_col[i], pivot_col[col_index]);
       }
 
       for (int j = i + 1; j < n; ++j)

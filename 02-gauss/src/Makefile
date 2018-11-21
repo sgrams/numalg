@@ -9,15 +9,14 @@ CFLAGS=-Wall -Werror -D_GNU_SOURCE -g -std=c++0x
 LDFLAGS=-lgmpxx -lgmp
 
 # main targets
-all: main.o gauss.o util.o
+all: gauss.o util.o main.o
 
 # *.c
-main.o: main.cc
 gauss.o: gauss.cc
 util.o: util.cc
-
+main.o: main.cc
 # other procedures
 .PHONY: clean
 clean:  rmobj
 rmobj:
-	rm -f main.o gauss.o util.o
+	rm -f gauss.o util.o main.o
