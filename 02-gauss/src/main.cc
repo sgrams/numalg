@@ -17,8 +17,8 @@
 using namespace std;
 
 int main (int argc, char *argv[]) {
-  Util::print_help ();
-  /*
+  //Util::print_help ();
+
   MyMatrix<MyType>* matrix = new MyMatrix<MyType>(10);
   MyType *ret_vec;
   matrix->fill_matrix ();
@@ -57,6 +57,6 @@ int main (int argc, char *argv[]) {
 
   delete matrix;
   delete[] ret_vec;
-*/
+
   return 0;
 }

@@ -14,8 +14,8 @@
 #include <algorithm>
 #include <gmp.h>
 
-#define RANDOMIZE_MIN_NUM -65536
-#define RANDOMIZE_MAX_NUM  65535
+#define RANDOMIZE_MIN_NUM -65536 // -2^32
+#define RANDOMIZE_MAX_NUM  65535 //  2^32 - 1
 
 using namespace std;
 
@@ -69,7 +69,8 @@ class MyMatrix {
 
     int width;
   public:
-    MyMatrix (int width) {
+    MyMatrix (int width)
+    {
       this->width    = width;
       this->matrix   = new T*[width];
       this->vector_X = new T[width];
@@ -81,7 +82,8 @@ class MyMatrix {
         matrix[i] = new T[width];
       }
     }
-    ~MyMatrix () {
+    ~MyMatrix ()
+    {
       for (int i = 0; i < this->width; i++)
       {
         delete[] this->matrix[i];
@@ -92,32 +94,47 @@ class MyMatrix {
     }
 
     // getters
-    int get_width () {
+    int
+    get_width ()
+    {
       return this->width;
     }
-    T **get_matrix () {
+    T
+    **get_matrix ()
+    {
       return this->matrix;
     };
-    T  *get_vector_X () {
+    T
+    *get_vector_X ()
+    {
       return this->vector_X;
     };
-    T  *get_vector_B () {
+    T
+    *get_vector_B ()
+    {
       return this->vector_B;
     };
 
     // setters
-    void set_vector_X (T *vector) {
+    void
+    set_vector_X (T *vector)
+    {
       this->vector_X = vector;
     }
-    void set_vector_B (T *vector) {
+    void
+    set_vector_B (T *vector)
+    {
       this->vector_B = vector;
     }
-    void set_matrix (T **matrix) {
+    void set_matrix (T **matrix)
+    {
       this->matrix = matrix;
     }
 
     // i/o streams operations
-    void print_matrix () {
+    void
+    print_matrix ()
+    {
       for (int i = 0; i < width; ++i)
       {
         for (int j = 0; j < width; ++j)
@@ -130,7 +147,9 @@ class MyMatrix {
       }
     }
 
-    void print_vector (T *vector, int width) {
+    void
+    print_vector (T *vector, int width)
+    {
       for (int i = 0; i < width; ++i)
       {
         cout << vector[i] << endl;
@@ -139,7 +158,9 @@ class MyMatrix {
 
     // data fillers
     // fills matrix A with randomized data
-    void fill_matrix () {
+    void
+    fill_matrix ()
+    {
       T num;
       random_device rd;
       mt19937 eng(rd());
@@ -159,7 +180,9 @@ class MyMatrix {
       }
     }
     // fills vector X with randomized data
-    void fill_vector_X () {
+    void
+    fill_vector_X () 
+    {
       T num;
       random_device rd;
       mt19937 eng(rd());
@@ -168,12 +191,17 @@ class MyMatrix {
       for (int i = 0; i < width; ++i)
       {
         num = distr (eng);
+        if (num == 0) {
+          num += 1;
+        }
         num /= RANDOMIZE_MAX_NUM;
         this->vector_X[i] = num;
       }
     }
     // fills vector B by solving B=A*X
-    void fill_vector_B () {
+    void
+    fill_vector_B ()
+    {
       for (int i = 0; i < width; ++i)
       {
         this->vector_B[i] = 0;
@@ -185,7 +213,9 @@ class MyMatrix {
     }
 
     // cloning methods for gaussian elimination methods
-    T **clone_matrix (T **matrix, int width) {
+    T
+    **clone_matrix (T **matrix, int width)
+    {
       T **A = new T*[width];
 
       for (int i = 0; i < width; ++i)
@@ -200,7 +230,9 @@ class MyMatrix {
       return A;
     }
 
-    T *clone_vector (T *vector, int width) {
+    T
+    *clone_vector (T *vector, int width)
+    {
       T *b = new T[width];
       for (int i = 0; i < width; ++i)
       {
@@ -211,7 +243,9 @@ class MyMatrix {
     }
 
     // delete methods for gaussian elimination methods
-    void delete_matrix (T **matrix, int width) {
+    void
+    delete_matrix (T **matrix, int width)
+    {
       for (int i = 0; i < width; ++i) {
         delete[] matrix[i];
       }
@@ -219,12 +253,16 @@ class MyMatrix {
       return;
     }
 
-    void delete_vector (T *vector) {
+    void
+    delete_vector (T *vector)
+    {
       delete[] vector;
       return;
     }
     
-    T abs_generic (T x) {
+    T
+    abs_generic (T x)
+    {
       T ret = x;
       if (x < 0) {
         ret = x * -1;
@@ -233,7 +271,9 @@ class MyMatrix {
     }
 
     // gaussian elimination methods
-    T *backsub_no_pivoting (T **A, T *b) {
+    T
+    *backsub_no_pivoting (T **A, T *b)
+    {
       T*  solution = new T[this->width];
       int n = this->width;
 
@@ -250,7 +290,9 @@ class MyMatrix {
       return solution;
     }
 
-    T *backsub_partial_pivoting (T **A, T *b, int *pivot) {
+    T
+    *backsub_partial_pivoting (T **A, T *b, int *pivot)
+    {
       T*  solution  = new T[this->width];
       T*  ret       = new T[this->width];
       int n         = this->width;
@@ -274,7 +316,9 @@ class MyMatrix {
       return ret;
     }
 
-    T *backsub_complete_pivoting (T **A, T *b, int *pivot_row, int *pivot_col) {
+    T
+    *backsub_complete_pivoting (T **A, T *b, int *pivot_row, int *pivot_col)
+    {
       T*  solution  = new T[this->width];
       T*  ret       = new T[this->width];
       int n         = this->width;
@@ -300,7 +344,9 @@ class MyMatrix {
       return ret;
     }
 
-    T *gaussian_no_pivoting () {
+    T
+    *gaussian_no_pivoting ()
+    {
       // create copy of matrix and vector b
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector_B, this->width);
@@ -330,7 +376,9 @@ class MyMatrix {
     return ret;
   }
 
-  T *gaussian_partial_pivoting () {
+  T
+  *gaussian_partial_pivoting ()
+  {
     T **A  = clone_matrix (this->matrix, this->width);
     T  *b  = clone_vector (this->vector_B, this->width);
     T *ret = nullptr;
@@ -383,7 +431,9 @@ class MyMatrix {
     return ret;
   }
 
-  T *gaussian_complete_pivoting () {
+  T
+  *gaussian_complete_pivoting ()
+  {
     T **A  = clone_matrix (this->matrix, this->width);
     T  *b  = clone_vector (this->vector_B, this->width);
     T *ret = nullptr;
