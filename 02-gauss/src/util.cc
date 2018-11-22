@@ -35,7 +35,7 @@ namespace Util {
     output_file.open (filename);
     for (auto i: result_vec)
     {
-      output_file.precision (10);
+      output_file.precision (30);
       output_file << fixed;
       output_file << i.matrix_size << ",";
       output_file << i.abs_err << ",";
