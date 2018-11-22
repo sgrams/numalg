@@ -19,12 +19,12 @@
 
 #define  DEFAULT_MIN_TEST_SIZE 10
 #define  DEFAULT_STEP_SIZE     10
-#define  DEFAULT_ATTEMPTS_SIZE 8
+#define  DEFAULT_ATTEMPTS_SIZE 5
 
 #define  MAX_THREADS       3
 #define  MAX_FLOAT_TESTS   500
 #define  MAX_DOUBLE_TESTS  500
-#define  MAX_MYTYPE_TESTS  200
+#define  MAX_MYTYPE_TESTS  120
 
 #define  DEFAULT_FLOAT_TESTS_FILENAME "float_tests.csv"
 #define  DEFAULT_DOUBLE_TESTS_FILENAME "double_tests.csv"
@@ -44,6 +44,9 @@ void *worker_func0 (void *buffer)
     result.abs_err     = 0;
     result.abs_err_pg  = 0;
     result.abs_err_fg  = 0;
+    result.rel_err     = 0;
+    result.rel_err_pg  = 0;
+    result.rel_err_fg  = 0;
     result.avg_time    = 0;
     result.avg_time_pg = 0;
     result.avg_time_fg = 0;
@@ -97,7 +100,7 @@ void *worker_func0 (void *buffer)
       result.abs_err_pg  /= 2;
       result.rel_err_pg  += matrix->count_rel_error (vec_X, ret_vec_np, size);
       result.rel_err_pg  /= 2;
-      result.avg_time_pg += diff_gnp_time;
+      result.avg_time_pg += diff_gpp_time;
       result.avg_time_pg /= 2;
 
       delete[] ret_vec_pp;
@@ -114,7 +117,7 @@ void *worker_func0 (void *buffer)
       result.abs_err_fg  /= 2;
       result.rel_err_fg  += matrix->count_rel_error (vec_X, ret_vec_cp, size);
       result.rel_err_fg  /= 2;
-      result.avg_time_fg += diff_gnp_time;
+      result.avg_time_fg += diff_gcp_time;
       result.avg_time_fg /= 2;
       
       delete[] ret_vec_cp;
@@ -143,6 +146,9 @@ void *worker_func1 (void *buffer)
     result.abs_err     = 0;
     result.abs_err_pg  = 0;
     result.abs_err_fg  = 0;
+    result.rel_err     = 0;
+    result.rel_err_pg  = 0;
+    result.rel_err_fg  = 0;
     result.avg_time    = 0;
     result.avg_time_pg = 0;
     result.avg_time_fg = 0;
@@ -196,7 +202,7 @@ void *worker_func1 (void *buffer)
       result.abs_err_pg  /= 2;
       result.rel_err_pg  += matrix->count_rel_error (vec_X, ret_vec_np, size);
       result.rel_err_pg  /= 2;
-      result.avg_time_pg += diff_gnp_time;
+      result.avg_time_pg += diff_gpp_time;
       result.avg_time_pg /= 2;
 
       delete[] ret_vec_pp;
@@ -213,7 +219,7 @@ void *worker_func1 (void *buffer)
       result.abs_err_fg  /= 2;
       result.rel_err_fg  += matrix->count_rel_error (vec_X, ret_vec_cp, size);
       result.rel_err_fg  /= 2;
-      result.avg_time_fg += diff_gnp_time;
+      result.avg_time_fg += diff_gcp_time;
       result.avg_time_fg /= 2;
       
       delete[] ret_vec_cp;
@@ -242,6 +248,9 @@ void *worker_func2 (void *buffer)
     result.abs_err     = 0;
     result.abs_err_pg  = 0;
     result.abs_err_fg  = 0;
+    result.rel_err     = 0;
+    result.rel_err_pg  = 0;
+    result.rel_err_fg  = 0;
     result.avg_time    = 0;
     result.avg_time_pg = 0;
     result.avg_time_fg = 0;
