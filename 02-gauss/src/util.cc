@@ -35,6 +35,8 @@ namespace Util {
     output_file.open (filename);
     for (auto i: result_vec)
     {
+      output_file.precision (10);
+      output_file << fixed;
       output_file << i.matrix_size << ",";
       output_file << i.abs_err << ",";
       output_file << i.abs_err_pg << ",";
@@ -44,8 +46,7 @@ namespace Util {
       output_file << i.rel_err_fg << ",";
       output_file << i.avg_time << ",";
       output_file << i.avg_time_pg << ",";
-      output_file << i.avg_time_fg << ",";
-      output_file << endl;
+      output_file << i.avg_time_fg << endl;
     }
     output_file.close ();
   }
