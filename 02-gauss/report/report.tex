@@ -1,0 +1,64 @@
+\documentclass[12pt]{article}
+ 
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{siunitx}
+ 
+\newenvironment{theorem}[2][Twierdzenie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Pytanie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{hypothesis}[2][Hipoteza]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemat]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Ćwiczenie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Uwaga]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Założenie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Wniosek]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+ 
+\begin{document}
+
+\title{Implementacja algorytmu eliminacji Gaussa\\oraz testy wydajnościowe i obliczeniowe trzech określonych typów}
+\author{Grams, Stanisław\\Jezierski, Maciej\\Korczakowski, Juliusz\\ MFI UG\\Algorytmy Numeryczne}
+
+\maketitle
+\section {Operacje na macierzach}
+\subsection{O sprawozdaniu}
+Sprawozdanie prezentuje analizę wydajności i poprawności implementacji algorytmu eliminacji Gaussa, dla macierzy kwadratowej $A$ oraz wektora $B$ w układzie liniowym $A*X = B$ gdzie współczynniki wektora $A$ oraz macierzy kwadratowej $X$ są losowane. \\
+Zakres losowanych współczynników jest równy $[-1, 1]$, natomiast każdy z nich został wyznaczony według wzoru $r/2^{16}$, gdzie $r$ jest losową liczbą zakresu $[-2^{16} , 2^{16}]$.
+Wygenerowany w ten sposób wektor $X$ pozostaje próbą kontrolną natomiast do algorytmu jako parametr przekazujemy wyliczony według powyższego wzoru wektor $B$.
+\subsection{O implementacji}
+Program \textit{„gauss”} został napisany w języku C++ z użyciem bibliotek:
+\begin{itemize}
+    \item \textit{„gmp.h”} — pozwalającej zaimplementować wymagany typ całkowity (TC)
+    \item \textit{„pthread.h”} — do celów obsługi wielowątkowości,
+\end{itemize}
+Wyniki działania programu zapisywane są do poszczególnych plików \textit{*.csv}.
+Zaimplementowano następujące warianty algorytmu Gaussa dla kolejnych typów zmiennych rzeczywistych:
+\begin{itemize}
+\item[] Warianty algorytmu eliminacji
+    \item G: bez wyboru elementu podstawowego,
+    \item PG: z częściowym wyborem elementu podstawowego, 
+    \item FG: z całkowitym wyborem elementu podstawowego.
+\item[] Typy zmiennych rzeczywistych
+    \item {float} – wbudowany typ pojedynczej precyzji 
+    \item {double} – wbudowany typ podwójnej precyzji
+    \item {MyType} – typ zaimplementowany przez zespół, oparty o bibliotekę „GMP.h” i typ „mpq\_t”
+\end{itemize}
+\subsection{Konkluzje}
+\begin{hypothesis}{1}
+Dla dowolnego ustalone rozmiaru macierzy czas działania metody Gaussa w kolejnych wersjach (G,PG,FG) rośnie.
+\end{hypothesis}
+
+\subsection{Wykresy}
+Wykresy (w postaci wektorowej) załączono w katalogu \textit{„report/plots/”}\\
+Do narysowania wykresów użyto oprogramowania \textit{„GNU Octave”} wraz z pakietem \textit{„gnuplot”}. Skrypty załączono w katalogu \textit{„scripts/”}.
+
+\end{document}
