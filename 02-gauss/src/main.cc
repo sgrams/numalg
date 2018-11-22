@@ -94,7 +94,7 @@ void *worker_func0 (void *buffer)
       clock_t begin_gpp_time = clock ();
       ret_vec_pp = matrix->gaussian_partial_pivoting ();
       clock_t end_gpp_time = clock ();
-      double  diff_gpp_time = (double)(end_gnp_time - begin_gnp_time) / CLOCKS_PER_SEC;
+      double  diff_gpp_time = (double)(end_gpp_time - begin_gpp_time) / CLOCKS_PER_SEC;
       // calculate absolute and relative errors, and set times to result structure
       result.abs_err_pg  += matrix->count_abs_error (vec_X, ret_vec_np, size);
       result.abs_err_pg  /= 2;
@@ -111,7 +111,7 @@ void *worker_func0 (void *buffer)
       clock_t begin_gcp_time = clock ();
       ret_vec_cp = matrix->gaussian_complete_pivoting ();
       clock_t end_gcp_time = clock ();
-      double  diff_gcp_time = (double)(end_gnp_time - begin_gnp_time) / CLOCKS_PER_SEC;
+      double  diff_gcp_time = (double)(end_gcp_time - begin_gcp_time) / CLOCKS_PER_SEC;
       // calculate absolute and relative errors, and set times to result structure
       result.abs_err_fg  += matrix->count_abs_error (vec_X, ret_vec_cp, size);
       result.abs_err_fg  /= 2;
@@ -196,7 +196,7 @@ void *worker_func1 (void *buffer)
       clock_t begin_gpp_time = clock ();
       ret_vec_pp = matrix->gaussian_partial_pivoting ();
       clock_t end_gpp_time = clock ();
-      double  diff_gpp_time = (double)(end_gnp_time - begin_gnp_time) / CLOCKS_PER_SEC;
+      double  diff_gpp_time = (double)(end_gpp_time - begin_gpp_time) / CLOCKS_PER_SEC;
       // calculate absolute and relative errors, and set times to result structure
       result.abs_err_pg  += matrix->count_abs_error (vec_X, ret_vec_np, size);
       result.abs_err_pg  /= 2;
@@ -213,7 +213,7 @@ void *worker_func1 (void *buffer)
       clock_t begin_gcp_time = clock ();
       ret_vec_cp = matrix->gaussian_complete_pivoting ();
       clock_t end_gcp_time = clock ();
-      double  diff_gcp_time = (double)(end_gnp_time - begin_gnp_time) / CLOCKS_PER_SEC;
+      double  diff_gcp_time = (double)(end_gcp_time - begin_gcp_time) / CLOCKS_PER_SEC;
       // calculate absolute and relative errors, and set times to result structure
       result.abs_err_fg  += matrix->count_abs_error (vec_X, ret_vec_cp, size);
       result.abs_err_fg  /= 2;
@@ -298,7 +298,7 @@ void *worker_func2 (void *buffer)
       clock_t begin_gpp_time = clock ();
       ret_vec_pp = matrix->gaussian_partial_pivoting ();
       clock_t end_gpp_time = clock ();
-      double  diff_gpp_time = (double)(end_gnp_time - begin_gnp_time) / CLOCKS_PER_SEC;
+      double  diff_gpp_time = (double)(end_gpp_time - begin_gpp_time) / CLOCKS_PER_SEC;
       // calculate absolute and relative errors, and set times to result structure
       result.abs_err_pg  += mpq_get_d (matrix->count_abs_error (vec_X, ret_vec_pp, size).value);
       result.abs_err_pg  /= 2;
@@ -315,7 +315,7 @@ void *worker_func2 (void *buffer)
       clock_t begin_gcp_time = clock ();
       ret_vec_cp = matrix->gaussian_complete_pivoting ();
       clock_t end_gcp_time = clock ();
-      double  diff_gcp_time = (double)(end_gnp_time - begin_gnp_time) / CLOCKS_PER_SEC;
+      double  diff_gcp_time = (double)(end_gcp_time - begin_gcp_time) / CLOCKS_PER_SEC;
       // calculate absolute and relative errors, and set times to result structure
       result.abs_err_fg  += mpq_get_d (matrix->count_abs_error (vec_X, ret_vec_cp, size).value);
       result.abs_err_fg  /= 2;
