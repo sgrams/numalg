@@ -5,8 +5,8 @@
 #  Stanisław Grams
 ##
 CC=g++
-CFLAGS=-Wall -Werror -D_GNU_SOURCE -g -std=c++0x
-LDFLAGS=-lgmpxx -lgmp
+CFLAGS=-Wall -Werror -Wall -pedantic -std=c++0x
+LDFLAGS=-lgmpxx -lgmp -pthread
 
 # main targets
 all: gauss.o util.o main.o

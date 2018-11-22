@@ -5,8 +5,8 @@
 #  Stanisław Grams
 ##
 CC=g++
-CFLAGS=-Wall -Werror -std=c++0x -pedantic -Wall
-LDFLAGS=-lgmpxx -lgmp
+CFLAGS=-Wall -Werror -Wall -pedantic -std=c++0x
+LDFLAGS=-lgmpxx -lgmp -pthread
 
 SRCDIR=src
 OUTNAME=gauss
@@ -24,3 +24,5 @@ clean:
 	+$(MAKE) -C $(SRCDIR) clean
 rmobj:
 	+$(MAKE) -C $(SRCDIR) rmobj
+rmcsv:
+	+rm -f double_tests.csv float_tests.csv mytype_tests.csv

@@ -38,6 +38,7 @@ class MyType {
     void   operator =  (const float set);
     void   operator =  (const double set);
     void   operator =  (const MyType &equ);
+
     MyType operator +  (const MyType &add);
     MyType operator -  (const MyType &sub);
     MyType operator *  (const MyType &mul);
@@ -263,9 +264,11 @@ class MyMatrix {
     T
     abs_generic (T x)
     {
-      T ret = x;
-      if (x < 0) {
-        ret = x * -1;
+      T ret;
+      ret = x;
+      // FIXME: integer overflow protection
+      if (ret < 0) {
+        ret = ret * -1;
       }
       return ret;
     }
@@ -496,6 +499,38 @@ class MyMatrix {
     delete_vector (b);
 
     return ret;
+  }
+
+  T
+  count_abs_error (T* exemplary, T* after_test, int width)
+  {
+    T error_counter;
+    T val;
+    T def;
+    for (int i = 0; i < width; ++i)
+    {
+      def = exemplary[i] - after_test[i];
+      val = abs_generic (def);
+      error_counter = error_counter + val;
+    }
+    error_counter = error_counter / width;
+    return error_counter;
+  }
+
+  T
+  count_rel_error (T* exemplary, T* after_test, int width)
+  {
+    T error_counter;
+    T val;
+    T def;
+    for (int i = 0; i < width; ++i)
+    {
+      def = exemplary[i] - after_test[i];
+      val = abs_generic (def);
+      error_counter = error_counter + val / exemplary[i];
+    }
+    error_counter = error_counter / width;
+    return error_counter;
   }
 };
 #endif // _GAUSS_GAUSS_H
