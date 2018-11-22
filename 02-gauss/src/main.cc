@@ -19,12 +19,12 @@
 
 #define  DEFAULT_MIN_TEST_SIZE 10
 #define  DEFAULT_STEP_SIZE     10
-#define  DEFAULT_ATTEMPTS_SIZE 5
+#define  DEFAULT_ATTEMPTS_SIZE 3
 
 #define  MAX_THREADS       3
 #define  MAX_FLOAT_TESTS   500
 #define  MAX_DOUBLE_TESTS  500
-#define  MAX_MYTYPE_TESTS  120
+#define  MAX_MYTYPE_TESTS  80
 
 #define  DEFAULT_FLOAT_TESTS_FILENAME "float_tests.csv"
 #define  DEFAULT_DOUBLE_TESTS_FILENAME "double_tests.csv"
