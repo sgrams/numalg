@@ -114,28 +114,32 @@ MyType::operator / (const MyType &div)
 void
 MyType::operator += (const MyType &adds)
 {
-  mpq_add (this->value, this->value, adds.value);
+  MyType mt = *this;
+  mpq_add (this->value, mt.value, adds.value);
   mpq_canonicalize (this->value);
 }
 
 void
 MyType::operator -= (const MyType &subs)
 {
-  mpq_sub (this->value, this->value, subs.value);
+  MyType mt = *this;
+  mpq_sub (this->value, mt.value, subs.value);
   mpq_canonicalize (this->value);
 }
 
 void
 MyType::operator *= (const MyType &muls)
 {
-  mpq_mul (this->value, this->value, muls.value);
+  MyType mt = *this;
+  mpq_mul (this->value, mt.value, muls.value);
   mpq_canonicalize (this->value);
 }
 
 void
 MyType::operator /= (const MyType &divs)
 {
-  mpq_div (this->value, this->value, divs.value);
+  MyType mt = *this;
+  mpq_div (this->value, mt.value, divs.value);
   mpq_canonicalize (this->value);
 }
 
