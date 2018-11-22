@@ -22,11 +22,11 @@
 #define  DEFAULT_ATTEMPTS_SIZE 3
 
 #define  MAX_THREADS       3
-#define  MAX_FLOAT_TESTS   500
-#define  MAX_DOUBLE_TESTS  500
-#define  MAX_MYTYPE_TESTS  80
+#define  MAX_FLOAT_TESTS   250
+#define  MAX_DOUBLE_TESTS  250
+#define  MAX_MYTYPE_TESTS  10
 
-#define  DEFAULT_FLOAT_TESTS_FILENAME "float_tests.csv"
+#define  DEFAULT_FLOAT_TESTS_FILENAME  "float_tests.csv"
 #define  DEFAULT_DOUBLE_TESTS_FILENAME "double_tests.csv"
 #define  DEFAULT_MYTYPE_TESTS_FILENAME "mytype_tests.csv"
 
@@ -139,7 +139,7 @@ void *worker_func0 (void *buffer)
 void *worker_func1 (void *buffer)
 {
   vector<result_fields_t> result_vec;
-  for (int size = DEFAULT_MIN_TEST_SIZE; size <= MAX_FLOAT_TESTS; size += DEFAULT_STEP_SIZE)
+  for (int size = DEFAULT_MIN_TEST_SIZE; size <= MAX_DOUBLE_TESTS; size += DEFAULT_STEP_SIZE)
   {
     result_fields_t result;
     result.matrix_size = size;
@@ -241,7 +241,7 @@ void *worker_func1 (void *buffer)
 void *worker_func2 (void *buffer)
 {
   vector<result_fields_t> result_vec;
-  for (int size = DEFAULT_MIN_TEST_SIZE; size <= MAX_FLOAT_TESTS; size += DEFAULT_STEP_SIZE)
+  for (int size = DEFAULT_MIN_TEST_SIZE; size <= MAX_MYTYPE_TESTS; size += DEFAULT_STEP_SIZE)
   {
     result_fields_t result;
     result.matrix_size = size;
@@ -346,9 +346,9 @@ int main (int argc, char *argv[])
   pthread_t threads[MAX_THREADS];
 
   pst.cur_value = 0;
-  pst.max_value +=  MAX_FLOAT_TESTS * DEFAULT_ATTEMPTS_SIZE;
-  pst.max_value += MAX_DOUBLE_TESTS * DEFAULT_ATTEMPTS_SIZE;
-  pst.max_value += MAX_MYTYPE_TESTS * DEFAULT_ATTEMPTS_SIZE;
+  pst.max_value +=  (MAX_FLOAT_TESTS * DEFAULT_ATTEMPTS_SIZE);
+  pst.max_value += (MAX_DOUBLE_TESTS * DEFAULT_ATTEMPTS_SIZE);
+  pst.max_value += (MAX_MYTYPE_TESTS * DEFAULT_ATTEMPTS_SIZE);
 
   // create worker for float tests
   ret = pthread_create (&threads[0], NULL, worker_func0, (void *) NULL);
