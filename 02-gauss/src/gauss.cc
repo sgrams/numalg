@@ -198,10 +198,40 @@ MyType::operator != (const MyType &inq)
   return false;
 }
 
+int
+MyType::abs (int x)
+{
+  if (x < 0)
+    return -x;
+  return x;
+}
+
+float
+MyType::abs (float x)
+{
+  if (x < 0)
+    return -x;
+  return x;
+}
+
+double
+MyType::abs (double x)
+{
+  if (x < 0)
+    return -x;
+  return x;
+}
+
+MyType&
+MyType::abs (MyType &x)
+{
+  mpq_abs (x.value, x.value);
+  return x;
+}
+
 // overloading i/o
 ostream& operator << (ostream &os, const MyType &mt)
 {
   os << fixed << mt.value;
   return os;
 }
-

@@ -13,6 +13,7 @@
 #include <random>
 #include <algorithm>
 #include <gmp.h>
+#include "util.hh"
 
 #define RANDOMIZE_MIN_NUM -65536 // -2^32
 #define RANDOMIZE_MAX_NUM  65535 //  2^32 - 1
@@ -56,6 +57,12 @@ class MyType {
     bool   operator >= (const MyType &boe);
     bool   operator == (const MyType &equ);
     bool   operator != (const MyType &inq);
+
+    // abs
+    static int     abs (int x);
+    static float   abs (float x);
+    static double  abs (double x);
+    static MyType& abs (MyType &x);
 
     // overloading i/o
     friend ostream& operator << (ostream &os, const MyType &mt);
@@ -261,18 +268,6 @@ class MyMatrix {
       return;
     }
     
-    T
-    abs_generic (T x)
-    {
-      T ret;
-      ret = x;
-      // FIXME: integer overflow protection
-      if (ret < 0) {
-        ret = ret * -1;
-      }
-      return ret;
-    }
-
     // gaussian elimination methods
     T
     *backsub_no_pivoting (T **A, T *b)
@@ -403,8 +398,8 @@ class MyMatrix {
       int index   = -1;
       for (int j = i; j <= m; ++j)
       {
-        if (abs_generic (A[pivot[j]][i]) > magnitude ) {
-          magnitude = abs_generic (A[pivot[j]][i]);
+        if (MyType::abs (A[pivot[j]][i]) > magnitude ) {
+          magnitude = MyType::abs (A[pivot[j]][i]);
           index = j;
         }
       }
@@ -464,8 +459,8 @@ class MyMatrix {
       {
         for (int k = i; k <= m; ++k)
         {
-          if (abs_generic(A[pivot_row[j]][pivot_row[k]]) > magnitude) {
-          magnitude = abs_generic(A[pivot_row[j]][pivot_col[k]]);
+          if (MyType::abs(A[pivot_row[j]][pivot_row[k]]) > magnitude) {
+          magnitude = MyType::abs(A[pivot_row[j]][pivot_col[k]]);
           row_index = j;
           col_index = k;
           }
@@ -510,7 +505,7 @@ class MyMatrix {
     for (int i = 0; i < width; ++i)
     {
       def = exemplary[i] - after_test[i];
-      val = abs_generic (def);
+      val = MyType::abs (def);
       error_counter = error_counter + val;
     }
     error_counter = error_counter / width;
@@ -526,7 +521,7 @@ class MyMatrix {
     for (int i = 0; i < width; ++i)
     {
       def = exemplary[i] - after_test[i];
-      val = abs_generic (def);
+      val = MyType::abs (def);
       error_counter = error_counter + val / exemplary[i];
     }
     error_counter = error_counter / width;

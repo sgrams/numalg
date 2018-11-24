@@ -13,6 +13,7 @@ using namespace std;
 #include <fstream>
 #include <string>
 #include <vector>
+#include "gauss.hh"
 
 #define PROGRESSBAR_STRING "#################################################"
 #define PROGRESSBAR_WIDTH  50
