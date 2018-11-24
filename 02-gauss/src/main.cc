@@ -17,14 +17,15 @@
 #include "gauss.hh"
 #include "util.hh"
 
-#define  DEFAULT_MIN_TEST_SIZE 10
-#define  DEFAULT_STEP_SIZE     10
-#define  DEFAULT_ATTEMPTS_SIZE 3
+#define  DEFAULT_MIN_TEST_SIZE        10
+#define  DEFAULT_STEP_SIZE            10
+#define  DEFAULT_ATTEMPTS_SIZE        10
+#define  DEFAULT_ATTEMPTS_MYTYPE_SIZE 5
 
 #define  MAX_THREADS       3
-#define  MAX_FLOAT_TESTS   250
-#define  MAX_DOUBLE_TESTS  250
-#define  MAX_MYTYPE_TESTS  10
+#define  MAX_FLOAT_TESTS   500
+#define  MAX_DOUBLE_TESTS  500
+#define  MAX_MYTYPE_TESTS  100
 
 #define  DEFAULT_FLOAT_TESTS_FILENAME  "float_tests.csv"
 #define  DEFAULT_DOUBLE_TESTS_FILENAME "double_tests.csv"
@@ -254,7 +255,7 @@ void *worker_func2 (void *buffer)
     result.avg_time    = 0;
     result.avg_time_pg = 0;
     result.avg_time_fg = 0;
-    for (int test = 0; test < DEFAULT_ATTEMPTS_SIZE; ++test)
+    for (int test = 0; test < DEFAULT_ATTEMPTS_MYTYPE_SIZE; ++test)
     {
       MyMatrix<MyType> *matrix = new MyMatrix<MyType>(size);
       
@@ -348,7 +349,7 @@ int main (int argc, char *argv[])
   pst.cur_value = 0;
   pst.max_value +=  (MAX_FLOAT_TESTS * DEFAULT_ATTEMPTS_SIZE);
   pst.max_value += (MAX_DOUBLE_TESTS * DEFAULT_ATTEMPTS_SIZE);
-  pst.max_value += (MAX_MYTYPE_TESTS * DEFAULT_ATTEMPTS_SIZE);
+  pst.max_value += (MAX_MYTYPE_TESTS * DEFAULT_ATTEMPTS_MYTYPE_SIZE);
 
   // create worker for float tests
   ret = pthread_create (&threads[0], NULL, worker_func0, (void *) NULL);
