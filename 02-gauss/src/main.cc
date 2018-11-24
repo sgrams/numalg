@@ -23,9 +23,9 @@
 #define  DEFAULT_ATTEMPTS_MYTYPE_SIZE 5
 
 #define  MAX_THREADS       3
-#define  MAX_FLOAT_TESTS   500
-#define  MAX_DOUBLE_TESTS  500
-#define  MAX_MYTYPE_TESTS  100
+#define  MAX_FLOAT_TESTS   1000
+#define  MAX_DOUBLE_TESTS  1000
+#define  MAX_MYTYPE_TESTS  200
 
 #define  DEFAULT_FLOAT_TESTS_FILENAME  "float_tests.csv"
 #define  DEFAULT_DOUBLE_TESTS_FILENAME "double_tests.csv"
