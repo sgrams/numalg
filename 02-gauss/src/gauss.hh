@@ -62,7 +62,7 @@ class MyType {
     static int     abs (int x);
     static float   abs (float x);
     static double  abs (double x);
-    static MyType& abs (MyType &x);
+    static MyType  abs (MyType x);
 
     // overloading i/o
     friend ostream& operator << (ostream &os, const MyType &mt);
@@ -499,9 +499,9 @@ class MyMatrix {
   T
   count_abs_error (T* exemplary, T* after_test, int width)
   {
-    T error_counter;
-    T val;
-    T def;
+    T error_counter = 0;
+    T val = 0;
+    T def = 0;
     for (int i = 0; i < width; ++i)
     {
       def = exemplary[i] - after_test[i];
@@ -515,14 +515,14 @@ class MyMatrix {
   T
   count_rel_error (T* exemplary, T* after_test, int width)
   {
-    T error_counter;
-    T val;
-    T def;
+    T error_counter = 0;
+    T val = 0;
+    T def = 0;
     for (int i = 0; i < width; ++i)
     {
       def = exemplary[i] - after_test[i];
       val = MyType::abs (def);
-      error_counter = error_counter + val / exemplary[i];
+      error_counter = error_counter + (val / MyType::abs(exemplary[i]));
     }
     error_counter = error_counter / width;
     return error_counter;

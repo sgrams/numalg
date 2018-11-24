@@ -96,9 +96,9 @@ void *worker_func0 (void *buffer)
       clock_t end_gpp_time = clock ();
       double  diff_gpp_time = (double)(end_gpp_time - begin_gpp_time) / CLOCKS_PER_SEC;
       // calculate absolute and relative errors, and set times to result structure
-      result.abs_err_pg  += matrix->count_abs_error (vec_X, ret_vec_np, size);
+      result.abs_err_pg  += matrix->count_abs_error (vec_X, ret_vec_pp, size);
       result.abs_err_pg  /= 2;
-      result.rel_err_pg  += matrix->count_rel_error (vec_X, ret_vec_np, size);
+      result.rel_err_pg  += matrix->count_rel_error (vec_X, ret_vec_pp, size);
       result.rel_err_pg  /= 2;
       result.avg_time_pg += diff_gpp_time;
       result.avg_time_pg /= 2;
@@ -198,9 +198,9 @@ void *worker_func1 (void *buffer)
       clock_t end_gpp_time = clock ();
       double  diff_gpp_time = (double)(end_gpp_time - begin_gpp_time) / CLOCKS_PER_SEC;
       // calculate absolute and relative errors, and set times to result structure
-      result.abs_err_pg  += matrix->count_abs_error (vec_X, ret_vec_np, size);
+      result.abs_err_pg  += matrix->count_abs_error (vec_X, ret_vec_pp, size);
       result.abs_err_pg  /= 2;
-      result.rel_err_pg  += matrix->count_rel_error (vec_X, ret_vec_np, size);
+      result.rel_err_pg  += matrix->count_rel_error (vec_X, ret_vec_pp, size);
       result.rel_err_pg  /= 2;
       result.avg_time_pg += diff_gpp_time;
       result.avg_time_pg /= 2;
@@ -302,9 +302,9 @@ void *worker_func2 (void *buffer)
       // calculate absolute and relative errors, and set times to result structure
       result.abs_err_pg  += mpq_get_d (matrix->count_abs_error (vec_X, ret_vec_pp, size).value);
       result.abs_err_pg  /= 2;
-      result.rel_err_pg  += mpq_get_d (matrix->count_abs_error (vec_X, ret_vec_pp, size).value);
+      result.rel_err_pg  += mpq_get_d (matrix->count_rel_error (vec_X, ret_vec_pp, size).value);
       result.rel_err_pg  /= 2;
-      result.avg_time_pg += diff_gnp_time;
+      result.avg_time_pg += diff_gpp_time;
       result.avg_time_pg /= 2;
 
       delete[] ret_vec_pp;
@@ -319,9 +319,9 @@ void *worker_func2 (void *buffer)
       // calculate absolute and relative errors, and set times to result structure
       result.abs_err_fg  += mpq_get_d (matrix->count_abs_error (vec_X, ret_vec_cp, size).value);
       result.abs_err_fg  /= 2;
-      result.rel_err_fg  += mpq_get_d (matrix->count_abs_error (vec_X, ret_vec_cp, size).value);
+      result.rel_err_fg  += mpq_get_d (matrix->count_rel_error (vec_X, ret_vec_cp, size).value);
       result.rel_err_fg  /= 2;
-      result.avg_time_fg += diff_gnp_time;
+      result.avg_time_fg += diff_gcp_time;
       result.avg_time_fg /= 2;
       
       delete[] ret_vec_cp;

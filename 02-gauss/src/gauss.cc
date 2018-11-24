@@ -222,11 +222,12 @@ MyType::abs (double x)
   return x;
 }
 
-MyType&
-MyType::abs (MyType &x)
+MyType
+MyType::abs (MyType x)
 {
-  mpq_abs (x.value, x.value);
-  return x;
+  MyType y;
+  mpq_abs (y.value, x.value);
+  return y;
 }
 
 // overloading i/o
