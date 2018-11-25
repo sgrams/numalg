@@ -1,9 +1,9 @@
-graphics_toolkit ("fltk");
+graphics_toolkit ("gnuplot");
 format long;
 output_precision = 32;
-load ../float_tests.csv;
-load ../double_tests.csv;
-load ../mytype_tests.csv;
+load ../../results/float_tests.csv;
+load ../../results/double_tests.csv;
+load ../../results/mytype_tests.csv;
 
 ### gauss float time
 matrix_size_float = float_tests(:,1);
@@ -14,7 +14,7 @@ xlabel ("matrix size");
 title  ("float time execution plot");
 legend ("float standard", "float partial gauss", "float full gauss","location","north");
 
-print -dpng ../plots/00_float_plot_time.png;
+print -dpng ../../report/plots/00_float_plot_time.png;
 
 ### gauss double time
 matrix_size_double = double_tests(:,1);
@@ -25,7 +25,7 @@ xlabel ("matrix size");
 title  ("double time execution plot");
 legend ("double standard", "double partial gauss", "double full gauss","location","north");
 
-print -dpng ../plots/01_double_plot_time.png;
+print -dpng ../../report/plots/01_double_plot_time.png;
 
 ### gauss mytype time
 matrix_size_mytype = mytype_tests(:,1);
@@ -36,7 +36,7 @@ xlabel ("matrix size");
 title  ("mytype time execution bar");
 legend ("mytype standard", "mytype partial gauss", "mytype full gauss","location","north");
 
-print -dpng ../plots/02_mytype_plot_time.png;
+print -dpng ../../report/plots/02_mytype_plot_time.png;
 
 
 ### abs float
@@ -47,7 +47,7 @@ xlabel ("matrix size");
 title  ("float abs error");
 legend ("float standard", "float partial gauss", "float full gauss","location","north");
 
-print -dpng ../plots/03_float_plot_abs.png;
+print -dpng ../../report/plots/03_float_plot_abs.png;
 
 ### abs double
 abs_result_double = [double_tests(:,2), double_tests(:,3), double_tests(:,4)];
@@ -57,7 +57,7 @@ xlabel ("matrix size");
 title  ("double abs error");
 legend ("double standard", "double partial gauss", "double full gauss","location","north");
 
-print -dpng ../plots/04_double_plot_abs.png;
+print -dpng ../../report/plots/04_double_plot_abs.png;
 
 ### rel float
 rel_result_float = [float_tests(:,5), float_tests(:,6), float_tests(:,7)];
@@ -67,7 +67,7 @@ xlabel ("matrix size");
 title  ("float relative error");
 legend ("float standard", "float partial gauss", "float full gauss","location","north");
 
-print -dpng ../plots/05_float_plot_rel.png;
+print -dpng ../../report/plots/05_float_plot_rel.png;
 
 ### rel double
 rel_result_double = [double_tests(:,5), double_tests(:,6), double_tests(:,7)];
@@ -77,4 +77,4 @@ xlabel ("matrix size");
 title  ("double relative error");
 legend ("double standard", "double partial gauss", "double full gauss","location","north");
 
-print -dpng ../plots/06_double_plot_rel.png;
+print -dpng ../../report/plots/06_double_plot_rel.png;
