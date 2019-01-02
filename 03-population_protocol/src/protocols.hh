@@ -1,9 +1,11 @@
 /*
  * This file is part of 03-population_protocol task.
  *
- * src/main.cc
+ * src/protocols.hh
  * Stanisław Grams <sgrams@fmdx.pl>
  */
+#ifndef PROTOCOLS_PROTOCOLS_HH
+#define PROTOCOLS_PROTOCOLS_HH
 #include <cstdlib>
 
 typedef enum state {
@@ -11,5 +13,6 @@ typedef enum state {
   N,
   U
 } state_t;
+#endif
 
 

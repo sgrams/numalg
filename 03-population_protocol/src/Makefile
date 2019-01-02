@@ -2,7 +2,7 @@
 #  This file is part of 03-population_protocol task.
 # 
 #  src/Makefile
-#  Stanisław Grams
+#  Stanisław Grams <sgrams@fmdx.pl>
 ##
 CC=g++
 CFLAGS=-Wall -Werror -Wall -pedantic -std=c++0x
