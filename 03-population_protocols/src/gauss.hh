@@ -1,10 +1,10 @@
 /*
- *  This file is part of 02-gauss task.
+ *  This file is part of 03-population_protocols task.
  * 
  *  src/gauss.hh
- *  Grams, Stanislaw <sgrams@fmdx.pl>
- *  Jezierski, Maciej <maciejjezierski4@gmail.com>
- *  Korczakowski, Juliusz <iuliuszkor@gmail.com>
+ *  Stanislaw Grams <sgrams@fmdx.pl>
+ *  Maciej Jezierski <maciejjezierski4@gmail.com>
+ *  Juliusz Korczakowski <iuliuszkor@gmail.com>
  */
 #ifndef PROTOCOLS_GAUSS_HH
 #define PROTOCOLS_GAUSS_HH
@@ -65,7 +65,7 @@ class MyMatrix {
     get_width ()
     {
       return this->width;
-    }
+    };
     T
     **get_matrix ()
     {
@@ -217,7 +217,7 @@ class MyMatrix {
       return;
     }
     
-    // gaussian elimination methods
+    // gaussian elimination with partial pivoting
     T
     *backsub (T **A, T *b, int *pivot)
     {
@@ -262,13 +262,12 @@ class MyMatrix {
 
     for (int i = 0; i < m; ++i)
     {
-      // do the pivot first
       T magnitude = 0;
       int index   = -1;
       for (int j = i; j <= m; ++j)
       {
-        if (MyType::abs (A[pivot[j]][i]) > magnitude ) {
-          magnitude = MyType::abs (A[pivot[j]][i]);
+        if (abs (A[pivot[j]][i]) > magnitude ) {
+          magnitude = abs (A[pivot[j]][i]);
           index = j;
         }
       }
