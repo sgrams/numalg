@@ -1,4 +1,4 @@
-/*
+ /*
  *  This file is part of 03-population_protocols task.
  * 
  *  src/gauss.hh
@@ -295,6 +295,55 @@ class MyMatrix {
     delete_vector (b);
 
     return ret;
+  }
+
+  T
+  *jacobi (int iterations)
+  {
+    T **A  = clone_matrix (this->matrix, this->width);
+    T  *b  = clone_vector (this->vector_B, this->width);
+    T*  N  = new T[this->width];
+    T **M = new T*[width];
+    T *x_1 = new T*[width];
+    T *x_2 = new T*[width];
+
+
+    int n  = this->width;
+    int i, j, k;
+
+    // N = D^-1
+    for (i = 0; i < n; ++i)
+      N[i] = 1 / A[i][i]
+
+    // M = -D^-1 (L + U)
+      for (i = 0; i < n; ++i)
+      {
+        for (j = 0; j < n; j++)
+        {
+          if (i == j)
+            M[i][j] = 0;
+          
+          else
+            M[i][j] = - (A[i][j] * N[i])
+        }
+      }
+
+      // initialize x
+      for (i = 0; i < n; ++i)
+        x_1[i] = 0;
+
+      // iterations
+      for (k = 0; k < iterations; ++k)
+      {
+        for (i = 0; i < n; ++i)
+        {
+          x_2[i] = N[i] * b[i];
+          for (j = 0; j < n; ++j)
+            x_2[i] += M[i][j] * x_1[j];
+        }
+          for (i = 0; i < n; ++i)
+            x_1[i] = x_2[i];
+      }
   }
 
   T
