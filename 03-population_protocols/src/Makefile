@@ -5,7 +5,7 @@
 #  Stanisław Grams <sgrams@fmdx.pl>
 ##
 CC=g++
-CXXFLAGS= -Wall -pedantic -std=c++0x
+CXXFLAGS=-Wall -Werror -pedantic -std=c++0x
 LDFLAGS=-pthread
 
 # main targets

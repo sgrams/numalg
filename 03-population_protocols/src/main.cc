@@ -21,7 +21,7 @@ using namespace std;
 
 int main (int argc, char *argv[])
 {
-  Generator *g = new Generator (30);
+  Generator *g = new Generator (5);
   MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
   /*
   for (int i = 0; i < g->get_cases_count(); ++i)
@@ -42,5 +42,6 @@ int main (int argc, char *argv[])
   cout << endl;
   delete matrix;
   delete g;
+  delete[] ret_vec;
   return EXIT_SUCCESS;
 }

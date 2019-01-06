@@ -232,7 +232,7 @@ class MyMatrix {
       ret = backsub (A, b, pivot);
       delete_matrix (A, this->width);
       delete_vector (b);
-      delete pivot;
+      delete[] pivot;
 
       return ret;
     }
@@ -299,7 +299,9 @@ class MyMatrix {
       delete_vector (b);
       delete_vector (x_1);
       
-      return ret;
+      delete[] A;
+
+      return x_1;
     }
 
 
@@ -336,12 +338,14 @@ class MyMatrix {
           sum = 0;
           for (j = 1; j < n; ++j)
           {
-            if (i != j)
+            if (i != j) {
               sum += A[i][j] * x_1[j];
+            }
           }
           x_1[i] = (-sum + b[i]) / A[i][i];
-          if (x_1[i] == -0.0)
+          if (x_1[i] == -0.0) {
             x_1[i] = 0.0;
+          }
         }
 
         helper = 0;
