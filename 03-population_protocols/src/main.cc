@@ -21,8 +21,9 @@ using namespace std;
 
 int main (int argc, char *argv[])
 {
-  Generator *g = new Generator (10);
+  Generator *g = new Generator (30);
   MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
+  /*
   for (int i = 0; i < g->get_cases_count(); ++i)
   {
     for (int j = 0; j < g->get_cases_count(); ++j)
@@ -31,6 +32,14 @@ int main (int argc, char *argv[])
     }
     cout << endl;
   }
+  cout << endl << endl << endl;
+  */
+  double *ret_vec = matrix->jacobi_iterative(10);
+  for (int i = 0; i < g->get_cases_count (); ++i)
+  {
+    cout << ret_vec[i] << ",";
+  }
+  cout << endl;
   delete matrix;
   delete g;
   return EXIT_SUCCESS;

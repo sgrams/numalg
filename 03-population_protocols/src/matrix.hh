@@ -192,7 +192,7 @@ class MyMatrix {
       int m  = this->width - 1;
       int n  = this->width;
 
-      int pivot[this->width];
+      int *pivot = new int[width];
 
       for (int i = 0; i < this->width; ++i)
       {
@@ -205,8 +205,8 @@ class MyMatrix {
         int index   = -1;
         for (int j = i; j <= m; ++j)
         {
-          if (abs (A[pivot[j]][i]) > magnitude ) {
-            magnitude = abs (A[pivot[j]][i]);
+          if (fabs (A[pivot[j]][i]) > magnitude ) {
+            magnitude = fabs (A[pivot[j]][i]);
             index = j;
           }
         }
@@ -229,9 +229,10 @@ class MyMatrix {
         }
       }
 
-      ret = backsub_partial_pivoting (A, b, pivot);
+      ret = backsub (A, b, pivot);
       delete_matrix (A, this->width);
       delete_vector (b);
+      delete pivot;
 
       return ret;
     }
