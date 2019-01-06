@@ -6,17 +6,19 @@
 ##
 CC=g++
 CFLAGS=-Wall -Werror -Wall -pedantic -std=c++0x
-LDFLAGS=-lgmpxx -lgmp -pthread
+LDFLAGS=-pthread
 
 # main targets
-all: protocols.o util.o main.o
+all: protocol.o util.o main.o
 
-# *.c
-protocols.o: protocols.cc
+# *.o: *.cc
+generator.o: generator.cc
+protocol.o: protocol.cc
 util.o: util.cc
 main.o: main.cc
+
 # other procedures
 .PHONY: clean
 clean:  rmobj
 rmobj:
-	rm -f protocols.o util.o main.o
+	rm -f generator.o protocol.o util.o main.o

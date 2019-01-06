@@ -6,7 +6,7 @@
 ##
 CC=g++
 CFLAGS=-Wall -Werror -Wall -pedantic -std=c++0x
-LDFLAGS=-lgmpxx -lgmp -pthread
+LDFLAGS=-pthread
 
 SRCDIR=src
 OUTNAME=protocols
