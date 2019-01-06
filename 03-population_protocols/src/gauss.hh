@@ -313,37 +313,45 @@ class MyMatrix {
 
     // N = D^-1
     for (i = 0; i < n; ++i)
+    {
       N[i] = 1 / A[i][i]
-
+    }
     // M = -D^-1 (L + U)
-      for (i = 0; i < n; ++i)
+    for (i = 0; i < n; ++i)
+    {
+      for (j = 0; j < n; j++)
       {
-        for (j = 0; j < n; j++)
-        {
-          if (i == j)
-            M[i][j] = 0;
-          
-          else
-            M[i][j] = - (A[i][j] * N[i])
+        if (i == j) {
+          M[i][j] = 0;
+        }
+        else {
+          M[i][j] = - (A[i][j] * N[i])
         }
       }
+    }
 
-      // initialize x
+    // initialize x
+    for (i = 0; i < n; ++i)
+    {
+      x_1[i] = 0;
+    }
+
+    // iterations
+    for (k = 0; k < iterations; ++k)
+    {
       for (i = 0; i < n; ++i)
-        x_1[i] = 0;
-
-      // iterations
-      for (k = 0; k < iterations; ++k)
       {
+        x_2[i] = N[i] * b[i];
+        for (j = 0; j < n; ++j)
+          x_2[i] += M[i][j] * x_1[j];
+      }
         for (i = 0; i < n; ++i)
         {
-          x_2[i] = N[i] * b[i];
-          for (j = 0; j < n; ++j)
-            x_2[i] += M[i][j] * x_1[j];
+          x_1[i] = x_2[i];
         }
-          for (i = 0; i < n; ++i)
-            x_1[i] = x_2[i];
-      }
+    }
+
+    return x_1;
   }
 
   T
