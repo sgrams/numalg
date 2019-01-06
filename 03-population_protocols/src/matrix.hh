@@ -15,8 +15,6 @@
 #include <vector>
 #include "protocol.hh"
 
-#define eps 0.00000000000001
-
 using namespace std;
 
 template <class T>
@@ -243,14 +241,12 @@ class MyMatrix {
     {
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector, this->width);
-      T*  N  = new T[this->width];
-      T **M = new T*[width];
-      T *x_1 = new T*[width];
-      T *x_2 = new T*[width];
+      T *x_1 = new T[width];
+      T *x_2 = new T[width];
 
       int n  = this->width;
       int counter = 0;
-      int i, j, k;
+      int i, j;
 
       double result, sum, helper;
 
@@ -292,6 +288,39 @@ class MyMatrix {
       
       return x_1;
     }
+
+
+/*
+    T
+    *jacobi_approx (double eps)
+    {
+      T **A  = clone_matrix (this->matrix, this->width);
+      T  *b  = clone_vector (this->vector_B, this->width);
+      T *x_1 = new T*[width];
+      T *x_2 = new T*[width];
+
+      int n  = this->width;
+      int counter = 0;
+      int i, j, k;
+
+      double result, sum, helper;
+
+      // initialize x
+      for (i = 0; i < n; ++i)
+      {
+        x_1[i] = 0;
+      }
+
+
+
+
+
+      
+      
+
+    }
+    */
+    
 
     T
     count_abs_error (T* exemplary, T* after_test, int width)
