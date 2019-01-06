@@ -243,7 +243,7 @@ class MyMatrix {
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector, this->width);
       T *x_1 = new T[this->width];
-      T *x_2;
+      T *x_2 = new T[this->width];
       T *ret = new T[this->width];
 
 
@@ -262,7 +262,7 @@ class MyMatrix {
       do
       {
         counter++;
-        x_2 = x_1;
+        x_2 = clone_vector (x_1, this->width);
 
         for (i = 0; i < n; ++i)
         {
@@ -310,7 +310,7 @@ class MyMatrix {
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector, this->width);
       T *x_1 = new T[width];
-      T *x_2;
+      T *x_2 = new T[width];
       T *ret = new T[this->width];
 
 
@@ -329,7 +329,7 @@ class MyMatrix {
       do
       {
         counter++;
-        x_2 = x_1;
+        x_2 = clone_vector (x_1, this->width);
 
         for (i = 0; i < n; ++i)
         {
@@ -378,7 +378,7 @@ class MyMatrix {
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector, this->width);
       T *x_1 = new T[this->width];
-      T *x_2;
+      T *x_2 = new T[width];
       T *ret = new T[this->width];
 
 
@@ -397,7 +397,7 @@ class MyMatrix {
       do
       {
         counter++;
-        x_2 = x_1;
+        x_2 = clone_vector (x_1, this->width);
 
         for (i = 0; i < n; ++i)
         {
@@ -450,7 +450,7 @@ class MyMatrix {
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector, this->width);
       T *x_1 = new T[this->width];
-      T *x_2;
+      T *x_2 = new T[width];;
       T *ret = new T[this->width];
 
 
@@ -469,7 +469,7 @@ class MyMatrix {
       do
       {
         counter++;
-        x_2 = x_1;
+        x_2 = clone_vector (x_1, this->width);
 
         for (i = 0; i < n; ++i)
         {

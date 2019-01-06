@@ -21,7 +21,7 @@ using namespace std;
 
 int main (int argc, char *argv[])
 {
-  Generator *g = new Generator (19);
+  Generator *g = new Generator (5);
   MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
 
   /*
@@ -37,10 +37,10 @@ int main (int argc, char *argv[])
   */
 
   double *ret_vec_gaussian = matrix->gaussian ();
-  double *ret_vec_jacobi_iterative = matrix->jacobi_iterative (10);
-  double *ret_vec_jacobi_approx = matrix->jacobi_approx(0.01);
-  double *ret_vec_seidel_iterative = matrix->gauss_seidel_iterative (10);
-  double *ret_vec_seidel_approx = matrix->gauss_seidel_approx (0.01);
+  double *ret_vec_jacobi_iterative = matrix->jacobi_iterative (1000);
+  double *ret_vec_jacobi_approx = matrix->jacobi_approx(0.001);
+  double *ret_vec_seidel_iterative = matrix->gauss_seidel_iterative (100000);
+  double *ret_vec_seidel_approx = matrix->gauss_seidel_approx (0.00001);
 
   for (int i = 0; i < g->get_cases_count (); ++i)
   {
