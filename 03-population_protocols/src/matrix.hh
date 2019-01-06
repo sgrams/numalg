@@ -15,6 +15,8 @@
 #include <vector>
 #include "protocol.hh"
 
+#define eps 0.00000000000001
+
 using namespace std;
 
 template <class T>
@@ -237,37 +239,18 @@ class MyMatrix {
     }
 
     T
-    *jacobi (int iterations)
+    *jacobi_iterative (int iterations)
     {
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector, this->width);
-      T*  N  = new T[this->width];
-      T **M = new T*[width];
       T *x_1 = new T*[width];
       T *x_2 = new T*[width];
 
-
       int n  = this->width;
+      int counter = 0;
       int i, j, k;
 
-      // N = D^-1
-      for (i = 0; i < n; ++i)
-      {
-        N[i] = 1 / A[i][i];
-      }
-      // M = -D^-1 (L + U)
-      for (i = 0; i < n; ++i)
-      {
-        for (j = 0; j < n; j++)
-        {
-          if (i == j) {
-            M[i][j] = 0;
-          }
-          else {
-            M[i][j] = - (A[i][j] * N[i]);
-          }
-        }
-      }
+      double result, sum, helper;
 
       // initialize x
       for (i = 0; i < n; ++i)
@@ -275,24 +258,47 @@ class MyMatrix {
         x_1[i] = 0;
       }
 
-      // iterations
-      for (k = 0; k < iterations; ++k)
+      do
       {
+        counter++;
+        x_2 = x_1;
+
         for (i = 0; i < n; ++i)
         {
-          x_2[i] = N[i] * b[i];
-          for (j = 0; j < n; ++j)
+          sum = 0;
+          for (j = 1; j < n; ++j)
           {
-            x_2[i] += M[i][j] * x_1[j];
+            if (i != j)
+              sum += A[i][j] * x_1[j];
           }
+          x_1[i] = (-sum + b[i]) / A[i][i];
+          if (x_1[i] == -0.0)
+            x_1[i] = 0.0;
         }
-          for (i = 0; i < n; ++i)
-          {
-            x_1[i] = x_2[i];
-          }
-      }
 
+        helper = 0;
+        result = 0;
+
+        for (i = 0; i < n; ++i)
+        {
+          helper = fabs(x_1[i] - x_2[i]);
+          result += helper * helper;
+        }
+
+        result = sqrt(result);
+      } while (counter < iterations);
+      
       return x_1;
+    }
+
+    T
+    *jacobi_approx
+    {
+      T **A  = clone_matrix (this->matrix, this->width);
+      T  *b  = clone_vector (this->vector_B, this->width);
+      int n  = this->width;
+      int i, j, k;
+
     }
 
     T
