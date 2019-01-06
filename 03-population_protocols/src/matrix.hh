@@ -290,18 +290,18 @@ class MyMatrix {
     }
 
 
-/*
+
     T
     *jacobi_approx (double eps)
     {
       T **A  = clone_matrix (this->matrix, this->width);
-      T  *b  = clone_vector (this->vector_B, this->width);
-      T *x_1 = new T*[width];
-      T *x_2 = new T*[width];
+      T  *b  = clone_vector (this->vector, this->width);
+      T *x_1 = new T[width];
+      T *x_2 = new T[width];
 
       int n  = this->width;
       int counter = 0;
-      int i, j, k;
+      int i, j;
 
       double result, sum, helper;
 
@@ -311,15 +311,39 @@ class MyMatrix {
         x_1[i] = 0;
       }
 
+      do
+      {
+        counter++;
+        x_2 = x_1;
 
+        for (i = 0; i < n; ++i)
+        {
+          sum = 0;
+          for (j = 1; j < n; ++j)
+          {
+            if (i != j)
+              sum += A[i][j] * x_1[j];
+          }
+          x_1[i] = (-sum + b[i]) / A[i][i];
+          if (x_1[i] == -0.0)
+            x_1[i] = 0.0;
+        }
 
+        helper = 0;
+        result = 0;
 
+        for (i = 0; i < n; ++i)
+        {
+          helper = fabs(x_1[i] - x_2[i]);
+          result += helper * helper;
+        }
 
+        result = sqrt(result);
+      } while (result > eps);
       
-      
-
+      return x_1;
     }
-    */
+    
     
 
     T
