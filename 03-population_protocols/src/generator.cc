@@ -96,7 +96,6 @@ void
 Generator::generate_protocols_vector ()
 {
   int iter = 0;
-  cout << this->agents_count << endl;
   for (int i = 0; i <= this->agents_count; ++i)
   {
     for (int j = 0; j <= this->agents_count; ++j)
