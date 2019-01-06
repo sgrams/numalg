@@ -321,6 +321,156 @@ class MyMatrix {
     }
     */
     
+    T *GSeidel(double eps) 
+    {
+      T dzielnik, norma1, norma2;
+      bool koniec;
+      T **A  = clone_matrix (this->matrix, this->width);
+      T  *B  = clone_vector (this->vector_B, this->width);
+      T *B2 = new T[this->width];
+      T *x = new T[this->width];
+      T *x2 = new T[this->width];
+      T **U = new T*[this->width];
+      T **L = new T*[this->width];
+      T **D = new T*[this->width];
+      T **I = new T*[this->width];
+
+      for (int i = 0; i < this->width; i++) {
+        for (int j = 0; j < this->width; j++)
+          {
+            L[i][j] = 0;
+            U[i][j] = 0;
+            D[i][j] = 0;
+            I[i][j] = 0;
+          }
+        }
+
+      for (int i = 0; i < this->width; i++)
+      {
+        for (int j = 0; j < this->width; j++)
+        {
+          // utworzenie macierzy dolnotrojkatnej
+          if (i > j)  
+            L[i][j] = A[i][j];
+            // utworzenie macierzy gornotrojkatnej
+          else if (i < j)
+            U[i][j] = A[i][j];
+          else
+          {
+            // utworzenie macierzy z przekatnej macierzy glownej
+            D[i][i] = A[i][i];
+            // jedynki na przekatnej
+            I[i][i] = 1;
+            }
+          }
+      }
+        // wyznaczenie p = min{||-(L+D)^-1 * N||:||-(L+D)^-1 * N||}
+        
+      // obliczenie D + L (wynik w L)
+      for (int i = 0; i < this->width; i++)
+        L[i][i] = D[i][i];
+      // obliczenie (D + L)^-1 (wynik w I)
+      for (int i = 0; i < this->width; i++)
+      {
+        dzielnik = L[i][i];
+        for (int j = 0; j < this->width; j++)
+        {
+          L[i][j] /= (double)dzielnik;
+          I[i][j] /= (double)dzielnik;
+        }
+        for (int k = 0; k < this->width; k++)
+        {
+          if (k == i) continue;
+            dzielnik = L[k][i];
+          for (int j = 0; j < this->width; j++)
+          {
+            L[k][j] -= (double)(L[i][j] * dzielnik);
+            I[k][j] -= (double)(I[i][j] * dzielnik);
+          }
+        }
+      }
+        // obliczenie (L + D)^-1 * N (wynik w L)
+      for (int i = 0; i < this->width; i++)
+      {
+        for (int j = 0; j < this->width; j++)
+        {
+          L[i][j] = 0;
+          for (int k = 0; k < this->width; k++)
+            L[i][j] += (double)(I[i][k] * U[k][j]);
+        }
+      }
+        
+      // obliczenie -(L+D)^-1 * N
+      for (int i = 0; i < this->width; i++)
+        for (int j = 0; j < this->width; j++)
+          L[i][j] *= (double)(-1);
+      // norma "jeden"
+      norma1 = 0;
+      for (int i = 0; i < this->width; i++)
+      {
+        dzielnik = 0;
+        for (int j = 0; j < this->width; j++)
+          dzielnik += fabs(L[j][i]);
+        if (dzielnik > norma1) norma1 = dzielnik;
+      }
+      // norma "nieskonczonosc"
+      norma2 = 0;
+      for (int i = 0; i < this->width; i++)
+      {
+        dzielnik = 0;
+        for (int j = 0; j < this->width; j++)
+          dzielnik += fabs(L[i][j]);
+        if (dzielnik > norma2) norma2 = dzielnik;
+      }
+        
+      // p = min(norma1, norma2)
+      if (norma1 > norma2) norma1 = norma2;
+        
+      // ciag nie jest zbiezny do rozwiazania ukladu rownan
+      if (norma1 >= 1)
+        norma1 = 0.5;
+        
+      // inicjalizacja wektora wynikow
+      for (int i = 0; i < this->width; i++)
+        x[i] = 0;
+        
+      koniec = true;
+      do
+      {
+        // przepisanie x - aktualnych wynikow do x2 - wynikow z poprzedniej iteracji
+        for (int i = 0; i < this->width; i++)
+          x2[i] = x[i];        
+          
+          // wykonanie kolejnej iteracji
+          for (int i = 0; i < this->width; i++)
+          {
+            B2[i] = B[i];       
+            for (int j = 0; j < i; j++)
+              B2[i] -= (A[i][j] * x[j]);    
+            for (int j = i + 1; j < this->width; j++)
+              B2[i] -= A[i][j] * x2[j];  
+              x[i] = (double)(B2[i] / A[i][i]);
+          }
+            
+            // sprawdzenie warunku zakonczenia: ||x(k)-x(k-1)|| <= epsilon
+            for (int i = 0; i < this->width; i++)
+            {
+                if (fabs(x[i] - x2[i]) > eps) { koniec = true; break; }
+                else koniec = false;
+            }
+      }while (koniec);
+        
+      // wyswietlenie wyniku
+      //std::cout << "Wynik GSeidel:\n";
+      for (int i = 0; i < this->width; i++) 
+      {
+        if (x[i] == -0.0) 
+        {
+          x[i] = 0.0;
+        }
+      }
+      return x;  
+    }
 
     T
     count_abs_error (T* exemplary, T* after_test, int width)
