@@ -39,7 +39,7 @@ Probability::set_cases_count (int cases_count)
 }
 
 double
-Probability::generate_value (Protocol *protocols_vector, int row, int col)
+Probability::generate_value (std::vector<Protocol> protocols_vector, int row, int col)
 {
   int yes_votes_in_row = protocols_vector[row].get_yes_votes ();
   int no_votes_in_row  = protocols_vector[row].get_no_votes ();

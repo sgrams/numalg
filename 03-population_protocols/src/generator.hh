@@ -23,14 +23,42 @@ Generator {
   private:
     int       agents_count;
     int       cases_count;
-    double  **protocols_equations;
-    Protocol *protocols_vector;
+    std::vector<Protocol> protocols_vector;
 
     double **matrix;
     double  *matrix_vector;
   public:
-    void   generate_probability_matrix ();
-    void   generate_protocols_vector ();
+    // constructors and destructors
+    Generator (int agents_count);
+   ~Generator ();
+    // getters and setters
+    int
+    get_agents_count ();
+    int
+    get_cases_count ();
+    std::vector<Protocol>
+    get_protocols_vector ();
+    double **
+    get_matrix ();
+    double *
+    get_matrix_vector ();
+
+    void
+    set_agents_count (int agents_count);
+    void
+    set_cases_count (int cases_count);
+    void
+    set_protocols_vector (std::vector<Protocol> protocols_vector);
+    void
+    set_matrix (double **matrix);
+    void
+    set_matrix_vector (double *matrix_vector);
+
+    // other procedures
+    void
+    generate_probability_matrix ();
+    void
+    generate_protocols_vector ();
 };
 
 #endif // PROTOCOLS_GENERATOR_HH

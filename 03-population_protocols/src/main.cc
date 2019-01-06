@@ -12,6 +12,8 @@
 #include "util.hh"
 #include "protocol.hh"
 #include "matrix.hh"
+#include "generator.hh"
+#include "probability.hh"
 
 #define  MAX_AGENTS_COUNT  50
 #define  START_AGENT_COUNT 3
@@ -19,5 +21,17 @@ using namespace std;
 
 int main (int argc, char *argv[])
 {
+  Generator *g = new Generator (10);
+  g->generate_protocols_vector ();
+  g->generate_probability_matrix ();
+  for (int i = 0; i < g->get_cases_count(); ++i)
+  {
+    for (int j = 0; j < g->get_cases_count(); ++j)
+    {
+      cout << g->get_matrix()[i][j] << " ";
+    }
+    cout << endl;
+  }
+  delete g;
   return EXIT_SUCCESS;
 }

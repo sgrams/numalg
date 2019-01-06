@@ -32,15 +32,15 @@ Protocol {
     Protocol ();
     Protocol (int yes_votes, int no_votes, int all_votes);
     // getters and setters
-    double get_yes_votes ();
-    double get_no_votes ();
-    double get_undecided_votes ();
-    double get_all_votes ();
+    int get_yes_votes ();
+    int get_no_votes ();
+    int get_undecided_votes ();
+    int get_all_votes ();
 
-    void set_yes_votes (double yes_votes);
-    void set_no_votes (double no_votes);
-    void set_undecided_votes (double undecided_votes);
-    void set_all_votes (double all_votes);
+    void set_yes_votes (int yes_votes);
+    void set_no_votes (int no_votes);
+    void set_undecided_votes (int undecided_votes);
+    void set_all_votes (int all_votes);
 };
 
 class
