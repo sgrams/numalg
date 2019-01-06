@@ -1,11 +1,11 @@
 /*
  * This file is part of 03-population_protocol task.
  *
- * src/protocols.hh
+ * src/protocol.hh
  * Stanisław Grams <sgrams@fmdx.pl>
  */
-#ifndef PROTOCOLS_PROTOCOLS_HH
-#define PROTOCOLS_PROTOCOLS_HH
+#ifndef PROTOCOLS_PROTOCOL_HH
+#define PROTOCOLS_PROTOCOL_HH
 #include <cstdlib>
 #include <random>
 #include <ctime>
@@ -14,20 +14,20 @@
 #include "util.hh"
 
 typedef enum state {
-  Y,
-  N,
-  U
+  NO,       // 0: keeps the boolean logic correct
+  YES,      // 1
+  UNDECIDED // 2
 } state_t;
 
 class
-Protocols {
+Protocol {
   private:
     int yes_votes;
     int no_votes;
     int undecided_votes;
     int all_votes;
   public:
-    Protocols (int yes_votes, int no_votes, int all_votes);
+    Protocol (int yes_votes, int no_votes, int all_votes);
     // getters and setters
     double get_yes_votes ();
     double get_no_votes ();
@@ -40,9 +40,20 @@ Protocols {
     void set_all_votes (double all_votes);
 };
 
-class MonteCarlo {
+class
+Agent {
+  private:
+    state_t state;
+  public:
+    Agent (state_t state);
+    void change_state (Agent &agent);
+};
+
+class
+MonteCarlo {
   private:
     int iterations;
+    int all_agents;
   public:
     MonteCarlo (int iterations);
    ~MonteCarlo ();
