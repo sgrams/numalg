@@ -242,8 +242,10 @@ class MyMatrix {
     {
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector, this->width);
-      T *x_1 = new T[width];
-      T *x_2 = new T[width];
+      T *x_1 = new T[this->width];
+      T *x_2;
+      T *ret = new T[this->width];
+
 
       int n  = this->width;
       int counter = 0;
@@ -286,8 +288,18 @@ class MyMatrix {
 
         result = sqrt(result);
       } while (counter < iterations);
+
+      for (int i = 0; i < n; ++i)
+      {
+        ret[i] = x_1[i];
+      }
+
+
+      delete_matrix (A, this->width);
+      delete_vector (b);
+      delete_vector (x_1);
       
-      return x_1;
+      return ret;
     }
 
 
@@ -299,6 +311,8 @@ class MyMatrix {
       T  *b  = clone_vector (this->vector, this->width);
       T *x_1 = new T[width];
       T *x_2 = new T[width];
+      T *ret = new T[this->width];
+
 
       int n  = this->width;
       int counter = 0;
@@ -341,8 +355,19 @@ class MyMatrix {
 
         result = sqrt(result);
       } while (result > eps);
+
+      for (int i = 0; i < n; ++i)
+      {
+        ret[i] = x_1[i];
+      }
+
+      delete[] x_2;
+      delete[] x_1;
+      delete_vector (b);
+      delete_matrix (A, this->width);
       
-      return x_1;
+      return ret;
+      
     }
     
     
