@@ -18,6 +18,32 @@ typedef enum state {
   N,
   U
 } state_t;
+
+class
+Protocols {
+  public:
+    int yes_votes;
+    int no_votes;
+    int undecided_votes;
+    int all_votes;
+    Protocols (int yes_votes, int no_votes, int all_votes);
+    // getters and setters
+    double get_yes_votes ();
+    double get_no_votes ();
+    double get_undecided_votes ();
+    double get_all_votes ();
+
+    void set_yes_votes (double yes_votes);
+    void set_no_votes (double no_votes);
+    void set_undecided_votes (double undecided_votes);
+    void set_all_votes (double all_votes);
+};
+
+class MonteCarlo {
+  private:
+    int iterations;
+  public:
+    MonteCarlo (int iterations);
+   ~MonteCarlo ();
+};
 #endif
-
-
