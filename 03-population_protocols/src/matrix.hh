@@ -1,4 +1,4 @@
- /*
+/*
  *  This file is part of 03-population_protocols task.
  * 
  *  src/matrix.hh
@@ -158,17 +158,15 @@ class MyMatrix {
       T*  solution  = new T[this->width];
       T*  ret       = new T[this->width];
       int n         = this->width;
-
       for (int i = n - 1; i >= 0; --i)
       {
         solution[pivot[i]] = b[pivot[i]];
         for (int j = i + 1; j < n; ++j)
         {
-            solution[pivot[i]] = solution[pivot[i]] - A[pivot[i]][j] * solution[pivot[j]];
+          solution[pivot[i]] = solution[pivot[i]] - A[pivot[i]][j] * solution[pivot[j]];
         }
         solution[pivot[i]] /= A[pivot[i]][i];
       }
-
       for (int i = 0; i < n; ++i)
       {
         ret[i] = solution[pivot[i]];
@@ -177,149 +175,149 @@ class MyMatrix {
       delete[] solution;
       return ret;
     }
-  T
-  *gaussian ()
-  {
-    T **A  = clone_matrix (this->matrix, this->width);
-    T  *b  = clone_vector (this->vector_B, this->width);
-    T *ret = nullptr;
-
-    int m  = this->width - 1;
-    int n  = this->width;
-
-    int pivot[this->width];
-
-    for (int i = 0; i < this->width; ++i)
+    T
+    *gaussian ()
     {
-      pivot[i] = i;
-    }
+      T **A  = clone_matrix (this->matrix, this->width);
+      T  *b  = clone_vector (this->vector_B, this->width);
+      T *ret = nullptr;
 
-    for (int i = 0; i < m; ++i)
-    {
-      T magnitude = 0;
-      int index   = -1;
-      for (int j = i; j <= m; ++j)
+      int m  = this->width - 1;
+      int n  = this->width;
+
+      int pivot[this->width];
+
+      for (int i = 0; i < this->width; ++i)
       {
-        if (abs (A[pivot[j]][i]) > magnitude ) {
-          magnitude = abs (A[pivot[j]][i]);
-          index = j;
-        }
+        pivot[i] = i;
       }
 
-      if (index != -1) {
-        swap (pivot[i], pivot[index]);
-      }
-
-      for (int j = i + 1; j < n; ++j)
+      for (int i = 0; i < m; ++i)
       {
-        // calculate the ratio
-        T ratio = A[pivot[j]][i] / A[pivot[i]][i];
-        for (int k = i; k < n; ++k)
+        T magnitude = 0;
+        int index   = -1;
+        for (int j = i; j <= m; ++j)
         {
-          // modify matrix entry
-          A[pivot[j]][k] = A[pivot[j]][k] - ratio * A[pivot[i]][k];
+          if (abs (A[pivot[j]][i]) > magnitude ) {
+            magnitude = abs (A[pivot[j]][i]);
+            index = j;
+          }
         }
-        // modify result vector
-        b[pivot[j]] = b[pivot[j]] - ratio * b[pivot[i]];
-      }
-    }
 
-    ret = backsub_partial_pivoting (A, b, pivot);
-    delete_matrix (A, this->width);
-    delete_vector (b);
-
-    return ret;
-  }
-
-  T
-  *jacobi (int iterations)
-  {
-    T **A  = clone_matrix (this->matrix, this->width);
-    T  *b  = clone_vector (this->vector_B, this->width);
-    T*  N  = new T[this->width];
-    T **M = new T*[width];
-    T *x_1 = new T*[width];
-    T *x_2 = new T*[width];
-
-
-    int n  = this->width;
-    int i, j, k;
-
-    // N = D^-1
-    for (i = 0; i < n; ++i)
-    {
-      N[i] = 1 / A[i][i];
-    }
-    // M = -D^-1 (L + U)
-    for (i = 0; i < n; ++i)
-    {
-      for (j = 0; j < n; j++)
-      {
-        if (i == j) {
-          M[i][j] = 0;
+        if (index != -1) {
+          swap (pivot[i], pivot[index]);
         }
-        else {
-          M[i][j] = - (A[i][j] * N[i]);
+
+        for (int j = i + 1; j < n; ++j)
+        {
+          // calculate the ratio
+          T ratio = A[pivot[j]][i] / A[pivot[i]][i];
+          for (int k = i; k < n; ++k)
+          {
+            // modify matrix entry
+            A[pivot[j]][k] = A[pivot[j]][k] - ratio * A[pivot[i]][k];
+          }
+          // modify result vector
+          b[pivot[j]] = b[pivot[j]] - ratio * b[pivot[i]];
         }
       }
+
+      ret = backsub_partial_pivoting (A, b, pivot);
+      delete_matrix (A, this->width);
+      delete_vector (b);
+
+      return ret;
     }
 
-    // initialize x
-    for (i = 0; i < n; ++i)
+    T
+    *jacobi (int iterations)
     {
-      x_1[i] = 0;
-    }
+      T **A  = clone_matrix (this->matrix, this->width);
+      T  *b  = clone_vector (this->vector_B, this->width);
+      T*  N  = new T[this->width];
+      T **M = new T*[width];
+      T *x_1 = new T*[width];
+      T *x_2 = new T*[width];
 
-    // iterations
-    for (k = 0; k < iterations; ++k)
-    {
+
+      int n  = this->width;
+      int i, j, k;
+
+      // N = D^-1
       for (i = 0; i < n; ++i)
       {
-        x_2[i] = N[i] * b[i];
-        for (j = 0; j < n; ++j)
+        N[i] = 1 / A[i][i];
+      }
+      // M = -D^-1 (L + U)
+      for (i = 0; i < n; ++i)
+      {
+        for (j = 0; j < n; j++)
         {
-          x_2[i] += M[i][j] * x_1[j];
+          if (i == j) {
+            M[i][j] = 0;
+          }
+          else {
+            M[i][j] = - (A[i][j] * N[i]);
+          }
         }
       }
+
+      // initialize x
+      for (i = 0; i < n; ++i)
+      {
+        x_1[i] = 0;
+      }
+
+      // iterations
+      for (k = 0; k < iterations; ++k)
+      {
         for (i = 0; i < n; ++i)
         {
-          x_1[i] = x_2[i];
+          x_2[i] = N[i] * b[i];
+          for (j = 0; j < n; ++j)
+          {
+            x_2[i] += M[i][j] * x_1[j];
+          }
         }
+          for (i = 0; i < n; ++i)
+          {
+            x_1[i] = x_2[i];
+          }
+      }
+
+      return x_1;
     }
 
-    return x_1;
-  }
-
-  T
-  count_abs_error (T* exemplary, T* after_test, int width)
-  {
-    T error_counter = 0;
-    T val = 0;
-    T def = 0;
-    for (int i = 0; i < width; ++i)
+    T
+    count_abs_error (T* exemplary, T* after_test, int width)
     {
-      def = exemplary[i] - after_test[i];
-      val = abs (def);
-      error_counter = error_counter + val;
+      T error_counter = 0;
+      T val = 0;
+      T def = 0;
+      for (int i = 0; i < width; ++i)
+      {
+        def = exemplary[i] - after_test[i];
+        val = abs (def);
+        error_counter = error_counter + val;
+      }
+      error_counter = error_counter / width;
+      return error_counter;
     }
-    error_counter = error_counter / width;
-    return error_counter;
-  }
 
-  T
-  count_rel_error (T* exemplary, T* after_test, int width)
-  {
-    T error_counter = 0;
-    T val = 0;
-    T def = 0;
-    for (int i = 0; i < width; ++i)
+    T
+    count_rel_error (T* exemplary, T* after_test, int width)
     {
-      def = exemplary[i] - after_test[i];
-      val = abs (def);
-      error_counter = error_counter + (val / abs (exemplary[i]));
+      T error_counter = 0;
+      T val = 0;
+      T def = 0;
+      for (int i = 0; i < width; ++i)
+      {
+        def = exemplary[i] - after_test[i];
+        val = abs (def);
+        error_counter = error_counter + (val / abs (exemplary[i]));
+      }
+      error_counter = error_counter / width;
+      return error_counter;
     }
-    error_counter = error_counter / width;
-    return error_counter;
-  }
 };
 #endif // PROTOCOLS_MATRIX_HH

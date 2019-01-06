@@ -1,8 +1,10 @@
 /*
- * This file is part of 03-population_protocol task.
- *
- * src/protocol.cc
- * Stanisław Grams <sgrams@fmdx.pl>
+ *  This file is part of 03-population_protocols task.
+ * 
+ *  src/protocol.cc
+ *  Stanislaw Grams <sgrams@fmdx.pl>
+ *  Maciej Jezierski <maciejjezierski4@gmail.com>
+ *  Juliusz Korczakowski <iuliuszkor@gmail.com>
  */
 #include "protocol.hh"
 /*
