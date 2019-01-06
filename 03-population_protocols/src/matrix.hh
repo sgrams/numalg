@@ -1,29 +1,18 @@
  /*
  *  This file is part of 03-population_protocols task.
  * 
- *  src/gauss.hh
+ *  src/matrix.hh
  *  Stanislaw Grams <sgrams@fmdx.pl>
  *  Maciej Jezierski <maciejjezierski4@gmail.com>
  *  Juliusz Korczakowski <iuliuszkor@gmail.com>
  */
-#ifndef PROTOCOLS_GAUSS_HH
-#define PROTOCOLS_GAUSS_HH
+#ifndef PROTOCOLS_MATRIX_HH
+#define PROTOCOLS_MATRIX_HH
 #include <iostream>
 #include <ctime>
 #include <random>
 #include <algorithm>
-#include <gmp.h>
-#include "util.hh"
-#include "protocols.hh"
-
-/* According to state_t there can be only three states
- * of an agent:
- * 1. Y = yes = 0,
- * 2. N = no = 1,
- * 3. U = undecided = 2
- */
-#define RANDOMIZE_MIN_NUM  Y
-#define RANDOMIZE_MAX_NUM  U
+#include <vector>
 
 using namespace std;
 
@@ -110,61 +99,6 @@ class MyMatrix {
           if (j == width - 1) {
             cout << endl;
           }
-        }
-      }
-    }
-
-    void
-    print_vector (T *vector, int width)
-    {
-      for (int i = 0; i < width; ++i)
-      {
-        cout << vector[i] << endl;
-      }
-    }
-
-    // data fillers
-    // fills matrix A with randomized data
-    void
-    fill_matrix ()
-    {
-      T num;
-      random_device rd;
-      mt19937 eng(rd());
-      uniform_int_distribution<> distr (RANDOMIZE_MIN_NUM, RANDOMIZE_MAX_NUM);
-
-      for (int i = 0; i < width; ++i)
-      {
-        for (int j = 0; j < width; ++j)
-        {
-          this->matrix[i][j] = distr (eng);
-        }
-      }
-    }
-    // fills vector X with randomized data
-    void
-    fill_vector_X () 
-    {
-      T num;
-      random_device rd;
-      mt19937 eng(rd());
-      uniform_int_distribution<> distr (RANDOMIZE_MIN_NUM, RANDOMIZE_MAX_NUM);
-
-      for (int i = 0; i < width; ++i)
-      {
-        this->vector_X[i] = distr (eng);
-      }
-    }
-    // fills vector B by solving B=A*X
-    void
-    fill_vector_B ()
-    {
-      for (int i = 0; i < width; ++i)
-      {
-        this->vector_B[i] = 0;
-        for (int j = 0; j < width; ++j)
-        {
-          this->vector_B[i] += this->matrix[i][j] * this->vector_X[j];
         }
       }
     }
@@ -314,7 +248,7 @@ class MyMatrix {
     // N = D^-1
     for (i = 0; i < n; ++i)
     {
-      N[i] = 1 / A[i][i]
+      N[i] = 1 / A[i][i];
     }
     // M = -D^-1 (L + U)
     for (i = 0; i < n; ++i)
@@ -325,7 +259,7 @@ class MyMatrix {
           M[i][j] = 0;
         }
         else {
-          M[i][j] = - (A[i][j] * N[i])
+          M[i][j] = - (A[i][j] * N[i]);
         }
       }
     }
@@ -343,7 +277,9 @@ class MyMatrix {
       {
         x_2[i] = N[i] * b[i];
         for (j = 0; j < n; ++j)
+        {
           x_2[i] += M[i][j] * x_1[j];
+        }
       }
         for (i = 0; i < n; ++i)
         {
@@ -386,4 +322,4 @@ class MyMatrix {
     return error_counter;
   }
 };
-#endif // PROTOCOLS_GAUSS_HH
+#endif // PROTOCOLS_MATRIX_HH
