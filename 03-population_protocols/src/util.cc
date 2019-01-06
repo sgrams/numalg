@@ -50,4 +50,20 @@ Util {
     }
     output_file.close ();
   }
+
+  unsigned int
+  calculate_newton (unsigned int n, unsigned int k)
+  {
+    unsigned int ret = 1;
+    
+    if (n == k || !k) {
+      return 1;
+    }
+
+    for (unsigned int i = 1 ; i <= k; ++i)
+    {
+      ret = ret * (n - i + 1) / i;
+    }
+    return ret;
+  }
 };

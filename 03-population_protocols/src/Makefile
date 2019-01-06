@@ -9,9 +9,10 @@ CFLAGS=-Wall -Werror -Wall -pedantic -std=c++0x
 LDFLAGS=-pthread
 
 # main targets
-all: matrix.o protocol.o util.o main.o
+all: probability.o matrix.o generator.o protocol.o util.o main.o
 
 # *.o: *.cc
+probability.o: probability.cc
 matrix.o: matrix.cc
 generator.o: generator.cc
 protocol.o: protocol.cc
@@ -22,4 +23,4 @@ main.o: main.cc
 .PHONY: clean
 clean:  rmobj
 rmobj:
-	rm -f matrix.o generator.o protocol.o util.o main.o
+	rm -f probability.o matrix.o generator.o protocol.o util.o main.o

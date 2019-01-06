@@ -48,5 +48,8 @@ namespace Util {
 
   void
   save_result_vec_to_file (const vector<result_fields_t > &result_vec, string filename);
+
+  unsigned int
+  calculate_newton (unsigned int n, unsigned int k);
 }
 #endif // _GAUSS_UTIL_H

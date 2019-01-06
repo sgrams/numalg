@@ -29,6 +29,7 @@ Protocol {
     int undecided_votes;
     int all_votes;
   public:
+    Protocol ();
     Protocol (int yes_votes, int no_votes, int all_votes);
     // getters and setters
     double get_yes_votes ();

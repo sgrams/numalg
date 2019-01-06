@@ -9,15 +9,18 @@
 #include "generator.hh"
 
 void
-generate_protocols_vector () {
+Generator::generate_protocols_vector () {
+  int iter = 0;
   this->protocols_vector = new Protocol[this->agents_count];
-
-  for (int i = 0, int iter = 0; i < this->agents_count; ++i)
+  for (int i = 0; i < this->agents_count; ++i)
   {
     for (int j = 0; j < this->agents_count; ++j)
     {
       if ((i + j) <= this->agents_count) {
-        this->protocols_vector[iter++] = Protocol (this->agents_count, i, j);
+        this->protocols_vector[iter].set_yes_votes (this->agents_count);
+        this->protocols_vector[iter].set_no_votes (i);
+        this->protocols_vector[iter].set_undecided_votes (j);
+        iter++;
       }
     }
   }
@@ -25,7 +28,8 @@ generate_protocols_vector () {
 }
 
 void
-generate_protocols_equations () {
+Generator::generate_probability_matrix () {
+  Probability *probability = new Probability (this->agents_count, this->cases_count);
   // create output (generated) vector
   this->matrix_vector = new double[this->cases_count];
   for (int i = 0; i < this->cases_count - 1; ++i)
@@ -35,41 +39,13 @@ generate_protocols_equations () {
   this->matrix_vector[this->cases_count - 1] = 1;
 
   // create output (generated) matrix
-  this->matrix = new double[this->cases_count];
+  this->matrix = new double*[this->cases_count];
   for (int i = 0; i < this->cases_count; ++i)
   {
     this->matrix[i] = new double [this->cases_count];
     for (int j = 0; j < this->cases_count; ++j)
     {
-      this->matrix[i][j] = generate_protocol_values (i, j);
+      this->matrix[i][j] = probability->generate_value (this->protocols_vector, i, j);
     }
   }
-}
-
-double
-generate_protocol_values (int row, int col) {
-  int yes_votes_in_row = this->protocols_vector[row].yes_votes;
-  int no_votes_in_row  = this->protocols_vector[row].no_votes;
-  int undecided_votes_in_row = this->protocols_vector[row].undecided_votes;
-
-  int yes_votes_in_col = this->protocols_vector[col].yes_votes;
-  int no_votes_in_col  = this->protocols_vector[col].no_votes;
-
-  if ((yes_votes_in_row == this->agents_count || no_votes_in_row == this->agents_count)
-      && row == col)
-    {
-      return 1.0;
-  }
-
-  if (yes_votes_in_row == 0 && no_votes_in_row == 0 && i == j) {
-    return 1.0;
-  }
-
-  // some moar casez
-  
-  if (i == j) {
-    return -1.0;
-  }
-
-  return 0.0;
 }

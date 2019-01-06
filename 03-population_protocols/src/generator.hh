@@ -16,6 +16,7 @@
 #include "util.hh"
 #include "protocol.hh"
 #include "matrix.hh"
+#include "probability.hh"
 
 class
 Generator {
@@ -28,9 +29,8 @@ Generator {
     double **matrix;
     double  *matrix_vector;
   public:
-    void   generate_equations_matrix ();
+    void   generate_probability_matrix ();
     void   generate_protocols_vector ();
-    double generate_protocol_value   (int row, int col);
 };
 
 #endif // PROTOCOLS_GENERATOR_HH
