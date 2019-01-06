@@ -1,8 +1,10 @@
 /*
- * This file is part of 03-population_protocol task.
- *
- * src/protocol.hh
- * Stanisław Grams <sgrams@fmdx.pl>
+ *  This file is part of 03-population_protocols task.
+ * 
+ *  src/generator.hh
+ *  Stanislaw Grams <sgrams@fmdx.pl>
+ *  Maciej Jezierski <maciejjezierski4@gmail.com>
+ *  Juliusz Korczakowski <iuliuszkor@gmail.com>
  */
 #ifndef PROTOCOLS_GENERATOR_HH
 #define PROTOCOLS_GENERATOR_HH
@@ -12,12 +14,23 @@
 #include <algorithm>
 #include <iostream>
 #include "util.hh"
-#include "gauss.hh"
+#include "protocol.hh"
+#include "matrix.hh"
 
 class
 Generator {
   private:
+    int       agents_count;
+    int       cases_count;
+    double  **protocols_equations;
+    Protocol *protocols_vector;
+
+    double **matrix;
+    double  *matrix_vector;
   public:
+    void   generate_equations_matrix ();
+    void   generate_protocols_vector ();
+    double generate_protocol_value   (int row, int col);
 };
 
 #endif // PROTOCOLS_GENERATOR_HH
