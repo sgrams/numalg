@@ -13,7 +13,6 @@
 #include <random>
 #include <algorithm>
 #include <vector>
-#include "protocol.hh"
 
 #define eps 0.00000000000001
 
@@ -23,7 +22,8 @@ template <class T>
 class MyMatrix {
   private:
     T **matrix;
-    T  *vector;
+    T  *vector_X;
+    T  *vector_B;
 
     int width;
   public:
@@ -31,7 +31,8 @@ class MyMatrix {
     {
       this->width    = width;
       this->matrix   = new T*[width];
-      this->vector   = new T[width];
+      this->vector_X = new T[width];
+      this->vector_B = new T[width];
 
       // create a square matrix of specified width
       for (int i = 0; i < width; i++)
@@ -39,25 +40,6 @@ class MyMatrix {
         matrix[i] = new T[width];
       }
     }
-    
-    MyMatrix (int width, T** matrix_to_clone, T* vector_to_clone)
-    {
-      this->width    = width;
-      this->matrix   = new T*[width];
-      this->vector   = new T[width];
-
-      // create a square matrix of specified width
-      for (int i = 0; i < width; i++)
-      {
-        matrix[i] = new T[width];
-        vector[i] = vector_to_clone[i];
-        for (int j = 0; j < width; ++j)
-        {
-          matrix[i][j] = matrix_to_clone[i][j];
-        }
-      }
-    }
-
     ~MyMatrix ()
     {
       for (int i = 0; i < this->width; i++)
@@ -65,7 +47,8 @@ class MyMatrix {
         delete[] this->matrix[i];
       }
       delete[] this->matrix;
-      delete[] this->vector;
+      delete[] this->vector_X;
+      delete[] this->vector_B;
     }
 
     // getters
@@ -80,16 +63,26 @@ class MyMatrix {
       return this->matrix;
     };
     T
-    *get_vector ()
+    *get_vector_X ()
     {
-      return this->vector;
+      return this->vector_X;
+    };
+    T
+    *get_vector_B ()
+    {
+      return this->vector_B;
     };
 
     // setters
     void
-    set_vector (T *vector)
+    set_vector_X (T *vector)
     {
-      this->vector = vector;
+      this->vector_X = vector;
+    }
+    void
+    set_vector_B (T *vector)
+    {
+      this->vector_B = vector;
     }
     void set_matrix (T **matrix)
     {
@@ -188,7 +181,7 @@ class MyMatrix {
     *gaussian ()
     {
       T **A  = clone_matrix (this->matrix, this->width);
-      T  *b  = clone_vector (this->vector, this->width);
+      T  *b  = clone_vector (this->vector_B, this->width);
       T *ret = nullptr;
 
       int m  = this->width - 1;
@@ -242,9 +235,7 @@ class MyMatrix {
     *jacobi_iterative (int iterations)
     {
       T **A  = clone_matrix (this->matrix, this->width);
-      T  *b  = clone_vector (this->vector, this->width);
-      T*  N  = new T[this->width];
-      T **M = new T*[width];
+      T  *b  = clone_vector (this->vector_B, this->width);
       T *x_1 = new T*[width];
       T *x_2 = new T*[width];
 
@@ -291,6 +282,16 @@ class MyMatrix {
       } while (counter < iterations);
       
       return x_1;
+    }
+
+    T
+    *jacobi_approx
+    {
+      T **A  = clone_matrix (this->matrix, this->width);
+      T  *b  = clone_vector (this->vector_B, this->width);
+      int n  = this->width;
+      int i, j, k;
+
     }
 
     T

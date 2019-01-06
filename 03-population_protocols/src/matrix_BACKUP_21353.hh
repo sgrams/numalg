@@ -242,9 +242,13 @@ class MyMatrix {
     *jacobi_iterative (int iterations)
     {
       T **A  = clone_matrix (this->matrix, this->width);
+<<<<<<< HEAD
       T  *b  = clone_vector (this->vector, this->width);
       T*  N  = new T[this->width];
       T **M = new T*[width];
+=======
+      T  *b  = clone_vector (this->vector_B, this->width);
+>>>>>>> b80f3499f92f4e5f66a9f30f16fa0fbb2ec0970d
       T *x_1 = new T*[width];
       T *x_2 = new T*[width];
 
@@ -291,6 +295,16 @@ class MyMatrix {
       } while (counter < iterations);
       
       return x_1;
+    }
+
+    T
+    *jacobi_approx
+    {
+      T **A  = clone_matrix (this->matrix, this->width);
+      T  *b  = clone_vector (this->vector_B, this->width);
+      int n  = this->width;
+      int i, j, k;
+
     }
 
     T

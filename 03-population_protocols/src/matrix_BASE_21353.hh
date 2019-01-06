@@ -13,9 +13,6 @@
 #include <random>
 #include <algorithm>
 #include <vector>
-#include "protocol.hh"
-
-#define eps 0.00000000000001
 
 using namespace std;
 
@@ -23,7 +20,8 @@ template <class T>
 class MyMatrix {
   private:
     T **matrix;
-    T  *vector;
+    T  *vector_X;
+    T  *vector_B;
 
     int width;
   public:
@@ -31,7 +29,8 @@ class MyMatrix {
     {
       this->width    = width;
       this->matrix   = new T*[width];
-      this->vector   = new T[width];
+      this->vector_X = new T[width];
+      this->vector_B = new T[width];
 
       // create a square matrix of specified width
       for (int i = 0; i < width; i++)
@@ -39,25 +38,6 @@ class MyMatrix {
         matrix[i] = new T[width];
       }
     }
-    
-    MyMatrix (int width, T** matrix_to_clone, T* vector_to_clone)
-    {
-      this->width    = width;
-      this->matrix   = new T*[width];
-      this->vector   = new T[width];
-
-      // create a square matrix of specified width
-      for (int i = 0; i < width; i++)
-      {
-        matrix[i] = new T[width];
-        vector[i] = vector_to_clone[i];
-        for (int j = 0; j < width; ++j)
-        {
-          matrix[i][j] = matrix_to_clone[i][j];
-        }
-      }
-    }
-
     ~MyMatrix ()
     {
       for (int i = 0; i < this->width; i++)
@@ -65,7 +45,8 @@ class MyMatrix {
         delete[] this->matrix[i];
       }
       delete[] this->matrix;
-      delete[] this->vector;
+      delete[] this->vector_X;
+      delete[] this->vector_B;
     }
 
     // getters
@@ -80,16 +61,26 @@ class MyMatrix {
       return this->matrix;
     };
     T
-    *get_vector ()
+    *get_vector_X ()
     {
-      return this->vector;
+      return this->vector_X;
+    };
+    T
+    *get_vector_B ()
+    {
+      return this->vector_B;
     };
 
     // setters
     void
-    set_vector (T *vector)
+    set_vector_X (T *vector)
     {
-      this->vector = vector;
+      this->vector_X = vector;
+    }
+    void
+    set_vector_B (T *vector)
+    {
+      this->vector_B = vector;
     }
     void set_matrix (T **matrix)
     {
@@ -188,7 +179,7 @@ class MyMatrix {
     *gaussian ()
     {
       T **A  = clone_matrix (this->matrix, this->width);
-      T  *b  = clone_vector (this->vector, this->width);
+      T  *b  = clone_vector (this->vector_B, this->width);
       T *ret = nullptr;
 
       int m  = this->width - 1;
@@ -239,20 +230,37 @@ class MyMatrix {
     }
 
     T
-    *jacobi_iterative (int iterations)
+    *jacobi (int iterations)
     {
       T **A  = clone_matrix (this->matrix, this->width);
-      T  *b  = clone_vector (this->vector, this->width);
+      T  *b  = clone_vector (this->vector_B, this->width);
       T*  N  = new T[this->width];
       T **M = new T*[width];
       T *x_1 = new T*[width];
       T *x_2 = new T*[width];
 
+
       int n  = this->width;
-      int counter = 0;
       int i, j, k;
 
-      double result, sum, helper;
+      // N = D^-1
+      for (i = 0; i < n; ++i)
+      {
+        N[i] = 1 / A[i][i];
+      }
+      // M = -D^-1 (L + U)
+      for (i = 0; i < n; ++i)
+      {
+        for (j = 0; j < n; j++)
+        {
+          if (i == j) {
+            M[i][j] = 0;
+          }
+          else {
+            M[i][j] = - (A[i][j] * N[i]);
+          }
+        }
+      }
 
       // initialize x
       for (i = 0; i < n; ++i)
@@ -260,36 +268,23 @@ class MyMatrix {
         x_1[i] = 0;
       }
 
-      do
+      // iterations
+      for (k = 0; k < iterations; ++k)
       {
-        counter++;
-        x_2 = x_1;
-
         for (i = 0; i < n; ++i)
         {
-          sum = 0;
-          for (j = 1; j < n; ++j)
+          x_2[i] = N[i] * b[i];
+          for (j = 0; j < n; ++j)
           {
-            if (i != j)
-              sum += A[i][j] * x_1[j];
+            x_2[i] += M[i][j] * x_1[j];
           }
-          x_1[i] = (-sum + b[i]) / A[i][i];
-          if (x_1[i] == -0.0)
-            x_1[i] = 0.0;
         }
+          for (i = 0; i < n; ++i)
+          {
+            x_1[i] = x_2[i];
+          }
+      }
 
-        helper = 0;
-        result = 0;
-
-        for (i = 0; i < n; ++i)
-        {
-          helper = fabs(x_1[i] - x_2[i]);
-          result += helper * helper;
-        }
-
-        result = sqrt(result);
-      } while (counter < iterations);
-      
       return x_1;
     }
 
