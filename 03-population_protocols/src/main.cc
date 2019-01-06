@@ -34,7 +34,7 @@ int main (int argc, char *argv[])
   }
   cout << endl << endl << endl;
   */
-  double *ret_vec = matrix->jacobi_iterative(10);
+  double *ret_vec = matrix->GSeidel(0.0000001);
   for (int i = 0; i < g->get_cases_count (); ++i)
   {
     cout << ret_vec[i] << ",";

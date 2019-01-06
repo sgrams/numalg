@@ -377,14 +377,14 @@ class MyMatrix {
         T dzielnik, norma1, norma2;
         bool koniec;
         T **A  = clone_matrix (this->matrix, this->width);
-        T  *B  = clone_vector (this->vector_B, this->width);
-        T *B2 = new T[this->width];
-        T *x = new T[this->width];
-        T *x2 = new T[this->width];
-        T **U = new T*[this->width];
-        T **L = new T*[this->width];
-        T **D = new T*[this->width];
-        T **I = new T*[this->width];
+        T  *B  = clone_vector (this->vector, this->width);
+        T *B2  = new T[this->width];
+        T *x   = new T[this->width];
+        T *x2  = new T[this->width];
+        T **U  = new T*[this->width];
+        T **L  = new T*[this->width];
+        T **D  = new T*[this->width];
+        T **I  = new T*[this->width];
         
         for (int i = 0; i < this->width; i++) {
             for (int j = 0; j < this->width; j++)
@@ -509,7 +509,7 @@ class MyMatrix {
                 if (fabs(x[i] - x2[i]) > eps) { koniec = true; break; }
                 else koniec = false;
             }
-        }while (koniec);
+        } while (koniec);
         
         // wyswietlenie wyniku
         //std::cout << "Wynik GSeidel:\n";
