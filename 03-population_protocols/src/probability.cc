@@ -12,7 +12,7 @@ Probability::Probability (int agents_count, int cases_count)
 {
   this->agents_count = agents_count;
   this->cases_count = cases_count;
-};
+}
 
 double
 Probability::get_agents_count ()
@@ -56,6 +56,26 @@ Probability::generate_value (Protocol *protocols_vector, int row, int col)
 
   if (yes_votes_in_row == 0 && no_votes_in_row == 0 && row == col) {
     return 1.0;
+  }
+
+  if (yes_votes_in_row == yes_votes_in_col && no_votes_in_row == no_votes_in_col &&
+      (yes_votes_in_row > 1 || no_votes_in_row > 1 || undecided_votes_in_row > 1)) {
+    return case_undecided_agents (protocols_vector[row]);
+  }
+
+  if (yes_votes_in_row + 1 == yes_votes_in_col && no_votes_in_row == no_votes_in_col &&
+      yes_votes_in_row > 0 && undecided_votes_in_row > 0) {
+    return case_one_undecided_agent (protocols_vector[row], yes_votes_in_row);
+  }
+
+  if (yes_votes_in_row == yes_votes_in_col && no_votes_in_row + 1 == no_votes_in_col &&
+      yes_votes_in_row > 0 && undecided_votes_in_row > 0) {
+    return case_one_undecided_agent (protocols_vector[row], no_votes_in_row);
+  }
+  
+  if (yes_votes_in_row - 1 == yes_votes_in_col && no_votes_in_row - 1 == no_votes_in_col &&
+      yes_votes_in_row > 0 && no_votes_in_row > 0) {
+    return case_mixed_agents (protocols_vector[row]);
   }
 
   if (row == col) {
@@ -108,4 +128,3 @@ Probability::case_mixed_agents (Protocol protocol)
 
   return res;
 }
-
