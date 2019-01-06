@@ -362,16 +362,199 @@ class MyMatrix {
         ret[i] = x_1[i];
       }
 
-      delete[] x_2;
-      delete[] x_1;
-      delete_vector (b);
       delete_matrix (A, this->width);
+      delete_vector (b);
+      delete_vector (x_1);
       
       return ret;
       
     }
     
     
+    
+    T
+    *gauss_seidel_approx (double eps)
+    {
+      T **A  = clone_matrix (this->matrix, this->width);
+      T  *b  = clone_vector (this->vector, this->width);
+      T *x_1 = new T[this->width];
+      T *x_2;
+      T *ret = new T[this->width];
+
+
+      int n  = this->width;
+      int counter = 0;
+      int i, j;
+
+      double result, sum, helper, sum_2;
+
+      // initialize x
+      for (i = 0; i < n; ++i)
+      {
+        x_1[i] = 0;
+      }
+
+      do
+      {
+        counter++;
+        x_2 = x_1;
+
+        for (i = 0; i < n; ++i)
+        {
+          sum = 0;
+          sum_2 = 0;
+
+          for (j = 1; j < i - 1; ++j)
+          {
+              sum += A[i][j] * x_1[j];
+          }
+
+          for (j = i + 1; j < n; ++j)
+          {
+              sum_2 += A[i][j] * x_1[j];
+          }
+
+          x_1[i] = ((-sum-sum_2) + b[i]) / A[i][i];
+          if (x_1[i] == -0.0)
+            x_1[i] = 0.0;
+        }
+
+        helper = 0;
+        result = 0;
+
+        for (i = 0; i < n; ++i)
+        {
+          helper = fabs(x_1[i] - x_2[i]);
+          result += helper * helper;
+        }
+
+        result = sqrt(result);
+      } while (result > eps);
+
+      for (int i = 0; i < n; ++i)
+      {
+        ret[i] = x_1[i];
+      }
+
+
+      delete_matrix (A, this->width);
+      delete_vector (b);
+      delete_vector (x_1);
+      
+      return ret;
+    }
+
+    T
+    *gauss_seidel_iterative (int iterations)
+    {
+      T **A  = clone_matrix (this->matrix, this->width);
+      T  *b  = clone_vector (this->vector, this->width);
+      T *x_1 = new T[this->width];
+      T *x_2;
+      T *ret = new T[this->width];
+
+
+      int n  = this->width;
+      int counter = 0;
+      int i, j;
+
+      double result, sum, helper, sum_2;
+
+      // initialize x
+      for (i = 0; i < n; ++i)
+      {
+        x_1[i] = 0;
+      }
+
+      do
+      {
+        counter++;
+        x_2 = x_1;
+
+        for (i = 0; i < n; ++i)
+        {
+          sum = 0;
+          sum_2 = 0;
+
+          for (j = 1; j < i - 1; ++j)
+          {
+              sum += A[i][j] * x_1[j];
+          }
+
+          for (j = i + 1; j < n; ++j)
+          {
+              sum_2 += A[i][j] * x_1[j];
+          }
+
+          x_1[i] = ((-sum-sum_2) + b[i]) / A[i][i];
+          if (x_1[i] == -0.0)
+            x_1[i] = 0.0;
+        }
+
+        helper = 0;
+        result = 0;
+
+        for (i = 0; i < n; ++i)
+        {
+          helper = fabs(x_1[i] - x_2[i]);
+          result += helper * helper;
+        }
+
+        result = sqrt(result);
+      } while (counter < iterations);
+
+      for (int i = 0; i < n; ++i)
+      {
+        ret[i] = x_1[i];
+      }
+
+
+      delete_matrix (A, this->width);
+      delete_vector (b);
+      delete_vector (x_1);
+      
+      return ret;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+
     T *GSeidel(double eps)
     {
         T dzielnik, norma1, norma2;
@@ -522,6 +705,7 @@ class MyMatrix {
         }
         return x;
     }
+    */
 
     T
     count_abs_error (T* exemplary, T* after_test, int width)

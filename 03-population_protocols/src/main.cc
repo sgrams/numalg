@@ -21,8 +21,9 @@ using namespace std;
 
 int main (int argc, char *argv[])
 {
-  Generator *g = new Generator (5);
+  Generator *g = new Generator (19);
   MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
+
   /*
   for (int i = 0; i < g->get_cases_count(); ++i)
   {
@@ -34,14 +35,55 @@ int main (int argc, char *argv[])
   }
   cout << endl << endl << endl;
   */
-  double *ret_vec = matrix->GSeidel(0.0000001);
+
+  double *ret_vec_gaussian = matrix->gaussian ();
+  double *ret_vec_jacobi_iterative = matrix->jacobi_iterative (10);
+  double *ret_vec_jacobi_approx = matrix->jacobi_approx(0.01);
+  double *ret_vec_seidel_iterative = matrix->gauss_seidel_iterative (10);
+  double *ret_vec_seidel_approx = matrix->gauss_seidel_approx (0.01);
+
   for (int i = 0; i < g->get_cases_count (); ++i)
   {
-    cout << ret_vec[i] << ",";
+    cout << ret_vec_gaussian[i] << ",";
   }
   cout << endl;
+  cout << endl;
+
+  for (int i = 0; i < g->get_cases_count (); ++i)
+  {
+    cout << ret_vec_jacobi_iterative[i] << ",";
+  }
+  cout << endl;
+  cout << endl;
+
+  for (int i = 0; i < g->get_cases_count (); ++i)
+  {
+    cout << ret_vec_jacobi_approx[i] << ",";
+  }
+  cout << endl;
+  cout << endl;
+
+  for (int i = 0; i < g->get_cases_count (); ++i)
+  {
+    cout << ret_vec_seidel_iterative[i] << ",";
+  }
+
+  cout << endl;
+  cout << endl;
+
+  for (int i = 0; i < g->get_cases_count (); ++i)
+  {
+    cout << ret_vec_seidel_approx[i] << ",";
+  }
+  
+  cout << endl;
+
   delete matrix;
   delete g;
-  delete[] ret_vec;
+  delete[] ret_vec_gaussian;
+  delete[] ret_vec_jacobi_iterative;
+  delete[] ret_vec_jacobi_approx;
+  delete[] ret_vec_seidel_iterative;
+  delete[] ret_vec_seidel_approx;
   return EXIT_SUCCESS;
 }
