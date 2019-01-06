@@ -232,7 +232,7 @@ class MyMatrix {
       ret = backsub (A, b, pivot);
       delete_matrix (A, this->width);
       delete_vector (b);
-      delete pivot;
+      delete[] pivot;
 
       return ret;
     }
