@@ -8,7 +8,6 @@
  */
 #ifndef _GAUSS_UTIL_H
 #define _GAUSS_UTIL_H
-using namespace std;
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -46,7 +45,7 @@ namespace Util {
   print_progressbar (int percentage);
 
   void
-  save_result_vec_to_file (const vector<result_fields_t > &result_vec, string filename);
+  save_result_vec_to_file (const std::vector<result_fields_t > &result_vec, std::string filename);
 
   unsigned int
   calculate_newton (unsigned int n, unsigned int k);

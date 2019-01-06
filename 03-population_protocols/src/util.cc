@@ -13,9 +13,9 @@ Util {
   void
   print_help ()
   {
-    cout << "Usage: ./gauss <options>" << endl;
-    cout << "Available options:" << endl;
-    cout << "  -h         print this help" << endl;
+    std::cout << "Usage: ./gauss <options>" << std::endl;
+    std::cout << "Available options:" << std::endl;
+    std::cout << "  -h         print this help" << std::endl;
   }
 
   void
@@ -29,14 +29,14 @@ Util {
   }
 
   void
-  save_result_vec_to_file (const vector<result_fields_t>&result_vec, string filename)
+  save_result_vec_to_file (const std::vector<result_fields_t>&result_vec, std::string filename)
   {
     std::ofstream output_file;
     output_file.open (filename);
     for (auto i: result_vec)
     {
       output_file.precision (34);
-      output_file << fixed;
+      output_file << std::fixed;
       output_file << i.matrix_size << ",";
       output_file << i.abs_err << ",";
       output_file << i.abs_err_pg << ",";
@@ -46,7 +46,7 @@ Util {
       output_file << i.rel_err_fg << ",";
       output_file << i.avg_time << ",";
       output_file << i.avg_time_pg << ",";
-      output_file << i.avg_time_fg << endl;
+      output_file << i.avg_time_fg << std::endl;
     }
     output_file.close ();
   }
