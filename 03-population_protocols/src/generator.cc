@@ -19,7 +19,8 @@ Generator::generate_protocols_vector () {
       if ((i + j) <= this->agents_count) {
         this->protocols_vector[iter].set_yes_votes (this->agents_count);
         this->protocols_vector[iter].set_no_votes (i);
-        this->protocols_vector[iter].set_undecided_votes (j);
+        this->protocols_vector[iter].set_all_votes (j);
+        this->protocols_vector[iter].set_undecided_votes (j-this->agents_count-i);
         iter++;
       }
     }
