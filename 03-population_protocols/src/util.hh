@@ -13,7 +13,6 @@ using namespace std;
 #include <fstream>
 #include <string>
 #include <vector>
-#include "matrix.hh"
 
 #define PROGRESSBAR_STRING "#################################################"
 #define PROGRESSBAR_WIDTH  50

@@ -22,13 +22,12 @@ using namespace std;
 int main (int argc, char *argv[])
 {
   Generator *g = new Generator (10);
-  g->generate_protocols_vector ();
-  g->generate_probability_matrix ();
+  MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
   for (int i = 0; i < g->get_cases_count(); ++i)
   {
     for (int j = 0; j < g->get_cases_count(); ++j)
     {
-      cout << g->get_matrix()[i][j] << " ";
+      cout << matrix->get_matrix()[i][j] << " ";
     }
     cout << endl;
   }

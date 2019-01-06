@@ -13,10 +13,10 @@ all: probability.o matrix.o generator.o protocol.o util.o main.o
 
 # *.o: *.cc
 probability.o: probability.cc
-matrix.o: matrix.cc
 generator.o: generator.cc
 protocol.o: protocol.cc
 util.o: util.cc
+matrix.o: matrix.cc
 main.o: main.cc
 
 # other procedures

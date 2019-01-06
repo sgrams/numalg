@@ -11,6 +11,8 @@
 Generator::Generator (int agents_count)
 {
   this->agents_count = agents_count;
+  this->generate_protocols_vector ();
+  this->generate_probability_matrix ();
 }
 Generator::~Generator ()
 {
