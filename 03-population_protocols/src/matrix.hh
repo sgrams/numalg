@@ -232,7 +232,7 @@ class MyMatrix {
       ret = backsub (A, b, pivot);
       delete_matrix (A, this->width);
       delete_vector (b);
-      delete[] pivot;
+      delete pivot;
 
       return ret;
     }
@@ -299,9 +299,7 @@ class MyMatrix {
       delete_vector (b);
       delete_vector (x_1);
       
-      delete[] A;
-
-      return x_1;
+      return ret;
     }
 
 
@@ -312,7 +310,7 @@ class MyMatrix {
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector, this->width);
       T *x_1 = new T[width];
-      T *x_2 = new T[width];
+      T *x_2;
       T *ret = new T[this->width];
 
 
@@ -343,9 +341,8 @@ class MyMatrix {
             }
           }
           x_1[i] = (-sum + b[i]) / A[i][i];
-          if (x_1[i] == -0.0) {
+          if (x_1[i] == -0.0)
             x_1[i] = 0.0;
-          }
         }
 
         helper = 0;
