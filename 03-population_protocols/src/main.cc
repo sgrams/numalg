@@ -24,18 +24,6 @@ int main (int argc, char *argv[])
   Generator *g = new Generator (5);
   MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
 
-  /*
-  for (int i = 0; i < g->get_cases_count(); ++i)
-  {
-    for (int j = 0; j < g->get_cases_count(); ++j)
-    {
-      cout << matrix->get_matrix()[i][j] << " ";
-    }
-    cout << endl;
-  }
-  cout << endl << endl << endl;
-  */
-
   double *ret_vec_gaussian = matrix->gaussian ();
   double *ret_vec_jacobi_iterative = matrix->jacobi_iterative (1000);
   double *ret_vec_jacobi_approx = matrix->jacobi_approx(0.001);
@@ -80,10 +68,12 @@ int main (int argc, char *argv[])
 
   delete matrix;
   delete g;
+  
   delete[] ret_vec_gaussian;
   delete[] ret_vec_jacobi_iterative;
   delete[] ret_vec_jacobi_approx;
   delete[] ret_vec_seidel_iterative;
   delete[] ret_vec_seidel_approx;
+
   return EXIT_SUCCESS;
 }

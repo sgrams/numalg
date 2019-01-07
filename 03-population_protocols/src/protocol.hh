@@ -21,6 +21,15 @@ typedef enum state {
   UNDECIDED // 2
 } state_t;
 
+typedef enum state_change {
+  YES_YES,
+  YES_NO,
+  YES_UNDECIDED,
+  NO_NO,
+  NO_UNDECIDED,
+  UNDECIDED_UNDECIDED
+} state_change_t;
+
 class
 Protocol {
   private:

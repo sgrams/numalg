@@ -47,7 +47,7 @@ Probability::generate_value (std::vector<Protocol> protocols_vector, int row, in
 
   int yes_votes_in_col = protocols_vector[col].get_yes_votes ();
   int no_votes_in_col  = protocols_vector[col].get_no_votes ();
-
+  
   if ((yes_votes_in_row == this->agents_count || no_votes_in_row == this->agents_count)
       && row == col)
     {
@@ -58,18 +58,18 @@ Probability::generate_value (std::vector<Protocol> protocols_vector, int row, in
     return 1.0;
   }
 
-  if (yes_votes_in_row == yes_votes_in_col && no_votes_in_row == no_votes_in_col &&
+  if ((yes_votes_in_row == yes_votes_in_col) && (no_votes_in_row == no_votes_in_col) &&
       (yes_votes_in_row > 1 || no_votes_in_row > 1 || undecided_votes_in_row > 1)) {
     return case_undecided_agents (protocols_vector[row]);
   }
 
-  if (yes_votes_in_row + 1 == yes_votes_in_col && no_votes_in_row == no_votes_in_col &&
+  if ((yes_votes_in_row + 1 == yes_votes_in_col) && (no_votes_in_row == no_votes_in_col) &&
       yes_votes_in_row > 0 && undecided_votes_in_row > 0) {
     return case_one_undecided_agent (protocols_vector[row], yes_votes_in_row);
   }
 
   if (yes_votes_in_row == yes_votes_in_col && no_votes_in_row + 1 == no_votes_in_col &&
-      yes_votes_in_row > 0 && undecided_votes_in_row > 0) {
+      no_votes_in_row > 0 && undecided_votes_in_row > 0) {
     return case_one_undecided_agent (protocols_vector[row], no_votes_in_row);
   }
   
@@ -91,13 +91,13 @@ Probability::case_undecided_agents (Protocol protocol) {
   double denominator = (double)Util::calculate_newton (this->agents_count, 2);
 
   if (protocol.get_yes_votes () > 1) {
-    res += (double)Util::calculate_newton (protocol.get_yes_votes (), 2) / denominator;
+    res += (double)Util::calculate_newton (protocol.get_yes_votes (), 2) / (double)denominator;
   }
   if (protocol.get_no_votes () > 1) {
-    res += (double)Util::calculate_newton (protocol.get_no_votes (), 2) / denominator;
+    res += (double)Util::calculate_newton (protocol.get_no_votes (), 2) / (double)denominator;
   }
   if (protocol.get_undecided_votes () > 1) {
-    res += (double)Util::calculate_newton (protocol.get_undecided_votes (), 2) / denominator;
+    res += (double)Util::calculate_newton (protocol.get_undecided_votes (), 2) / (double)denominator;
   }
 
   return res;
@@ -110,9 +110,8 @@ Probability::case_one_undecided_agent (Protocol protocol, int condition)
   double denominator = (double)Util::calculate_newton (this->agents_count, 2);
 
   if (condition > 0 && protocol.get_undecided_votes () > 0) {
-    res = (double)(condition * (protocol.get_undecided_votes ())) / denominator;
+    res = (double)((double)condition * (double)(protocol.get_undecided_votes ())) / (double)denominator;
   }
-
   return res;
 }
 
@@ -123,7 +122,7 @@ Probability::case_mixed_agents (Protocol protocol)
   double denominator = (double)Util::calculate_newton (this->agents_count, 2);
 
   if (protocol.get_yes_votes () > 0 && protocol.get_no_votes () > 0) {
-    res = (double)(protocol.get_yes_votes () * protocol.get_no_votes ()) / denominator;
+    res = (double)((double)protocol.get_yes_votes () * (double)protocol.get_no_votes ()) / (double)denominator;
   }
 
   return res;

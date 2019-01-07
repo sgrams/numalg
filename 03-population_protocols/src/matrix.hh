@@ -243,7 +243,7 @@ class MyMatrix {
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector, this->width);
       T *x_1 = new T[this->width];
-      T *x_2 = new T[this->width];
+      T *x_2;
       T *ret = new T[this->width];
 
 
@@ -287,6 +287,7 @@ class MyMatrix {
         }
 
         result = sqrt(result);
+        delete_vector (x_2);
       } while (counter < iterations);
 
       for (int i = 0; i < n; ++i)
@@ -302,15 +303,13 @@ class MyMatrix {
       return ret;
     }
 
-
-
     T
     *jacobi_approx (double eps)
     {
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector, this->width);
       T *x_1 = new T[width];
-      T *x_2 = new T[width];
+      T *x_2;
       T *ret = new T[this->width];
 
 
@@ -355,6 +354,7 @@ class MyMatrix {
         }
 
         result = sqrt(result);
+        delete_vector (x_2);
       } while (result > eps);
 
       for (int i = 0; i < n; ++i)
@@ -369,16 +369,14 @@ class MyMatrix {
       return ret;
       
     }
-    
-    
-    
+
     T
     *gauss_seidel_approx (double eps)
     {
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector, this->width);
       T *x_1 = new T[this->width];
-      T *x_2 = new T[width];
+      T *x_2;
       T *ret = new T[this->width];
 
 
@@ -429,6 +427,7 @@ class MyMatrix {
         }
 
         result = sqrt(result);
+        delete_vector (x_2);
       } while (result > eps);
 
       for (int i = 0; i < n; ++i)
@@ -440,7 +439,7 @@ class MyMatrix {
       delete_matrix (A, this->width);
       delete_vector (b);
       delete_vector (x_1);
-      
+
       return ret;
     }
 
@@ -450,7 +449,7 @@ class MyMatrix {
       T **A  = clone_matrix (this->matrix, this->width);
       T  *b  = clone_vector (this->vector, this->width);
       T *x_1 = new T[this->width];
-      T *x_2 = new T[width];;
+      T *x_2;
       T *ret = new T[this->width];
 
 
@@ -501,6 +500,7 @@ class MyMatrix {
         }
 
         result = sqrt(result);
+        delete_vector (x_2);
       } while (counter < iterations);
 
       for (int i = 0; i < n; ++i)
