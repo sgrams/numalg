@@ -12,23 +12,17 @@
 #include <random>
 #include <ctime>
 #include <algorithm>
+#include <vector>
+#include <ctime>
+#include <random>
 #include <iostream>
 #include "util.hh"
 
-typedef enum state {
+enum state_t {
   NO,       // 0: keeps the boolean logic correct
   YES,      // 1
   UNDECIDED // 2
-} state_t;
-
-typedef enum state_change {
-  YES_YES,
-  YES_NO,
-  YES_UNDECIDED,
-  NO_NO,
-  NO_UNDECIDED,
-  UNDECIDED_UNDECIDED
-} state_change_t;
+};
 
 class
 Protocol {
@@ -56,9 +50,14 @@ class
 Agent {
   private:
     state_t state;
+    bool    is_ready;
   public:
     Agent (state_t state);
-    void change_state (Agent &agent);
+    void    change_state (Agent agent);
+    void    set_state (state_t state);
+    state_t get_state ();
+    bool    ready ();
+    void    make_ready();
 };
 
 class
@@ -66,8 +65,11 @@ MonteCarlo {
   private:
     int iterations;
     int all_agents;
+
   public:
-    MonteCarlo (int iterations);
+    MonteCarlo (int iterations, int all_agents);
    ~MonteCarlo ();
+    double  run_simulation (int yes_votes, int no_votes);
+    state_t run_simulation_helper (std::vector<Agent> simulation_vector);
 };
 #endif
