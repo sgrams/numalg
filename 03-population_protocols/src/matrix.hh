@@ -237,7 +237,7 @@ class MyMatrix {
       return ret;
     }
 
-    *gaussian_improved ()
+    T *gaussian_improved ()
     {
         T **A  = clone_matrix (this->matrix, this->width);
         T  *b  = clone_vector (this->vector, this->width);
@@ -271,7 +271,7 @@ class MyMatrix {
             
             for (int j = i + 1; j < n; ++j)
             {
-                if(tab[i][n] == 0) {
+                if(A[i][n] == 0) {
                     continue;
                 }
                 T ratio = A[pivot[j]][i] / A[pivot[i]][i];
