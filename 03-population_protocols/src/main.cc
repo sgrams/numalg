@@ -80,6 +80,7 @@ int main (int argc, char *argv[])
   
   cout << endl;
 
+  delete mc;
   delete matrix;
   delete g;
   
