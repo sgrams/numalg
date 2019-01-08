@@ -142,7 +142,6 @@ Agent::change_state (Agent agent)
  */
 MonteCarlo::MonteCarlo (int iterations, int all_agents)
 {
-  std::vector<double> result_vector;
   this->iterations = iterations;
   this->all_agents = all_agents;
   int size = (all_agents + 1) * (all_agents + 2);
@@ -288,4 +287,10 @@ MonteCarlo::run_simulation (int yes_votes, int no_votes)
     simulation_vector.clear ();
   }
   return yes_votes / this->iterations;
+}
+
+std::vector<double>
+MonteCarlo::get_result_vector ()
+{
+  return this->result_vector;
 }

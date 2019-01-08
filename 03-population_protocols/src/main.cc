@@ -17,12 +17,24 @@
 
 #define  MAX_AGENTS_COUNT  50
 #define  START_AGENT_COUNT 3
+#define  DEFAULT_ERRORS_CSV_FILENAME "errors.csv"
+#define  DEFAULT_SPARSE_TIMINGS_CSV_FILENAME "timings.csv"
+#define  DEFAULT_ITERATION_METHODS_ERRORS_FILENAME "iterative.csv"
 using namespace std;
 
 int main (int argc, char *argv[])
 {
   Generator *g = new Generator (5);
   MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
+
+  MonteCarlo *mc = new MonteCarlo (2, 3);
+
+  vector<double> ret_vec_mc = mc->get_result_vector ();
+  for (int i = 0; i <= (int)ret_vec_mc.size(); ++i)
+  {
+    cout << ret_vec_mc[i] << " ";
+  }
+  cout << endl;
 
   double *ret_vec_gaussian = matrix->gaussian ();
   double *ret_vec_jacobi_iterative = matrix->jacobi_iterative (1000);

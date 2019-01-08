@@ -65,11 +65,13 @@ MonteCarlo {
   private:
     int iterations;
     int all_agents;
+    std::vector<double> result_vector;
 
   public:
     MonteCarlo (int iterations, int all_agents);
    ~MonteCarlo ();
     double  run_simulation (int yes_votes, int no_votes);
     state_t run_simulation_helper (std::vector<Agent> simulation_vector);
+    std::vector<double> get_result_vector();
 };
 #endif
