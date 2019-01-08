@@ -237,6 +237,63 @@ class MyMatrix {
       return ret;
     }
 
+    *gaussian_improved ()
+    {
+        T **A  = clone_matrix (this->matrix, this->width);
+        T  *b  = clone_vector (this->vector, this->width);
+        T *ret = nullptr;
+        
+        int m  = this->width - 1;
+        int n  = this->width;
+        
+        int *pivot = new int[width];
+        
+        for (int i = 0; i < this->width; ++i)
+        {
+            pivot[i] = i;
+        }
+        
+        for (int i = 0; i < m; ++i)
+        {
+            T magnitude = 0;
+            int index   = -1;
+            for (int j = i; j <= m; ++j)
+            {
+                if (fabs (A[pivot[j]][i]) > magnitude ) {
+                    magnitude = fabs (A[pivot[j]][i]);
+                    index = j;
+                }
+            }
+            
+            if (index != -1) {
+                swap (pivot[i], pivot[index]);
+            }
+            
+            for (int j = i + 1; j < n; ++j)
+            {
+                if(tab[i][n] == 0)
+                {
+                    continue;
+                }
+                T ratio = A[pivot[j]][i] / A[pivot[i]][i];
+                for (int k = i; k < n; ++k)
+                {
+                    // modify matrix entry
+                    A[pivot[j]][k] = A[pivot[j]][k] - ratio * A[pivot[i]][k];
+                }
+                // modify result vector
+                b[pivot[j]] = b[pivot[j]] - ratio * b[pivot[i]];
+            }
+        }
+        
+        ret = backsub (A, b, pivot);
+        delete_matrix (A, this->width);
+        delete_vector (b);
+        delete[] pivot;
+        
+        return ret;
+    }
+    
     T
     *jacobi_iterative (int iterations)
     {
