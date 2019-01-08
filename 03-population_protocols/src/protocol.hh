@@ -52,8 +52,9 @@ Agent {
     state_t state;
     bool    is_ready;
   public:
+    Agent ();
     Agent (state_t state);
-    void    change_state (Agent agent);
+    void    change_state (Agent *agent);
     void    set_state (state_t state);
     state_t get_state ();
     bool    ready ();
@@ -71,7 +72,7 @@ MonteCarlo {
     MonteCarlo (int iterations, int all_agents);
    ~MonteCarlo ();
     double  run_simulation (int yes_votes, int no_votes);
-    state_t run_simulation_helper (std::vector<Agent> simulation_vector);
+    state_t run_simulation_helper (Agent* simulation_vector);
     std::vector<double> get_result_vector();
 };
 #endif
