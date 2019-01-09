@@ -15,10 +15,10 @@
 #include "generator.hh"
 #include "probability.hh"
 
-#define  MAX_AGENTS_COUNT  10
-#define  START_AGENT_COUNT 4
-#define  ITERATIONS 10
-#define  EPS 0.001
+#define  MAX_AGENTS_COUNT  20
+#define  START_AGENT_COUNT 3
+#define  ITERATIONS 1000
+#define  EPS 0.000001
 #define  DEFAULT_ERRORS_CSV_FILENAME "errors.csv"
 #define  DEFAULT_SPARSE_TIMINGS_CSV_FILENAME "timings.csv"
 #define  DEFAULT_ITERATION_METHODS_ERRORS_FILENAME "iterative.csv"

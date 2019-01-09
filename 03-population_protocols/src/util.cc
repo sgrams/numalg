@@ -44,7 +44,7 @@ Util {
       output_file << i.abs_err_gs << ",";
       output_file << i.abs_err_gsit << ",";
       output_file << i.abs_err_j << ",";
-      output_file << i.abs_err_jit << ",";
+      output_file << i.abs_err_jit << std::endl;
       //output_file << i.abs_err_mc << ",";
 
       // output_file << i.avg_time_g << ",";
