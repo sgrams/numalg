@@ -94,7 +94,7 @@ Util {
       output_file.precision (34);
       output_file << std::fixed;
       output_file << i.agent_count << ",";
-      output_file << i.iterations << ",";
+      output_file << i.epsilon << ",";
 
       output_file << i.abs_err_gs << ",";
       output_file << i.abs_err_j << ",";

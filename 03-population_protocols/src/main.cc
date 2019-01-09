@@ -25,7 +25,7 @@
 #define DEFAULT_SEIDEL_ITERATIONS     100
 #define DEFAULT_SEIDEL_EPSILON        0.1
 #define DEFUALT_MIN_ITERATIONS        1
-#define DEFAULT_MAX_ITERATIONS        100000
+#define DEFAULT_MAX_ITERATIONS        1000
 #define DEFAULT_MIN_AGENT_COUNT       3
 #define DEFAULT_MAX_AGENTS_COUNT      20
 
@@ -226,23 +226,23 @@ void run_precision_methods_only ()
 
     result      = new Result ();
     // new for needed
-    for (int iterations = DEFUALT_MIN_ITERATIONS; iterations <= DEFAULT_MAX_ITERATIONS; ++iterations)
+    for (double epsilon = 0.1; epsilon >= 0.00000000000000001; epsilon/=10)
     {
       // Run jacobi approx method
       clock_t begin_jacobi_time = clock ();
-      ret_vec_jacobi  = matrix->jacobi_approx (iterations);
+      ret_vec_jacobi  = matrix->jacobi_approx (epsilon);
       clock_t end_jacobi_time   = clock ();
       double  diff_jacobi_time  = (double)(end_jacobi_time - begin_jacobi_time) / CLOCKS_PER_SEC;
 
       // Run seidel approx method
       clock_t begin_seidel_time = clock ();
-      ret_vec_seidel = matrix->gauss_seidel_approx (iterations);
+      ret_vec_seidel = matrix->gauss_seidel_approx (epsilon);
       clock_t end_seidel_time   = clock ();
       double  diff_seidel_time  = (double)(end_seidel_time - begin_seidel_time) / CLOCKS_PER_SEC;
 
       // Set error vector with received values
       result->agent_count  = n;
-      result->iterations   = iterations;
+      result->epsilon      = epsilon;
       result->abs_err_gs = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_seidel, size);
       result->abs_err_j  = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_jacobi, size);
       result->time_gs = diff_seidel_time;
@@ -261,8 +261,8 @@ void run_precision_methods_only ()
 int main (int argc, char *argv[])
 {
   run_all_methods ();
-  run_iterative_methods_only ();
   run_precision_methods_only ();
+  run_iterative_methods_only ();
 
   return EXIT_SUCCESS;
 }
