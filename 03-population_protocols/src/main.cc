@@ -15,85 +15,134 @@
 #include "generator.hh"
 #include "probability.hh"
 
-#define  MAX_AGENTS_COUNT  20
-#define  START_AGENT_COUNT 3
-#define  ITERATIONS 1000
-#define  EPS 0.000001
-#define  DEFAULT_ERRORS_CSV_FILENAME "errors.csv"
-#define  DEFAULT_SPARSE_TIMINGS_CSV_FILENAME "timings.csv"
-#define  DEFAULT_ITERATION_METHODS_ERRORS_FILENAME "iterative.csv"
+#define DEFAULT_ERRORS_CSV_FILENAME     "errors.csv"
+#define DEFAULT_ITERATIVE_CSV_FILENAME  "iterative.csv"
+#define DEFAULT_PRECISIONS_CSV_FILENAME "precisions.csv"
+
+#define DEFAULT_MONTECARLO_ITERATIONS 1
+#define DEFAULT_JACOBI_ITERATIONS     10000
+#define DEFAULT_JACOBI_EPSILON        0.0000000000000001
+#define DEFAULT_SEIDEL_ITERATIONS     10000
+#define DEFAULT_SEIDEL_EPSILON        0.0000000000000001
+#define DEFUALT_MIN_ITERATIONS        1
+#define DEFAULT_MAX_ITERATIONS        10000
+#define DEFAULT_MIN_AGENT_COUNT       3
+#define DEFAULT_MAX_AGENTS_COUNT      10
+
 using namespace std;
 
-int main (int argc, char *argv[])
+/*
+ * Runs all methods with fixed precision/iterations
+ * and saves output to DEFAULT_ERRORS_CSV_FILENAME
+*/
+void run_all_methods ()
 {
+  MyMatrix<double> *matrix;
+  MonteCarlo *monte_carlo;
+  Generator  *generator;
+  Result     *result = new Result ();
+  std::vector<Result> errors_vec;
 
-  vector<double> ret_vec_mc;
-  vector<result_fields_t> result_vec;
+  int size = 0;
 
   double *ret_vec_gaussian;
-  double *ret_vec_gaussiani;
+  double *ret_vec_gaussian_improved;
   double *ret_vec_jacobi_iterative;
   double *ret_vec_jacobi_approx;
   double *ret_vec_seidel_iterative;
   double *ret_vec_seidel_approx;
-
-  for(int size = START_AGENT_COUNT; size <= MAX_AGENTS_COUNT; ++size)
+  for (int n = DEFAULT_MIN_AGENT_COUNT; n <= (int)DEFAULT_MAX_AGENTS_COUNT; n++)
   {
-    result_fields_t result;
-    result.agent_count    = size;
-    result.abs_err_g      = 0;
-    result.abs_err_gi     = 0;
-    result.abs_err_gs     = 0;
-    result.abs_err_gsit   = 0;
-    result.abs_err_j      = 0;
-    result.abs_err_jit    = 0;
-    result.abs_err_jit    = 0;
+    clock_t begin_montecarlo_time = clock ();
+    monte_carlo = new MonteCarlo (DEFAULT_MONTECARLO_ITERATIONS, n);
+    clock_t end_montecarlo_time = clock ();
+    double  diff_montecarlo_time  = (double)(end_montecarlo_time - begin_montecarlo_time) / CLOCKS_PER_SEC;
 
-    for(int i = START_AGENT_COUNT; i <= MAX_AGENTS_COUNT; ++i)
-      {
+    generator   = new Generator  (n);
+    result      = new Result ();
+    matrix      = new MyMatrix<double>(generator->get_cases_count (), generator->get_matrix (), generator->get_matrix_vector ());
+    size        = (n + 1) * (n + 2) / 2;
+    // Run gaussian method
+    clock_t begin_gaussian_time = clock ();
+    ret_vec_gaussian            = matrix->gaussian ();
+    clock_t end_gaussian_time   = clock ();
+    double  diff_gaussian_time  = (double)(end_gaussian_time - begin_gaussian_time) / CLOCKS_PER_SEC;
+    
+    // Run gaussian improved method
+    clock_t begin_gaussian_improved_time = clock ();
+    ret_vec_gaussian_improved            = matrix->gaussian_improved ();
+    clock_t end_gaussian_improved_time   = clock ();
+    double  diff_gaussian_improved_time  = (double)(end_gaussian_improved_time - begin_gaussian_improved_time) / CLOCKS_PER_SEC;
 
-        Generator *g = new Generator (i);
-        MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
+    // Run jacobi approx method
+    clock_t begin_jacobi_approx_time = clock ();
+    ret_vec_jacobi_approx = matrix->jacobi_approx (DEFAULT_JACOBI_EPSILON);
+    clock_t end_jacobi_approx_time   = clock ();
+    double  diff_jacobi_approx_time  = (double)(end_jacobi_approx_time - begin_jacobi_approx_time) / CLOCKS_PER_SEC;
 
-        MonteCarlo *mc = new MonteCarlo (ITERATIONS, i);
-  
-        int size = (result.agent_count + 1) * (result.agent_count + 2);
+    // Run seidel approx method
+    clock_t begin_seidel_approx_time = clock ();
+    ret_vec_seidel_approx = matrix->gauss_seidel_approx (DEFAULT_SEIDEL_EPSILON);
+    clock_t end_seidel_approx_time   = clock ();
+    double  diff_seidel_approx_time  = (double)(end_seidel_approx_time - begin_seidel_approx_time) / CLOCKS_PER_SEC;
 
-        ret_vec_mc = mc->get_result_vector ();
-        double *tab = new double[ret_vec_mc.size()];
+    // Run jacobi iterative method
+    clock_t begin_jacobi_time = clock ();
+    ret_vec_jacobi_iterative  = matrix->jacobi_iterative (DEFAULT_JACOBI_ITERATIONS);
+    clock_t end_jacobi_time   = clock ();
+    double  diff_jacobi_time  = (double)(end_jacobi_time - begin_jacobi_time) / CLOCKS_PER_SEC;
 
-          for (int i = 0; i < (int) ret_vec_mc.size(); ++i)
-            {
-              tab[i]=ret_vec_mc[i];
-            }
-  
-        ret_vec_gaussian = matrix->gaussian ();
-        ret_vec_gaussiani = matrix->gaussian_improved ();
-        ret_vec_jacobi_iterative = matrix->jacobi_iterative (ITERATIONS);
-        ret_vec_jacobi_approx = matrix->jacobi_approx(EPS);
-        ret_vec_seidel_iterative = matrix->gauss_seidel_iterative (ITERATIONS);
-        ret_vec_seidel_approx = matrix->gauss_seidel_approx (EPS);
-
-        result.abs_err_g    = matrix->count_abs_error (tab, ret_vec_gaussian, size);
-        result.abs_err_gi   = matrix->count_abs_error (tab, ret_vec_gaussiani, size);
-        result.abs_err_gs   = matrix->count_abs_error (tab, ret_vec_seidel_approx, size);
-        result.abs_err_gsit = matrix->count_abs_error (tab, ret_vec_seidel_iterative, size);
-        result.abs_err_j    = matrix->count_abs_error (tab, ret_vec_jacobi_approx, size);
-        result.abs_err_jit  = matrix->count_abs_error (tab, ret_vec_jacobi_iterative, size);
-      }
-      result_vec.push_back (result);
-    }
-
-    Util::save_result_vec_to_file (result_vec, DEFAULT_ERRORS_CSV_FILENAME);
-    result_vec.clear ();
+    // Run seidel iterative method
+    clock_t begin_seidel_time = clock ();
+    ret_vec_seidel_iterative = matrix->gauss_seidel_iterative (DEFAULT_SEIDEL_ITERATIONS);
+    clock_t end_seidel_time   = clock ();
+    double  diff_seidel_time  = (double)(end_seidel_time - begin_seidel_time) / CLOCKS_PER_SEC;
 
 
+    // Set error vector with received values
+    result->agent_count  = n;
+    result->abs_err_g    = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_gaussian, size);
+    result->abs_err_gi   = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_gaussian_improved, size);
+    result->abs_err_gs   = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_seidel_approx, size);
+    result->abs_err_gsit = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_seidel_iterative, size);
+    result->abs_err_j    = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_jacobi_approx, size);
+    result->abs_err_jit  = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_jacobi_iterative, size);
+    result->time_g    = diff_gaussian_time;
+    result->time_gi   = diff_gaussian_improved_time;
+    result->time_gs   = diff_seidel_approx_time;
+    result->time_gsit = diff_seidel_time;
+    result->time_j    = diff_jacobi_approx_time;
+    result->time_jit  = diff_jacobi_time;
+    result->time_mc   = diff_montecarlo_time;
 
-  delete[] ret_vec_gaussian;
-  delete[] ret_vec_jacobi_iterative;
-  delete[] ret_vec_jacobi_approx;
-  delete[] ret_vec_seidel_iterative;
-  delete[] ret_vec_seidel_approx;
+    errors_vec.push_back (*result);
+    delete matrix;
+    delete generator;
+    delete monte_carlo;
+  }
+  Util::save_errors_vec_to_file (errors_vec, DEFAULT_ERRORS_CSV_FILENAME);
+  errors_vec.clear();
+}
+
+/*
+ * Runs iterative methods with different iterations value
+ * and saves output to DEFAULT_ITERATIVE_CSV_FILENAME
+*/
+void run_iterative_methods_only ()
+{
+}
+
+/*
+ * Runs precision methods with different iterations value
+ * and saves output to DEFAULT_IPRECISIONS_CSV_FILENAME
+*/
+void run_precision_methods_only ()
+{
+}
+
+int main (int argc, char *argv[])
+{
+  run_all_methods ();
 
   return EXIT_SUCCESS;
 }

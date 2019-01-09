@@ -29,7 +29,7 @@ Util {
   }
 
   void
-  save_result_vec_to_file (const std::vector<result_fields_t>&result_vec, std::string filename)
+  save_errors_vec_to_file (const std::vector<Result>&result_vec, std::string filename)
   {
     std::ofstream output_file;
     output_file.open (filename);
@@ -44,16 +44,17 @@ Util {
       output_file << i.abs_err_gs << ",";
       output_file << i.abs_err_gsit << ",";
       output_file << i.abs_err_j << ",";
-      output_file << i.abs_err_jit << std::endl;
-      //output_file << i.abs_err_mc << ",";
+      output_file << i.abs_err_jit << ",";
 
-      // output_file << i.avg_time_g << ",";
-      // output_file << i.avg_time_gi << ",";
-      // output_file << i.avg_time_gs << ",";
-      // output_file << i.avg_time_gsit << ",";
-      // output_file << i.avg_time_j << ",";
-      // output_file << i.avg_time_jit << ",";
-      // output_file << i.avg_time_mc << std::endl;
+      output_file << i.time_g << ",";
+      output_file << i.time_gi << ",";
+      output_file << i.time_gs << ",";
+      output_file << i.time_gsit << ",";
+      output_file << i.time_j << ",";
+      output_file << i.time_jit << ",";
+      output_file << i.time_mc;
+      output_file << std::endl;
+
     }
     output_file.close ();
   }
