@@ -15,8 +15,10 @@
 #include "generator.hh"
 #include "probability.hh"
 
-#define  MAX_AGENTS_COUNT  50
-#define  START_AGENT_COUNT 3
+#define  MAX_AGENTS_COUNT  10
+#define  START_AGENT_COUNT 4
+#define  ITERATIONS 10
+#define  EPS 0.001
 #define  DEFAULT_ERRORS_CSV_FILENAME "errors.csv"
 #define  DEFAULT_SPARSE_TIMINGS_CSV_FILENAME "timings.csv"
 #define  DEFAULT_ITERATION_METHODS_ERRORS_FILENAME "iterative.csv"
@@ -24,91 +26,69 @@ using namespace std;
 
 int main (int argc, char *argv[])
 {
-  Generator *g = new Generator (3);
-  MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
 
-  MonteCarlo *mc = new MonteCarlo (1000, 3);
-  
-  result_fields_t result;
-  result.agent_count = 3;
-  int size = (result.agent_count + 1) * (result.agent_count + 2);
-
-  vector<double> ret_vec_mc = mc->get_result_vector ();
-  int a = (int)ret_vec_mc.size();
-  double tab[a];
-  for (int i = 0; i < (int)ret_vec_mc.size(); ++i)
-  {
-    tab[i]=ret_vec_mc[i];
-  }
-  cout << endl;
-
-  double *ret_vec_gaussian = matrix->gaussian ();
-  double *ret_vec_gaussiani = matrix->gaussian_improved ();
-  double *ret_vec_jacobi_iterative = matrix->jacobi_iterative (1000);
-  double *ret_vec_jacobi_approx = matrix->jacobi_approx(0.001);
-  double *ret_vec_seidel_iterative = matrix->gauss_seidel_iterative (100000);
-  double *ret_vec_seidel_approx = matrix->gauss_seidel_approx (0.00001);
-
-  result.abs_err_g    += matrix->count_abs_error (tab, ret_vec_gaussian, size);
-  result.abs_err_gi   += matrix->count_abs_error (tab, ret_vec_gaussiani, size);
-  result.abs_err_gs   += matrix->count_abs_error (tab, ret_vec_seidel_approx, size);
-  result.abs_err_gsit += matrix->count_abs_error (tab, ret_vec_seidel_iterative, size);
-  result.abs_err_j    += matrix->count_abs_error (tab, ret_vec_jacobi_approx, size);
-  result.abs_err_jit  += matrix->count_abs_error (tab, ret_vec_jacobi_iterative, size);
-  //result.abs_err_mc   += matrix->count_abs_error (tab, ret_vec_gaussian, size);
-
+  vector<double> ret_vec_mc;
   vector<result_fields_t> result_vec;
-  result_vec.push_back (result);
-  Util::save_result_vec_to_file (result_vec, "testing.csv");
 
-  for (int i = 0; i < (int)ret_vec_mc.size(); ++i)
+  double *ret_vec_gaussian;
+  double *ret_vec_gaussiani;
+  double *ret_vec_jacobi_iterative;
+  double *ret_vec_jacobi_approx;
+  double *ret_vec_seidel_iterative;
+  double *ret_vec_seidel_approx;
+
+  for(int size = START_AGENT_COUNT; size <= MAX_AGENTS_COUNT; ++size)
   {
-    cout << ret_vec_mc[i] << ",";
-  }
-  cout << endl;
+    result_fields_t result;
+    result.agent_count    = size;
+    result.abs_err_g      = 0;
+    result.abs_err_gi     = 0;
+    result.abs_err_gs     = 0;
+    result.abs_err_gsit   = 0;
+    result.abs_err_j      = 0;
+    result.abs_err_jit    = 0;
+    result.abs_err_jit    = 0;
 
-  cout << ret_vec_mc.size() << endl;
+    for(int i = START_AGENT_COUNT; i <= MAX_AGENTS_COUNT; ++i)
+      {
 
-  for (int i = 0; i < g->get_cases_count (); ++i)
-  {
-    cout << ret_vec_gaussian[i] << ",";
-  }
-  cout << endl;
-  cout << endl;
+        Generator *g = new Generator (i);
+        MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
 
-  for (int i = 0; i < g->get_cases_count (); ++i)
-  {
-    cout << ret_vec_jacobi_iterative[i] << ",";
-  }
-  cout << endl;
-  cout << endl;
-
-  for (int i = 0; i < g->get_cases_count (); ++i)
-  {
-    cout << ret_vec_jacobi_approx[i] << ",";
-  }
-  cout << endl;
-  cout << endl;
-
-  for (int i = 0; i < g->get_cases_count (); ++i)
-  {
-    cout << ret_vec_seidel_iterative[i] << ",";
-  }
-
-  cout << endl;
-  cout << endl;
-
-  for (int i = 0; i < g->get_cases_count (); ++i)
-  {
-    cout << ret_vec_seidel_approx[i] << ",";
-  }
+        MonteCarlo *mc = new MonteCarlo (ITERATIONS, i);
   
-  cout << endl;
+        int size = (result.agent_count + 1) * (result.agent_count + 2);
 
-  delete mc;
-  delete matrix;
-  delete g;
+        ret_vec_mc = mc->get_result_vector ();
+        double *tab = new double[ret_vec_mc.size()];
+
+          for (int i = 0; i < (int) ret_vec_mc.size(); ++i)
+            {
+              tab[i]=ret_vec_mc[i];
+            }
   
+        ret_vec_gaussian = matrix->gaussian ();
+        ret_vec_gaussiani = matrix->gaussian_improved ();
+        ret_vec_jacobi_iterative = matrix->jacobi_iterative (ITERATIONS);
+        ret_vec_jacobi_approx = matrix->jacobi_approx(EPS);
+        ret_vec_seidel_iterative = matrix->gauss_seidel_iterative (ITERATIONS);
+        ret_vec_seidel_approx = matrix->gauss_seidel_approx (EPS);
+
+        result.abs_err_g    = matrix->count_abs_error (tab, ret_vec_gaussian, size);
+        result.abs_err_gi   = matrix->count_abs_error (tab, ret_vec_gaussiani, size);
+        result.abs_err_gs   = matrix->count_abs_error (tab, ret_vec_seidel_approx, size);
+        result.abs_err_gsit = matrix->count_abs_error (tab, ret_vec_seidel_iterative, size);
+        result.abs_err_j    = matrix->count_abs_error (tab, ret_vec_jacobi_approx, size);
+        result.abs_err_jit  = matrix->count_abs_error (tab, ret_vec_jacobi_iterative, size);
+      }
+      result_vec.push_back (result);
+    }
+
+    Util::save_result_vec_to_file (result_vec, DEFAULT_ERRORS_CSV_FILENAME);
+    result_vec.clear ();
+
+
+
   delete[] ret_vec_gaussian;
   delete[] ret_vec_jacobi_iterative;
   delete[] ret_vec_jacobi_approx;
