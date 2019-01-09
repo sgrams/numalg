@@ -29,7 +29,7 @@ typedef struct result_fields {
   // times
   double avg_time_g   = 0.0;
   double avg_time_gi = 0.0;
-  double avg_time_gs = 0.0;
+  double avg_time_gs = 0.0; 
   double avg_time_gsit = 0.0;
   double avg_time_j = 0.0;
   double avg_time_jit = 0.0;
