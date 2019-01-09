@@ -37,16 +37,23 @@ Util {
     {
       output_file.precision (34);
       output_file << std::fixed;
-      output_file << i.matrix_size << ",";
-      output_file << i.abs_err << ",";
-      output_file << i.abs_err_pg << ",";
-      output_file << i.abs_err_fg << ",";
-      output_file << i.rel_err << ",";
-      output_file << i.rel_err_pg << ",";
-      output_file << i.rel_err_fg << ",";
-      output_file << i.avg_time << ",";
-      output_file << i.avg_time_pg << ",";
-      output_file << i.avg_time_fg << std::endl;
+      output_file << i.agent_count << ",";
+
+      output_file << i.abs_err_g << ",";
+      output_file << i.abs_err_gi << ",";
+      output_file << i.abs_err_gs << ",";
+      output_file << i.abs_err_gsit << ",";
+      output_file << i.abs_err_j << ",";
+      output_file << i.abs_err_jit << ",";
+      output_file << i.abs_err_mc << ",";
+
+      output_file << i.avg_time_g << ",";
+      output_file << i.avg_time_gi << ",";
+      output_file << i.avg_time_gs << ",";
+      output_file << i.avg_time_gsit << ",";
+      output_file << i.avg_time_j << ",";
+      output_file << i.avg_time_jit << ",";
+      output_file << i.avg_time_mc << std::endl;
     }
     output_file.close ();
   }
