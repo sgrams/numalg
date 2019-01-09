@@ -213,7 +213,7 @@ void run_precision_methods_only ()
   double *ret_vec_jacobi;
   double *ret_vec_seidel;
 
-  for (int n = DEFAULT_MIN_AGENT_COUNT; n <= (int)DEFAULT_MAX_AGENTS_COUNT; n++)
+  for (int n = DEFAULT_MIN_AGENT_COUNT; n <= (int)DEFAULT_MAX_AGENTS_COUNT-5; n++)
   {
     clock_t begin_montecarlo_time = clock ();
     monte_carlo = new MonteCarlo (DEFAULT_MONTECARLO_ITERATIONS, n);
@@ -226,8 +226,9 @@ void run_precision_methods_only ()
 
     result      = new Result ();
     // new for needed
-    for (double epsilon = 0.1; epsilon >= 0.00000000000000001; epsilon/=10)
+    for (int counter = -1; counter >= -18; counter-=1)
     {
+      double epsilon = std::pow(10, counter);
       // Run jacobi approx method
       clock_t begin_jacobi_time = clock ();
       ret_vec_jacobi  = matrix->jacobi_approx (epsilon);
