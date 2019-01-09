@@ -56,6 +56,9 @@ namespace Util {
   void
   save_iterative_vec_to_file (const std::vector<Result> &result_vec, std::string filename);
 
+  void
+  save_approx_vec_to_file (const std::vector<Result>&result_vec, std::string filename);
+  
   unsigned int
   calculate_newton (unsigned int n, unsigned int k);
 }

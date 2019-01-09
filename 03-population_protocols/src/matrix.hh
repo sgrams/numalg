@@ -274,6 +274,7 @@ class MyMatrix {
                 if(A[i][n] == 0) {
                     continue;
                 }
+                
                 T ratio = A[pivot[j]][i] / A[pivot[i]][i];
                 for (int k = i; k < n; ++k)
                 {
