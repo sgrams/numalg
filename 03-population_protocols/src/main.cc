@@ -25,7 +25,7 @@
 #define DEFAULT_SEIDEL_ITERATIONS     100
 #define DEFAULT_SEIDEL_EPSILON        0.1
 #define DEFUALT_MIN_ITERATIONS        1
-#define DEFAULT_MAX_ITERATIONS        1000
+#define DEFAULT_MAX_ITERATIONS        100
 #define DEFAULT_MIN_AGENT_COUNT       3
 #define DEFAULT_MAX_AGENTS_COUNT      20
 
@@ -156,16 +156,15 @@ void run_iterative_methods_only ()
     generator   = new Generator  (n);
     matrix      = new MyMatrix<double>(generator->get_cases_count (), generator->get_matrix (), generator->get_matrix_vector ());
     size        = (n + 1) * (n + 2) / 2;
+    // Run MonteCarlo iterative method
+    clock_t begin_montecarlo_time = clock ();
+    monte_carlo = new MonteCarlo (DEFAULT_MONTECARLO_ITERATIONS, n);
+    clock_t end_montecarlo_time = clock ();
+    double  diff_montecarlo_time  = (double)(end_montecarlo_time - begin_montecarlo_time) / CLOCKS_PER_SEC;
 
     result      = new Result ();
     for (int iterations = DEFUALT_MIN_ITERATIONS; iterations <= DEFAULT_MAX_ITERATIONS; ++iterations)
     {
-      // Run MonteCarlo iterative method
-      clock_t begin_montecarlo_time = clock ();
-      monte_carlo = new MonteCarlo (iterations, n);
-      clock_t end_montecarlo_time = clock ();
-      double  diff_montecarlo_time  = (double)(end_montecarlo_time - begin_montecarlo_time) / CLOCKS_PER_SEC;
-
       // Run jacobi iterative method
       clock_t begin_jacobi_time = clock ();
       ret_vec_jacobi_iterative  = matrix->jacobi_iterative (iterations);
@@ -213,7 +212,7 @@ void run_precision_methods_only ()
   double *ret_vec_jacobi;
   double *ret_vec_seidel;
 
-  for (int n = DEFAULT_MIN_AGENT_COUNT; n <= (int)DEFAULT_MAX_AGENTS_COUNT-5; n++)
+  for (int n = DEFAULT_MIN_AGENT_COUNT; n <= (int)DEFAULT_MAX_AGENTS_COUNT; n++)
   {
     clock_t begin_montecarlo_time = clock ();
     monte_carlo = new MonteCarlo (DEFAULT_MONTECARLO_ITERATIONS, n);
