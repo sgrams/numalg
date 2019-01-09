@@ -28,8 +28,39 @@ int main (int argc, char *argv[])
   MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
 
   MonteCarlo *mc = new MonteCarlo (1000, 3);
+  
+  result_fields_t result;
+  result.agent_count = 3;
+  int size = (result.agent_count + 1) * (result.agent_count + 2);
 
   vector<double> ret_vec_mc = mc->get_result_vector ();
+  int a = (int)ret_vec_mc.size();
+  double tab[a];
+  for (int i = 0; i < (int)ret_vec_mc.size(); ++i)
+  {
+    tab[i]=ret_vec_mc[i];
+  }
+  cout << endl;
+
+  double *ret_vec_gaussian = matrix->gaussian ();
+  double *ret_vec_gaussiani = matrix->gaussian_improved ();
+  double *ret_vec_jacobi_iterative = matrix->jacobi_iterative (1000);
+  double *ret_vec_jacobi_approx = matrix->jacobi_approx(0.001);
+  double *ret_vec_seidel_iterative = matrix->gauss_seidel_iterative (100000);
+  double *ret_vec_seidel_approx = matrix->gauss_seidel_approx (0.00001);
+
+  result.abs_err_g    += matrix->count_abs_error (tab, ret_vec_gaussian, size);
+  result.abs_err_gi   += matrix->count_abs_error (tab, ret_vec_gaussiani, size);
+  result.abs_err_gs   += matrix->count_abs_error (tab, ret_vec_seidel_approx, size);
+  result.abs_err_gsit += matrix->count_abs_error (tab, ret_vec_seidel_iterative, size);
+  result.abs_err_j    += matrix->count_abs_error (tab, ret_vec_jacobi_approx, size);
+  result.abs_err_jit  += matrix->count_abs_error (tab, ret_vec_jacobi_iterative, size);
+  //result.abs_err_mc   += matrix->count_abs_error (tab, ret_vec_gaussian, size);
+
+  vector<result_fields_t> result_vec;
+  result_vec.push_back (result);
+  Util::save_result_vec_to_file (result_vec, "testing.csv");
+
   for (int i = 0; i < (int)ret_vec_mc.size(); ++i)
   {
     cout << ret_vec_mc[i] << ",";
@@ -37,12 +68,6 @@ int main (int argc, char *argv[])
   cout << endl;
 
   cout << ret_vec_mc.size() << endl;
-
-  double *ret_vec_gaussian = matrix->gaussian ();
-  double *ret_vec_jacobi_iterative = matrix->jacobi_iterative (1000);
-  double *ret_vec_jacobi_approx = matrix->jacobi_approx(0.001);
-  double *ret_vec_seidel_iterative = matrix->gauss_seidel_iterative (100000);
-  double *ret_vec_seidel_approx = matrix->gauss_seidel_approx (0.00001);
 
   for (int i = 0; i < g->get_cases_count (); ++i)
   {
