@@ -45,15 +45,15 @@ Util {
       output_file << i.abs_err_gsit << ",";
       output_file << i.abs_err_j << ",";
       output_file << i.abs_err_jit << ",";
-      output_file << i.abs_err_mc << ",";
+      //output_file << i.abs_err_mc << ",";
 
-      output_file << i.avg_time_g << ",";
-      output_file << i.avg_time_gi << ",";
-      output_file << i.avg_time_gs << ",";
-      output_file << i.avg_time_gsit << ",";
-      output_file << i.avg_time_j << ",";
-      output_file << i.avg_time_jit << ",";
-      output_file << i.avg_time_mc << std::endl;
+      // output_file << i.avg_time_g << ",";
+      // output_file << i.avg_time_gi << ",";
+      // output_file << i.avg_time_gs << ",";
+      // output_file << i.avg_time_gsit << ",";
+      // output_file << i.avg_time_j << ",";
+      // output_file << i.avg_time_jit << ",";
+      // output_file << i.avg_time_mc << std::endl;
     }
     output_file.close ();
   }
