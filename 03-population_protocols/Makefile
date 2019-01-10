@@ -27,3 +27,5 @@ clean:
 	+$(MAKE) -C $(SRCDIR) clean
 rmobj:
 	+$(MAKE) -C $(SRCDIR) rmobj
+rmcsv:
+	+rm *.csv
