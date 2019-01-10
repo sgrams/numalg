@@ -19,15 +19,15 @@
 #define DEFAULT_ITERATIVE_CSV_FILENAME  "iterative.csv"
 #define DEFAULT_PRECISIONS_CSV_FILENAME "precisions.csv"
 
-#define DEFAULT_MONTECARLO_ITERATIONS 100
-#define DEFAULT_JACOBI_ITERATIONS     10000
-#define DEFAULT_JACOBI_EPSILON        0.0000000000001
-#define DEFAULT_SEIDEL_ITERATIONS     10000
-#define DEFAULT_SEIDEL_EPSILON        0.0000000000001
+#define DEFAULT_MONTECARLO_ITERATIONS 1000
+#define DEFAULT_JACOBI_ITERATIONS     1000
+#define DEFAULT_JACOBI_EPSILON        0.00000000000001
+#define DEFAULT_SEIDEL_ITERATIONS     1000
+#define DEFAULT_SEIDEL_EPSILON        0.00000000000001
 #define DEFUALT_MIN_ITERATIONS        1
 #define DEFAULT_MAX_ITERATIONS        1000
 #define DEFAULT_MIN_AGENT_COUNT       3
-#define DEFAULT_MAX_AGENTS_COUNT      3
+#define DEFAULT_MAX_AGENTS_COUNT      30
 
 using namespace std;
 
@@ -129,7 +129,6 @@ void run_all_methods ()
     delete[] ret_vec_seidel_iterative;
     delete[] ret_vec_jacobi_approx;
     delete[] ret_vec_jacobi_iterative;
-
   }
   Util::save_errors_vec_to_file (errors_vec, DEFAULT_ERRORS_CSV_FILENAME);
   errors_vec.clear();
@@ -144,7 +143,7 @@ void run_iterative_methods_only ()
   MyMatrix<double> *matrix;
   MonteCarlo *monte_carlo;
   Generator  *generator;
-  Result     *result = new Result ();
+  Result     *result;
   std::vector<Result> iterative_vec;
 
   int size = 0;
@@ -163,9 +162,9 @@ void run_iterative_methods_only ()
     clock_t end_montecarlo_time = clock ();
     double  diff_montecarlo_time  = (double)(end_montecarlo_time - begin_montecarlo_time) / CLOCKS_PER_SEC;
 
-    result      = new Result ();
     for (int iterations = DEFUALT_MIN_ITERATIONS; iterations <= DEFAULT_MAX_ITERATIONS; ++iterations)
     {
+      result = new Result ();
       // Run jacobi iterative method
       clock_t begin_jacobi_time = clock ();
       ret_vec_jacobi_iterative  = matrix->jacobi_iterative (iterations);
@@ -187,13 +186,13 @@ void run_iterative_methods_only ()
       result->time_jit  = diff_jacobi_time;
       result->time_mc   = diff_montecarlo_time;
       iterative_vec.push_back (*result);
+      delete[] ret_vec_seidel_iterative;
+      delete[] ret_vec_jacobi_iterative;
+      delete result;
     }
     delete matrix;
     delete generator;
     delete monte_carlo;
-
-    delete[] ret_vec_seidel_iterative;
-    delete[] ret_vec_jacobi_iterative;
   }
   Util::save_iterative_vec_to_file (iterative_vec, DEFAULT_ITERATIVE_CSV_FILENAME);
   iterative_vec.clear();
@@ -208,7 +207,7 @@ void run_precision_methods_only ()
   MyMatrix<double> *matrix;
   MonteCarlo *monte_carlo;
   Generator  *generator;
-  Result     *result = new Result ();
+  Result     *result;
   std::vector<Result> approx_vec;
 
   int size = 0;
@@ -227,10 +226,10 @@ void run_precision_methods_only ()
     matrix      = new MyMatrix<double>(generator->get_cases_count (), generator->get_matrix (), generator->get_matrix_vector ());
     size        = (n + 1) * (n + 2) / 2;
 
-    result      = new Result ();
     // new for needed
     for (int counter = -1; counter >= -16; counter-=1)
     {
+      result = new Result ();
       double epsilon = std::pow(10, counter);
       // Run jacobi approx method
       clock_t begin_jacobi_time = clock ();
@@ -253,13 +252,13 @@ void run_precision_methods_only ()
       result->time_j  = diff_jacobi_time;
       result->time_mc = diff_montecarlo_time;
       approx_vec.push_back (*result);
+      delete[] ret_vec_seidel;
+      delete[] ret_vec_jacobi;
+      delete result;
     }
     delete matrix;
     delete generator;
     delete monte_carlo;
-
-    delete[] ret_vec_seidel;
-    delete[] ret_vec_jacobi;
   }
   Util::save_approx_vec_to_file (approx_vec, DEFAULT_PRECISIONS_CSV_FILENAME);
   approx_vec.clear();
