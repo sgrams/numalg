@@ -240,7 +240,6 @@ MonteCarlo::run_simulation (int yes_votes, int no_votes)
 
   for (int i = 0; i < this->iterations; ++i)
   {
-    
     undecided_votes = this->all_agents - yes_votes - no_votes;
     simulation_vector = new Agent[this->all_agents];
     // prepare simulation vector

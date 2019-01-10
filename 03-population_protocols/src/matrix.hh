@@ -182,11 +182,12 @@ class MyMatrix {
       delete[] solution;
       return ret;
     }
+    
     T
     *gaussian ()
     {
-      T **A  = clone_matrix (this->matrix, this->width);
-      T  *b  = clone_vector (this->vector, this->width);
+      T** A = clone_matrix (this->matrix, this->width);
+      T*  b = clone_vector (this->vector, this->width);
       T *ret = nullptr;
 
       int m  = this->width - 1;
@@ -230,347 +231,96 @@ class MyMatrix {
       }
 
       ret = backsub (A, b, pivot);
+      delete[] pivot;
       delete_matrix (A, this->width);
       delete_vector (b);
-      delete[] pivot;
 
       return ret;
     }
 
     T *gaussian_improved ()
     {
-        T **A  = clone_matrix (this->matrix, this->width);
-        T  *b  = clone_vector (this->vector, this->width);
-        T *ret = nullptr;
-        
-        int m  = this->width - 1;
-        int n  = this->width;
-        
-        int *pivot = new int[width];
-        
-        for (int i = 0; i < this->width; ++i)
+      T** A = clone_matrix (this->matrix, this->width);
+      T*  b = clone_vector (this->vector, this->width);
+      T  *ret = nullptr;
+
+      int m  = this->width - 1;
+      int n  = this->width;
+
+      int *pivot = new int[width];
+
+      for (int i = 0; i < this->width; ++i)
+      {
+        pivot[i] = i;
+      }
+
+      for (int i = 0; i < m; ++i)
+      {
+        T magnitude = 0;
+        int index   = -1;
+        for (int j = i; j <= m; ++j)
         {
-            pivot[i] = i;
+          if (fabs (A[pivot[j]][i]) > magnitude ) {
+            magnitude = fabs (A[pivot[j]][i]);
+            index = j;
+          }
         }
-        
-        for (int i = 0; i < m; ++i)
+
+        if (index != -1) {
+          swap (pivot[i], pivot[index]);
+        }
+
+        for (int j = i + 1; j < n; ++j)
         {
-            T magnitude = 0;
-            int index   = -1;
-            for (int j = i; j <= m; ++j)
-            {
-                if (fabs (A[pivot[j]][i]) > magnitude ) {
-                    magnitude = fabs (A[pivot[j]][i]);
-                    index = j;
-                }
-            }
-            
-            if (index != -1) {
-                swap (pivot[i], pivot[index]);
-            }
-            
-            for (int j = i + 1; j < n; ++j)
-            {
-                if(A[i][n] == 0) {
-                    continue;
-                }
-                
-                T ratio = A[pivot[j]][i] / A[pivot[i]][i];
-                for (int k = i; k < n; ++k)
-                {
-                    // modify matrix entry
-                    A[pivot[j]][k] = A[pivot[j]][k] - ratio * A[pivot[i]][k];
-                }
-                // modify result vector
-                b[pivot[j]] = b[pivot[j]] - ratio * b[pivot[i]];
-            }
+          if (A[pivot[j]][i] == 0) {
+            continue;
+          }
+          // calculate the ratio
+          T ratio = A[pivot[j]][i] / A[pivot[i]][i];
+          for (int k = i; k < n; ++k)
+          {
+            // modify matrix entry
+            A[pivot[j]][k] = A[pivot[j]][k] - ratio * A[pivot[i]][k];
+          }
+          // modify result vector
+          b[pivot[j]] = b[pivot[j]] - ratio * b[pivot[i]];
         }
-        
-        ret = backsub (A, b, pivot);
-        delete_matrix (A, this->width);
-        delete_vector (b);
-        delete[] pivot;
-        
-        return ret;
+      }
+
+      ret = backsub (A, b, pivot);
+      delete[] pivot;
+      delete_matrix (A, this->width);
+      delete_vector (b);
+
+      return ret;
     }
     
     T
-    *jacobi_iterative (int iterations)
+    *jacobi_approx (double eps)
     {
-      T **A  = clone_matrix (this->matrix, this->width);
-      T  *b  = clone_vector (this->vector, this->width);
-      T *x_1 = new T[this->width];
-      T *x_2;
-      T *ret = new T[this->width];
-
-
-      int n  = this->width;
-      int counter = 0;
-      int i, j;
-
-      double result, sum, helper;
-
-      // initialize x
-      for (i = 0; i < n; ++i)
-      {
-        x_1[i] = 0;
-      }
-
-      do
-      {
-        counter++;
-        x_2 = clone_vector (x_1, this->width);
-
-        for (i = 0; i < n; ++i)
-        {
-          sum = 0;
-          for (j = 1; j < n; ++j)
-          {
-            if (i != j)
-              sum += A[i][j] * x_1[j];
-          }
-          x_1[i] = (-sum + b[i]) / A[i][i];
-          if (x_1[i] == -0.0)
-            x_1[i] = 0.0;
-        }
-
-        helper = 0;
-        result = 0;
-
-        for (i = 0; i < n; ++i)
-        {
-          helper = fabs(x_1[i] - x_2[i]);
-          result += helper * helper;
-        }
-
-        result = sqrt(result);
-        delete_vector (x_2);
-      } while (counter < iterations);
-
-      for (int i = 0; i < n; ++i)
-      {
-        ret[i] = x_1[i];
-      }
-
-
-      delete_matrix (A, this->width);
-      delete_vector (b);
-      delete_vector (x_1);
-      
-      return ret;
+      // override compilator errors
+      return this->vector;
     }
 
     T
-    *jacobi_approx (double eps)
+    *jacobi_iterative (int iterations)
     {
-      T **A  = clone_matrix (this->matrix, this->width);
-      T  *b  = clone_vector (this->vector, this->width);
-      T *x_1 = new T[width];
-      T *x_2;
-      T *ret = new T[this->width];
-
-
-      int n  = this->width;
-      int counter = 0;
-      int i, j;
-
-      double result, sum, helper;
-
-      // initialize x
-      for (i = 0; i < n; ++i)
-      {
-        x_1[i] = 0;
-      }
-
-      do
-      {
-        counter++;
-        x_2 = clone_vector (x_1, this->width);
-
-        for (i = 0; i < n; ++i)
-        {
-          sum = 0;
-          for (j = 1; j < n; ++j)
-          {
-            if (i != j) {
-              sum += A[i][j] * x_1[j];
-            }
-          }
-          x_1[i] = (-sum + b[i]) / A[i][i];
-          if (x_1[i] == -0.0)
-            x_1[i] = 0.0;
-        }
-
-        helper = 0;
-        result = 0;
-
-        for (i = 0; i < n; ++i)
-        {
-          helper = fabs(x_1[i] - x_2[i]);
-          result += helper * helper;
-        }
-
-        result = sqrt(result);
-        delete_vector (x_2);
-      } while (result > eps);
-
-      for (int i = 0; i < n; ++i)
-      {
-        ret[i] = x_1[i];
-      }
-
-      delete_matrix (A, this->width);
-      delete_vector (b);
-      delete_vector (x_1);
-      
-      return ret;
-      
+      // override compilator errors
+      return this->vector;
     }
 
     T
     *gauss_seidel_approx (double eps)
     {
-      T **A  = clone_matrix (this->matrix, this->width);
-      T  *b  = clone_vector (this->vector, this->width);
-      T *x_1 = new T[this->width];
-      T *x_2;
-      T *ret = new T[this->width];
-
-
-      int n  = this->width;
-      int counter = 0;
-      int i, j;
-
-      double result, sum, helper, sum_2;
-
-      // initialize x
-      for (i = 0; i < n; ++i)
-      {
-        x_1[i] = 0;
-      }
-
-      do
-      {
-        counter++;
-        x_2 = clone_vector (x_1, this->width);
-
-        for (i = 0; i < n; ++i)
-        {
-          sum = 0;
-          sum_2 = 0;
-
-          for (j = 1; j < i - 1; ++j)
-          {
-              sum += A[i][j] * x_1[j];
-          }
-
-          for (j = i + 1; j < n; ++j)
-          {
-              sum_2 += A[i][j] * x_1[j];
-          }
-
-          x_1[i] = ((-sum-sum_2) + b[i]) / A[i][i];
-          if (x_1[i] == -0.0)
-            x_1[i] = 0.0;
-        }
-
-        helper = 0;
-        result = 0;
-
-        for (i = 0; i < n; ++i)
-        {
-          helper = fabs(x_1[i] - x_2[i]);
-          result += helper * helper;
-        }
-
-        result = sqrt(result);
-        delete_vector (x_2);
-      } while (result > eps);
-
-      for (int i = 0; i < n; ++i)
-      {
-        ret[i] = x_1[i];
-      }
-
-
-      delete_matrix (A, this->width);
-      delete_vector (b);
-      delete_vector (x_1);
-
-      return ret;
+      // override compilator errors
+      return this->vector;
     }
 
     T
     *gauss_seidel_iterative (int iterations)
     {
-      T **A  = clone_matrix (this->matrix, this->width);
-      T  *b  = clone_vector (this->vector, this->width);
-      T *x_1 = new T[this->width];
-      T *x_2;
-      T *ret = new T[this->width];
-
-
-      int n  = this->width;
-      int counter = 0;
-      int i, j;
-
-      double result, sum, helper, sum_2;
-
-      // initialize x
-      for (i = 0; i < n; ++i)
-      {
-        x_1[i] = 0;
-      }
-
-      do
-      {
-        counter++;
-        x_2 = clone_vector (x_1, this->width);
-
-        for (i = 0; i < n; ++i)
-        {
-          sum = 0;
-          sum_2 = 0;
-
-          for (j = 1; j < i - 1; ++j)
-          {
-              sum += A[i][j] * x_1[j];
-          }
-
-          for (j = i + 1; j < n; ++j)
-          {
-              sum_2 += A[i][j] * x_1[j];
-          }
-
-          x_1[i] = ((-sum-sum_2) + b[i]) / A[i][i];
-          if (x_1[i] == -0.0)
-            x_1[i] = 0.0;
-        }
-
-        helper = 0;
-        result = 0;
-
-        for (i = 0; i < n; ++i)
-        {
-          helper = fabs(x_1[i] - x_2[i]);
-          result += helper * helper;
-        }
-
-        result = sqrt(result);
-        delete_vector (x_2);
-      } while (counter < iterations);
-
-      for (int i = 0; i < n; ++i)
-      {
-        ret[i] = x_1[i];
-      }
-
-
-      delete_matrix (A, this->width);
-      delete_vector (b);
-      delete_vector (x_1);
-      
-      return ret;
+      // override compilator errors
+      return this->vector;
     }
 
     T
