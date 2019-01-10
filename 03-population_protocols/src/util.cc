@@ -99,7 +99,6 @@ Util {
       output_file << i.abs_err_gs << ",";
       output_file << i.abs_err_j << ",";
 
-
       output_file << i.time_gs << ",";
       output_file << i.time_j << ",";
       output_file << i.time_mc;
