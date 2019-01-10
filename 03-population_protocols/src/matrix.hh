@@ -158,6 +158,18 @@ class MyMatrix {
       return;
     }
     
+    double vector_norm (T* ret_vec, T* tmp_vec, int width)
+    {
+      double result  = 0.0;
+      double helper;
+      for (int i = 0; i < width; ++i)
+      {
+        helper  = fabs(ret_vec[i] - tmp_vec[i]);
+        result += (double)helper * (double)helper;
+      }
+      return (double)sqrt (result);
+    }
+
     // gaussian elimination with partial pivoting
     T
     *backsub (T **A, T *b, int *pivot)
@@ -312,15 +324,95 @@ class MyMatrix {
     T
     *gauss_seidel_approx (double eps)
     {
-      // override compilator errors
-      return this->vector;
+      T **A = this->matrix;
+      T  *b = this->vector;
+
+      T* ret_vec = new T[this->width];
+      T* tmp_vec = new T[this->width];
+      T* pre_vec;
+
+      double result;
+
+      for (int i = 0; i < this->width; ++i)
+      {
+        tmp_vec[i] = 0;
+        ret_vec[i] = 0;
+      }
+
+      do
+      {
+        pre_vec = clone_vector (ret_vec, this->width);
+        for (int i = 0; i < this->width; ++i)
+        {
+          ret_vec[i] = (b[i] / A[i][i]);
+          for (int j = 0; j < this->width; ++j)
+          {
+            if (i == j) {
+              continue;
+            }
+            ret_vec[i] = ret_vec[i] - ((A[i][j] / A[i][i]) * tmp_vec[j]);
+            tmp_vec[i] = ret_vec[i];
+          }
+        }
+        result = vector_norm (ret_vec, pre_vec, this->width);
+        delete[] pre_vec;
+      } while (result > eps);
+
+      delete[] tmp_vec;
+      return ret_vec;
     }
 
     T
     *gauss_seidel_iterative (int iterations)
     {
-      // override compilator errors
-      return this->vector;
+      T **A = this->matrix;
+      T  *b = this->vector;
+
+      T* ret_vec = new T[this->width];
+      T* tmp_vec = new T[this->width];
+
+      for (int i = 0; i < this->width; ++i)
+      {
+        tmp_vec[i] = 0;
+        ret_vec[i] = 0;
+      }
+
+      int iterator = iterations;
+      do
+      {
+        for (int i = 0; i < this->width; ++i)
+        {
+          ret_vec[i] = (b[i] / A[i][i]);
+          for (int j = 0; j < this->width; ++j)
+          {
+            if (i == j) {
+              continue;
+            }
+            ret_vec[i] = ret_vec[i] - ((A[i][j] / A[i][i]) * tmp_vec[j]);
+            tmp_vec[i] = ret_vec[i];
+          }
+        }
+        iterator--;
+      } while (iterator > 0);
+
+      delete[] tmp_vec;
+      return ret_vec;
+    }
+
+    T
+    count_abs_error (T* exemplary, T* after_test, int width)
+    {
+      T error_counter = 0;
+      T val = 0;
+      T def = 0;
+      for (int i = 0; i < width; ++i)
+      {
+        def = exemplary[i] - after_test[i];
+        val = abs (def);
+        error_counter = error_counter + val;
+      }
+      error_counter = error_counter / width;
+      return error_counter;
     }
 
     T
