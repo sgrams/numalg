@@ -28,7 +28,7 @@
 #define DEFAULT_MAX_ITERATIONS        1000
 #define DEFAULT_ITERATIONS_STEP       10
 #define DEFAULT_MIN_AGENT_COUNT       3
-#define DEFAULT_MAX_AGENTS_COUNT      5
+#define DEFAULT_MAX_AGENTS_COUNT      20
 
 using namespace std;
 
