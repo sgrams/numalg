@@ -20,9 +20,9 @@
 #define DEFAULT_PRECISIONS_CSV_FILENAME "precisions.csv"
 
 #define DEFAULT_MONTECARLO_ITERATIONS 100
-#define DEFAULT_JACOBI_ITERATIONS     1000
+#define DEFAULT_JACOBI_ITERATIONS     10000
 #define DEFAULT_JACOBI_EPSILON        0.0000000000001
-#define DEFAULT_SEIDEL_ITERATIONS     1000
+#define DEFAULT_SEIDEL_ITERATIONS     10000
 #define DEFAULT_SEIDEL_EPSILON        0.0000000000001
 #define DEFUALT_MIN_ITERATIONS        1
 #define DEFAULT_MAX_ITERATIONS        1000
@@ -191,6 +191,9 @@ void run_iterative_methods_only ()
     delete matrix;
     delete generator;
     delete monte_carlo;
+
+    delete[] ret_vec_seidel_iterative;
+    delete[] ret_vec_jacobi_iterative;
   }
   Util::save_iterative_vec_to_file (iterative_vec, DEFAULT_ITERATIVE_CSV_FILENAME);
   iterative_vec.clear();
@@ -254,6 +257,9 @@ void run_precision_methods_only ()
     delete matrix;
     delete generator;
     delete monte_carlo;
+
+    delete[] ret_vec_seidel;
+    delete[] ret_vec_jacobi;
   }
   Util::save_approx_vec_to_file (approx_vec, DEFAULT_PRECISIONS_CSV_FILENAME);
   approx_vec.clear();
