@@ -35,7 +35,7 @@ Util {
     output_file.open (filename);
     for (auto i: result_vec)
     {
-      output_file.precision (34);
+      output_file.precision (18);
       output_file << std::fixed;
       output_file << i.agent_count << ",";
 
@@ -66,7 +66,7 @@ Util {
     output_file.open (filename);
     for (auto i: result_vec)
     {
-      output_file.precision (34);
+      output_file.precision (18);
       output_file << std::fixed;
       output_file << i.agent_count << ",";
       output_file << i.iterations << ",";
@@ -91,7 +91,7 @@ Util {
     output_file.open (filename);
     for (auto i: result_vec)
     {
-      output_file.precision (34);
+      output_file.precision (18);
       output_file << std::fixed;
       output_file << i.agent_count << ",";
       output_file << i.epsilon << ",";
