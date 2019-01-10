@@ -16,6 +16,9 @@ all:
 	+$(MAKE) -C $(SRCDIR)
 	+$(CC) -o $(OUTNAME) $(SRCDIR)/*.o $(CFLAGS) $(LDFLAGS)
 
+run:
+	+./protocols
+
 # other procedures
 .PHONY:
 	clean
