@@ -236,7 +236,7 @@ MonteCarlo::run_simulation (int yes_votes, int no_votes)
   int     random_index;
   int     undecided_votes;
 
-  int     ret_yes_votes = yes_votes;
+  int     ret_yes_votes = 0;
 
   for (int i = 0; i < this->iterations; ++i)
   {
