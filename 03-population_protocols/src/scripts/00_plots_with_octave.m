@@ -79,7 +79,7 @@ plot(iterations, iterative(1701:1800,5), "-", "linewidth", 5, iterations, iterat
 ylabel ("time");
 xlabel ("iterations");
 title ("Time execution iterative methods");
-legend ("Gauss-Seidel", "Jacobi", "location", "northwest");
+legend ("Jacobi", "Gauss-Seidel", "location", "northwest"); 
 
 print -dpng ../../report/plots/04_time_iterative_methods_all_rows.png;
 
@@ -106,7 +106,7 @@ xlim([0.00000000000001 0.0001])
 ylabel ("time");
 xlabel ("precision");
 title ("Time execution precisions methods");
-legend ("Gauss-Seidel", "Jacobi", "location", "northeast");
+legend ("Jacobi", "Gauss-Seidel", "location", "northeast");
 
 print -dpng ../../report/plots/06_time_precision_methods_all_rows.png;
 
