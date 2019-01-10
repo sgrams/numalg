@@ -347,8 +347,9 @@ class MyMatrix {
         }
 
         counter++;
-      } while (counter < iterations);
+      } while (counter <= iterations);
 
+      
       delete_vector (X);
       return vec_res;
     }
