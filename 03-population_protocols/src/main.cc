@@ -26,6 +26,7 @@
 #define DEFAULT_SEIDEL_EPSILON        0.00000000000001 // 10^-14
 #define DEFUALT_MIN_ITERATIONS        1
 #define DEFAULT_MAX_ITERATIONS        1000
+#define DEFAULT_ITERATIONS_STEP       10
 #define DEFAULT_MIN_AGENT_COUNT       3
 #define DEFAULT_MAX_AGENTS_COUNT      20
 
@@ -162,7 +163,7 @@ void run_iterative_methods_only ()
     clock_t end_montecarlo_time = clock ();
     double  diff_montecarlo_time  = (double)(end_montecarlo_time - begin_montecarlo_time) / CLOCKS_PER_SEC;
 
-    for (int iterations = DEFUALT_MIN_ITERATIONS; iterations <= DEFAULT_MAX_ITERATIONS; ++iterations)
+    for (int iterations = DEFUALT_MIN_ITERATIONS; iterations <= DEFAULT_MAX_ITERATIONS; iterations += DEFAULT_ITERATIONS_STEP)
     {
       result = new Result ();
       // Run jacobi iterative method
