@@ -310,48 +310,75 @@ class MyMatrix {
     T
     *jacobi_approx (double eps)
     {
-      // override compilator errors
-      return this->vector;
+      T **A = this->matrix;
+      T  *b = this->vector;
+
+      T  *ret_vec = new T[this->width];
+      T  *pre_vec;
+
+      for (int i = 0; i < this->width; ++i)
+      {
+        ret_vec[i] = 0;
+      }
+
+      double result = 0.0;
+
+      do {
+        pre_vec = clone_vector (ret_vec, this->width);
+        for (int i = 0; i < this->width; ++i)
+        {
+          double sum = b[i];
+          for (int j = 0; j < this->width; ++j)
+          {
+            if (i != j) {
+              sum -= A[i][j] * pre_vec[j];
+            }
+          }
+          ret_vec[i] = 1 / A[i][i] * sum;
+        }
+
+        result = vector_norm (ret_vec, pre_vec, this->width);
+        delete[] pre_vec;
+      } while (result > eps);
+
+      return ret_vec;
     }
 
     T
     *jacobi_iterative (int iterations)
     {
-      T** A = this->matrix;
-      T*  b = this->vector;
-      T*  X = new T[this->width];
-      T*  vec_res = new T[this->width];
+      T **A = this->matrix;
+      T  *b = this->vector;
+
+      T  *ret_vec = new T[this->width];
+      T  *pre_vec;
 
       for (int i = 0; i < this->width; ++i)
       {
-        vec_res[i] = 0;
+        ret_vec[i] = 0;
       }
 
-      int counter = 0;
+      int iterator = iterations;
 
       do {
+        pre_vec = clone_vector (ret_vec, this->width);
         for (int i = 0; i < this->width; ++i)
         {
-          X[i] = b[i];
+          double sum = b[i];
           for (int j = 0; j < this->width; ++j)
           {
             if (i != j) {
-              X[i] -= A[i][j] * X[j];
+              sum -= A[i][j] * pre_vec[j];
             }
           }
-        }
-        
-        for (int i = 0; i < this->width; ++i)
-        {
-          vec_res[i] = X[i] / A[i][i];
+          ret_vec[i] = 1 / A[i][i] * sum;
         }
 
-        counter++;
-      } while (counter <= iterations);
+        iterator--;
+        delete[] pre_vec;
+      } while (iterator > 0);
 
-      
-      delete_vector (X);
-      return vec_res;
+      return ret_vec;
     }
 
     T

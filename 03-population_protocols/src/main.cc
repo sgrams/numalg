@@ -49,7 +49,7 @@ void run_all_methods ()
   double *ret_vec_gaussian_improved;
   double *ret_vec_seidel_approx;
   double *ret_vec_seidel_iterative;
-  //double *ret_vec_jacobi_approx;
+  double *ret_vec_jacobi_approx;
   double *ret_vec_jacobi_iterative;
 
   for (int n = DEFAULT_MIN_AGENT_COUNT; n <= (int)DEFAULT_MAX_AGENTS_COUNT; n++)
@@ -88,13 +88,12 @@ void run_all_methods ()
     clock_t end_seidel_time   = clock ();
     double  diff_seidel_time  = (double)(end_seidel_time - begin_seidel_time) / CLOCKS_PER_SEC;
 
-/*
     // Run jacobi approx method
     clock_t begin_jacobi_approx_time = clock ();
     ret_vec_jacobi_approx = matrix->jacobi_approx (DEFAULT_JACOBI_EPSILON);
     clock_t end_jacobi_approx_time   = clock ();
     double  diff_jacobi_approx_time  = (double)(end_jacobi_approx_time - begin_jacobi_approx_time) / CLOCKS_PER_SEC;
-*/
+
     // Run jacobi iterative method
     clock_t begin_jacobi_time = clock ();
     ret_vec_jacobi_iterative  = matrix->jacobi_iterative (DEFAULT_JACOBI_ITERATIONS);
@@ -108,13 +107,13 @@ void run_all_methods ()
     result->abs_err_gi   = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_gaussian_improved, size);
     result->abs_err_gs   = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_seidel_approx, size);
     result->abs_err_gsit = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_seidel_iterative, size);
-    // result->abs_err_j    = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_jacobi_approx, size);
+    result->abs_err_j    = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_jacobi_approx, size);
     result->abs_err_jit  = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_jacobi_iterative, size);
     result->time_g    = diff_gaussian_time;
     result->time_gi   = diff_gaussian_improved_time;
     result->time_gs   = diff_seidel_approx_time;
     result->time_gsit = diff_seidel_time;
-    // result->time_j    = diff_jacobi_approx_time;
+    result->time_j    = diff_jacobi_approx_time;
     result->time_jit  = diff_jacobi_time;
     result->time_mc   = diff_montecarlo_time;
 
@@ -128,7 +127,7 @@ void run_all_methods ()
     delete[] ret_vec_gaussian_improved;
     delete[] ret_vec_seidel_approx;
     delete[] ret_vec_seidel_iterative;
-    // delete[] ret_vec_jacobi_approx;
+    delete[] ret_vec_jacobi_approx;
     delete[] ret_vec_jacobi_iterative;
 
   }
@@ -263,8 +262,8 @@ void run_precision_methods_only ()
 int main (int argc, char *argv[])
 {
   run_all_methods ();
-  //run_precision_methods_only ();
-  //run_iterative_methods_only ();
+  run_precision_methods_only ();
+  run_iterative_methods_only ();
 
   return EXIT_SUCCESS;
 }
