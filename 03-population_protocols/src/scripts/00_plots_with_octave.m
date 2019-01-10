@@ -9,8 +9,8 @@ load ../../precisions.csv
 agent_count = errors(:,1);
 abs_results = [errors(:,2), errors(:,3), errors(:,4), errors(:,5), errors(:,6), errors(:,7)];
 bar(agent_count, abs_results);
-xlim([9.5 20.5]);
-ylim([0 0.0025]);
+xlim([2.5 20.5]);
+ylim([0 0.003]);
 ylabel ("error");
 xlabel ("agents count");
 title  ("Monte Carlo ABS errors all");
