@@ -13,7 +13,7 @@ xlim([3 20]);
 ylabel ("error");
 xlabel ("agents count");
 title  ("Monte Carlo ABS errors all");
-legend ("Gauss", "Gauss Improved", "Gauss-Seidel Approx", "Gauss-Seidel Iterative", "Jacobi Iterative", "Jacobi Approx", "location","northwest");
+legend ("Gauss", "Gauss Improved", "Gauss-Seidel Approx", "Gauss-Seidel Iterative", "Jacobi Approx", "Jacobi Iterative", "location","northwest");
 
 print -dpng ../../report/plots/01_abs_all_methods_all_rows.png;
 
@@ -25,7 +25,7 @@ xlim([3 20]);
 ylabel ("time");
 xlabel ("agents count")
 title ("Time execution for all methods")
-legend ("Gauss", "Gauss Improved", "Gauss-Seidel Approx", "Gauss-Seidel Iterative", "Jacobi Iterative", "Jacobi Approx", "location","north");
+legend ("Gauss", "Gauss Improved", "Gauss-Seidel Approx", "Gauss-Seidel Iterative", "Jacobi Approx", "Jacobi Iterative", "location","north");
 
 print -dpng ../../report/plots/02_time_execution_all_methods.png;
 

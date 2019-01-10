@@ -305,8 +305,40 @@ class MyMatrix {
     T
     *jacobi_iterative (int iterations)
     {
-      // override compilator errors
-      return this->vector;
+      T** A = this->matrix;
+      T*  b = this->vector;
+      T*  X = new T[this->width];
+      T*  vec_res = new T[this->width];
+
+      for(int i = 0; i < this->width; ++i)
+      {
+        vec_res[i] = 0;
+      }
+
+      int counter = 0;
+
+      do {
+        for (int i = 0; i < this->width; ++i)
+      {
+        X[i] = b[i];
+        for(int j = 0; j < this->width; ++j)
+        {
+          if (i != j)
+            X[i] -= A[i][j] * X[j]; 
+        }
+      }
+      for (int i = 0; i < this->width; ++i)
+      {
+         vec_res[i] = X[i] / A[i][i];
+      }
+
+        counter++;
+      } while (counter < iterations);
+
+        delete[] A;
+        delete[] b;
+        delete_vector (X);
+        return vec_res;
     }
 
     T
