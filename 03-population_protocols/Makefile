@@ -5,7 +5,7 @@
 #  Stanisław Grams
 ##
 CC=g++
-CFLAGS=-Wall -std=c++0x
+CFLAGS=-Wall -Werror -pedantic -std=c++0x
 LDFLAGS=-pthread
 
 SRCDIR=src
