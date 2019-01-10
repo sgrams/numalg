@@ -42,7 +42,7 @@ Program \textit{„protocols”} został napisany w języku C++, a wyniki dział
 \begin{itemize}
 	\item (PG - Partial Gauss) Algorytm Gaussa z częściowym wyborem elementu
 	\item (PGS - Partial Gauss for Sparse Matrices) Algorytm Gaussa z optymalizacją dla macierzy rzadkich
-	\item Algroytm Jacobiego
+	\item Algorytm Jacobiego
 	\item Algorytm Gaussa-Seidela
 	\item Metoda Monte Carlo
 \end{itemize}
@@ -66,25 +66,23 @@ By zweryfikować poprawność implementacji zarówno generowania macierzy jak i 
 
 \subsection{Analiza wyników}
 \subsubsection{Gauss oraz Gauss z optymalizacją dla macierzy rzadkich}
-Przeanalizujmy poniższy wykres. Wynika z niego jednoznacznie, że optymalizacja nie wpływa na dokładność. Wyraźnie widać, że na praktycznie całej długości wykresu błąd wynosi 0.
+Przeanalizujmy poniższy wykres. Wynika z niego jednoznacznie, że optymalizacja nie wpływa na dokładność. Wyraźnie widać, że na całej długości wykresu błąd wynosi 0.
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.43]{plots/07_abs_gauss_and_gauss_optimized_all_rows.png}
 \end{figure}
 
 \subsubsection{Algorytmy iteracyjne}
-Obie zaimplementowane przez nasz zespół metody oferują przyzwoitą dokładność jednak poniższe wykresy pozwalają wyciągnąć wniosek mówiący, że metoda Jacobi jest dokładniejsza.
-
+Obie zaimplementowane przez nasz zespół metody oferują jednakową dokładność.
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.45]{plots/03_abs_iterative_methods_all_rows.png}
-\includegraphics[scale=0.45]{plots/05_abs_precision_methods_all_rows.png}
 \end{figure}
 \subsection {Wydajność}
 \subsubsection{Wydajność względem wielkości planszy}
-Analizując poniższe wykresy można wyciągnąć następujące wnioski:\\
-1. Pod względem błędów obliczeń metody Gaussa oraz Gaussa z ulepszeniem dla macierzy rzadkich zdecydowanie wygrywają z innymi algorytmami oferując idealnie taką samą, wysoką dokładność.\\
-2. Ze względu na swoją specyfikacje metoda Gaussa z ulepszeniem dla macierzy rzadkich wygrywa z klasyczną wersją tej metody pod względem czasu wykonania.\\
+Analizując pierwszy wykres w tym tekście oraz poniższy można wyciągnąć następujące wnioski:\\
+1. Pod względem błędów obliczeń wszystkie metody są bardzo podobne, przy małej wymaganej dokładności wręcz identyczne.
+2. Pod względem czasu wykonania wyraźnie wygrywają obie metody na podstawie metody Gaussa jednak wersja z usprawnieniem z racji swojej specyfikacji jest zdecydowanie najszybsza.
 \\
 Powyższe wnioski wyraźnie wskazują, że w klasie wydajności względem wielkości planszy jako optymalny wybór należy wskazać metodę Gaussa z ulepszeniem dla macierzy rzadkich.
 \begin{figure}[h]
@@ -99,8 +97,9 @@ Powyższe wnioski wyraźnie wskazują, że w klasie wydajności względem wielko
 \includegraphics[scale=0.45]{plots/05_abs_precision_methods_all_rows.png}
 \includegraphics[scale=0.45]{plots/06_time_precision_methods_all_rows.png}
 \end{figure}
-W przypadku tego kryterium porównujemy tylko metody Jacobiego oraz Gaussa-Seidela. Na pierwszym wykresie widzimy różnicę błędów między powyższymi metodami, w tej kategorii wygrywa metoda Jacobi. W kwestii czasu wykonania oba algorytmy plasują się bardzo podobnie, jednak tak jak w poprzednim przypadku w okolicach $\epsilon$=$10^{-12}$ następuje lekkie załamanie metody Gaussa-Seidela, tym razem na korzyść algorytmu Jacobi.\\
-Podsumowując, metoda Jacobi jest dokładniejsza od Gaussa-Seidela, natomiast metoda Gaussa-Seidela jest szybsza od metody Jacobi dla tej samej ilości iteracji.
+W przypadku tego kryterium porównujemy tylko metody Jacobiego oraz Gaussa-Seidela. Na pierwszym wykresie widzimy różnicę błędów między powyższymi metodami, widać że metody te dają wręcz identyczną dokładność. W kwestii czasu wykonania oba algorytmy także plasują się bardzo podobnie jest jednak widoczna różnica na korzyść metody Jacobiego.
+
+Podsumowując, metody są bardzo do siebie zbliżone jednak ze względu na delikatnie lepszy czas wykonania bardziej optymalna jest metoda Jacobiego.
 
 \section{Podział pracy}
 \centering
