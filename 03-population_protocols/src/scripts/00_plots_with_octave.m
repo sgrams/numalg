@@ -79,6 +79,7 @@ print -dpng ../../report/plots/06_time_precision_methods_all_rows.png;
  abs_results = (errors(:,2) - errors(:,3));
  plot(agent_count, abs_results, "linewidth", 5);
  xlim([3 20]);
+ ylim([-0.16 0.5])
  ylabel ("error");
  xlabel ("agents count");
  title  ("ABS Gauss and Gauss Optimized difference");
