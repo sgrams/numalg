@@ -30,7 +30,7 @@
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
 
 \begin{document}
-\[\title{Implementacja population protocols\\oraz testy wydajnościowe}
+\title{Implementacja population protocols\\oraz testy wydajnościowe}
 \author{Grams, Stanisław\\Jezierski, Maciej\\Korczakowski, Juliusz\\ MFI UG\\Algorytmy Numeryczne}
 
 \maketitle
@@ -68,7 +68,8 @@ By zweryfikować poprawność implementacji zarówno generowania macierzy jak i 
 Przeanalizujmy poniższy wykres. Wynika z niego jednoznacznie, że optymalizacja nie wpływa na dokładność. Wyraźnie widać, że na całej długości wykresu błąd wynosi 0.
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.43]{plots/07_abs_gauss_and_gauss_optimized_all_rows.png}
+\includegraphics[scale=0.45]{plots/07_abs_gauss_and_gauss_optimized_all_rows.png}
+\includegraphics[scale=0.45]{plots/08_abs_gauss_and_montecarlo_iterations_rows.png}
 \end{figure}
 
 \subsubsection{Algorytmy iteracyjne}
@@ -80,7 +81,7 @@ Obie zaimplementowane przez nasz zespół metody oferują jednakową dokładnoś
 \subsection {Wydajność}
 \subsubsection{Wydajność względem wielkości planszy}
 Analizując pierwszy wykres w tym tekście oraz poniższy można wyciągnąć następujące wnioski:\\
-1. Pod względem błędów obliczeń wszystkie metody są bardzo podobne, przy małej wymaganej dokładności wręcz identyczne.
+1. Pod względem błędów obliczeń wszystkie metody są bardzo podobne, przy małej wymaganej dokładności wręcz identyczne.\\
 2. Pod względem czasu wykonania wyraźnie wygrywają obie metody na podstawie metody Gaussa jednak wersja z usprawnieniem z racji swojej specyfikacji jest zdecydowanie najszybsza.
 \\
 Powyższe wnioski wyraźnie wskazują, że w klasie wydajności względem wielkości planszy jako optymalny wybór należy wskazać metodę Gaussa z ulepszeniem dla macierzy rzadkich.
@@ -109,5 +110,5 @@ Podsumowując, metody są bardzo do siebie zbliżone jednak ze względu na delik
 		 Implementacja symulacji Monte Carlo& Przygotowanie testów i ich uruchomienie &Analiza wykresów oraz przygotowanie sprawozdania \\ \hline
 		Implementacja algorytmu generowania macierzy & Przygotowanie wykresów końcowych &Praca nad strukturą projektu\\ \hline
 	\end{tabular}
-\]
+\
 \end{document}
