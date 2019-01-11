@@ -14,7 +14,7 @@ xlim([2.5 20.5]);
 ylim([0 0.003]);
 ylabel ("error");
 xlabel ("agents count");
-title  ("Monte Carlo ABS errors all");
+title  ("All methods compared to Monte Carlo simulation");
 legend ("Gauss", "Gauss Improved", "Gauss-Seidel Approx", "Gauss-Seidel Iterative", "Jacobi Approx", "Jacobi Iterative", "location","northwest");
 
 print -dpng ../../report/plots/01_abs_all_methods_all_rows.png;
@@ -69,7 +69,7 @@ xlim([200 1000]);
 ylim([-1 1]);
 ylabel ("error");
 xlabel ("iterations");
-title ("ABS difference of Gauss-Seidel and Jacobi iterative");
+title ("Absolute difference of Gauss-Seidel and Jacobi iterative");
 legend ("Gauss-Seidel and Jacobi diff", "location", "northwest");
 
 print -dpng ../../report/plots/03_abs_iterative_methods_all_rows.png;
@@ -79,7 +79,7 @@ iterations = iterative(1701:1800,2);
 plot(iterations, iterative(1701:1800,5), "-", "linewidth", 5, iterations, iterative(1701:1800,6), "-", "linewidth", 5);
 ylabel ("time");
 xlabel ("iterations");
-title ("Time execution iterative methods");
+title ("Time execution for iterative methods");
 legend ("Gauss-Seidel", "Jacobi", "location", "northwest");
 
 print -dpng ../../report/plots/04_time_iterative_methods_all_rows.png;
@@ -93,7 +93,7 @@ xlim([0.00000000000001 0.0001])
 ylim([-1 1])
 ylabel ("error");
 xlabel ("precision");
-title ("ABS difference of Gauss-Seidel and Jacobi precisions");
+title ("Absolute difference of Gauss-Seidel and Jacobi precisions");
 legend ("Gauss Seidel and Jacobi diff", "location", "northwest");
 
 print -dpng ../../report/plots/05_abs_precision_methods_all_rows.png;
@@ -106,7 +106,7 @@ semilogx(epsi, time_results, "linewidth", 5);
 xlim([0.00000000000001 0.0001])
 ylabel ("time");
 xlabel ("precision");
-title ("Time execution precisions methods");
+title ("Time execution for precisions methods");
 legend ("Gauss-Seidel", "Jacobi", "location", "northwest");
 print -dpng ../../report/plots/06_time_precision_methods_all_rows.png;
 
@@ -117,8 +117,8 @@ plot(agent_count, abs_results, "linewidth", 5, "m");
 xlim([3 20]);
 ylabel ("error");
 xlabel ("agents count");
-title  ("ABS Gauss and Gauss Optimized difference");
-legend ("ABS Gauss and Gauss Optimized diff", "location","south");
+title  ("Absolute difference of PG and PGS");
+legend ("Absolute difference of PG and PGS", "location","south");
 
 print -dpng ../../report/plots/07_abs_gauss_and_gauss_optimized_all_rows.png;
 
