@@ -109,6 +109,25 @@ Util {
     output_file.close ();
   }
 
+  void
+  save_montecarlo_vec_to_file (const std::vector<Result>&result_vec, std::string filename)
+  {
+    std::ofstream output_file;
+    output_file.open (filename);
+    for (auto i: result_vec)
+    {
+      output_file.precision (18);
+      output_file << std::fixed;
+      output_file << i.iterations << ",";
+      output_file << i.abs_err_gi << ",";
+      output_file << i.time_gi << ",";
+      output_file << i.time_mc;
+      output_file << std::endl;
+
+    }
+    output_file.close ();
+  }
+
   unsigned int
   calculate_newton (unsigned int n, unsigned int k)
   {

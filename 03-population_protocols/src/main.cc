@@ -18,8 +18,12 @@
 #define DEFAULT_ERRORS_CSV_FILENAME     "errors.csv"
 #define DEFAULT_ITERATIVE_CSV_FILENAME  "iterative.csv"
 #define DEFAULT_PRECISIONS_CSV_FILENAME "precisions.csv"
+#define DEFAULT_MONTECARLO_CSV_FILENAME "montecarlo.csv"
 
 #define DEFAULT_MONTECARLO_ITERATIONS 10000 // 10k
+#define DEFAULT_MIN_VALIDATION_ITERATIONS 10
+#define DEFAULT_MAX_VALIDATION_ITERATIONS 10000 // 1mln
+#define DEFAULT_VALIDATION_ITERATIONS_STEP 10
 #define DEFAULT_JACOBI_ITERATIONS     1000 //  1k
 #define DEFAULT_JACOBI_EPSILON        0.00000000000001 // 10^-14
 #define DEFAULT_SEIDEL_ITERATIONS     1000 //  1k
@@ -29,6 +33,7 @@
 #define DEFAULT_ITERATIONS_STEP       10
 #define DEFAULT_MIN_AGENT_COUNT       3
 #define DEFAULT_MAX_AGENTS_COUNT      20
+#define DEFAULT_VALIDATION_AGENTS_COUNT 10
 
 using namespace std;
 
@@ -272,11 +277,54 @@ void run_precision_methods_only ()
   approx_vec.clear();
 }
 
+void
+run_montecarlo_validation ()
+{
+  MyMatrix<double> *matrix;
+  MonteCarlo *monte_carlo;
+  Generator  *generator;
+  Result     *result;
+  std::vector<Result> montecarlo_vec;
+
+  double *ret_vec_gaussian_improved;
+  int size = (DEFAULT_VALIDATION_AGENTS_COUNT + 1) * (DEFAULT_VALIDATION_AGENTS_COUNT + 2) / 2;
+
+  generator = new Generator  (DEFAULT_VALIDATION_AGENTS_COUNT);
+  matrix    = new MyMatrix<double>(generator->get_cases_count (), generator->get_matrix (), generator->get_matrix_vector ());
+
+  for (int i = DEFAULT_MIN_VALIDATION_ITERATIONS; i < DEFAULT_MAX_VALIDATION_ITERATIONS; i += DEFAULT_VALIDATION_ITERATIONS_STEP)
+  {
+    result = new Result ();
+    clock_t begin_montecarlo_time = clock ();
+    monte_carlo = new MonteCarlo (i, DEFAULT_VALIDATION_AGENTS_COUNT);
+    clock_t end_montecarlo_time   = clock ();
+    double  diff_montecarlo_time  = (double)(end_montecarlo_time - begin_montecarlo_time) / CLOCKS_PER_SEC;
+
+    // Run gaussian improved method
+    clock_t begin_gaussian_improved_time = clock ();
+    ret_vec_gaussian_improved            = matrix->gaussian_improved ();
+    clock_t end_gaussian_improved_time   = clock ();
+    double  diff_gaussian_improved_time  = (double)(end_gaussian_improved_time - begin_gaussian_improved_time) / CLOCKS_PER_SEC;
+
+    result->iterations = i;
+    result->agent_count  = DEFAULT_VALIDATION_AGENTS_COUNT;
+    result->abs_err_gi   = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_gaussian_improved, size);
+    result->time_gi   = diff_gaussian_improved_time;
+    result->time_mc   = diff_montecarlo_time;
+
+    montecarlo_vec.push_back (*result);
+    delete monte_carlo;
+    delete result;
+    delete[] ret_vec_gaussian_improved;
+  }
+  Util::save_montecarlo_vec_to_file (montecarlo_vec, DEFAULT_MONTECARLO_CSV_FILENAME);
+}
+
 int main (int argc, char *argv[])
 {
   run_all_methods ();
   run_precision_methods_only ();
   run_iterative_methods_only ();
-
+  run_montecarlo_validation ();
   return EXIT_SUCCESS;
 }
