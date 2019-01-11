@@ -53,6 +53,7 @@ Util {
       output_file << i.time_j << ",";
       output_file << i.time_jit << ",";
       output_file << i.time_mc;
+
       output_file << std::endl;
 
     }

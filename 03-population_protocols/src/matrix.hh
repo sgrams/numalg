@@ -308,79 +308,6 @@ class MyMatrix {
     }
     
     T
-    *jacobi_approx (double eps)
-    {
-      T **A = this->matrix;
-      T  *b = this->vector;
-
-      T  *ret_vec = new T[this->width];
-      T  *pre_vec;
-
-      for (int i = 0; i < this->width; ++i)
-      {
-        ret_vec[i] = 0;
-      }
-
-      double result = 0.0;
-
-      do {
-        pre_vec = clone_vector (ret_vec, this->width);
-        for (int i = 0; i < this->width; ++i)
-        {
-          double sum = b[i];
-          for (int j = 0; j < this->width; ++j)
-          {
-            if (i != j) {
-              sum -= A[i][j] * pre_vec[j];
-            }
-          }
-          ret_vec[i] = 1 / A[i][i] * sum;
-        }
-
-        result = vector_norm (ret_vec, pre_vec, this->width);
-        delete[] pre_vec;
-      } while (result > eps);
-
-      return ret_vec;
-    }
-
-    T
-    *jacobi_iterative (int iterations)
-    {
-      T **A = this->matrix;
-      T  *b = this->vector;
-
-      T  *ret_vec = new T[this->width];
-      T  *tmp_vec;
-
-      for (int i = 0; i < this->width; ++i)
-      {
-        ret_vec[i] = 0;
-      }
-
-      int iterator = iterations;
-
-      do {
-        tmp_vec = clone_vector (ret_vec, this->width);
-        for (int i = 0; i < this->width; ++i)
-        {
-          ret_vec[i] = b[i];
-          for (int j = 0; j < this->width; ++j)
-          {
-            if (i != j) {
-              ret_vec[i] -= tmp_vec[j] * A[i][j];
-            }            
-          }
-          ret_vec[i] /= A[i][i];
-        }
-        iterator--;
-        delete[] tmp_vec;
-      } while (iterator > 0);
-
-      return ret_vec;
-    }
-
-    T
     *gauss_seidel_approx (double eps)
     {
       T **A = this->matrix;
@@ -422,39 +349,114 @@ class MyMatrix {
     }
 
     T
+    *jacobi_approx (double eps)
+    {
+      T **A = this->matrix;
+      T  *b = this->vector;
+
+      T  *ret_vec = new T[this->width];
+      T  *tmp_vec;
+
+      for (int i = 0; i < this->width; ++i)
+      {
+        ret_vec[i] = 0;
+      }
+
+      double result = 0.0;
+
+      do {
+        tmp_vec = clone_vector (ret_vec, this->width);
+        for (int i = 0; i < this->width; ++i)
+        {
+          ret_vec[i] = b[i];
+          for (int j = 0; j < this->width; ++j)
+          {
+            if (i != j) {
+              ret_vec[i] -= tmp_vec[j] * A[i][j];
+            }            
+          }
+          ret_vec[i] /= A[i][i];
+        }
+
+        result = vector_norm (ret_vec, tmp_vec, this->width);
+        delete[] tmp_vec;
+      } while (result > eps);
+
+      return ret_vec;
+    }
+
+    T
+    *jacobi_iterative (int iterations)
+    {
+      T **A = this->matrix;
+      T  *b = this->vector;
+
+      T  *ret_vec = new T[this->width];
+      T  *tmp_vec;
+
+      for (int i = 0; i < this->width; ++i)
+      {
+        ret_vec[i] = 0;
+      }
+
+      int iterator = iterations;
+
+      do {
+        tmp_vec = clone_vector (ret_vec, this->width);
+        for (int i = 0; i < this->width; ++i)
+        {
+          ret_vec[i] = b[i];
+          for (int j = 0; j < this->width; ++j)
+          {
+            if (i != j) {
+              ret_vec[i] -= tmp_vec[j] * A[i][j];
+            }            
+          }
+          ret_vec[i] /= A[i][i];
+        }
+
+        iterator--;
+        delete[] tmp_vec;
+      } while (iterator > 0);
+
+      return ret_vec;
+    }
+
+    T
     *gauss_seidel_iterative (int iterations)
     {
       T **A = this->matrix;
       T  *b = this->vector;
 
-      T* ret_vec = new T[this->width];
-      T* tmp_vec = new T[this->width];
+      T  *ret_vec = new T[this->width];
+      T  *tmp_vec;
 
       for (int i = 0; i < this->width; ++i)
       {
-        tmp_vec[i] = 0;
         ret_vec[i] = 0;
       }
 
       int iterator = iterations;
-      do
-      {
+
+      do {
+        tmp_vec = clone_vector (ret_vec, this->width);
         for (int i = 0; i < this->width; ++i)
         {
-          ret_vec[i] = (b[i] / A[i][i]);
-          for (int j = 0; j < this->width; ++j)
+          ret_vec[i] = b[i];
+          for (int j = 0; j < i; ++j)
           {
-            if (i == j) {
-              continue;
-            }
-            ret_vec[i] = ret_vec[i] - ((A[i][j] / A[i][i]) * tmp_vec[j]);
-            tmp_vec[i] = ret_vec[i];
+            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
           }
+          for (int j = i+1; j < this->width; ++j)
+          {
+            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
+          }
+          ret_vec[i] = ret_vec[i] / A[i][i];
         }
+        delete[] tmp_vec;
         iterator--;
       } while (iterator > 0);
 
-      delete[] tmp_vec;
       return ret_vec;
     }
 
