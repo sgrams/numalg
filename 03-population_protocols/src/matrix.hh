@@ -313,21 +313,18 @@ class MyMatrix {
       T **A = this->matrix;
       T  *b = this->vector;
 
-      T* ret_vec = new T[this->width];
-      T* tmp_vec = new T[this->width];
-      T* pre_vec;
-
-      double result;
+      T  *ret_vec = new T[this->width];
+      T  *tmp_vec;
 
       for (int i = 0; i < this->width; ++i)
       {
-        tmp_vec[i] = 0;
         ret_vec[i] = 0;
       }
 
-      do
-      {
-        pre_vec = clone_vector (ret_vec, this->width);
+      double result = 0.0;
+
+      do {
+        tmp_vec = clone_vector (ret_vec, this->width);
         for (int i = 0; i < this->width; ++i)
         {
           ret_vec[i] = b[i];
@@ -341,11 +338,10 @@ class MyMatrix {
           }
           ret_vec[i] = ret_vec[i] / A[i][i];
         }
-        result = vector_norm (ret_vec, pre_vec, this->width);
-        delete[] pre_vec;
+        result = vector_norm (ret_vec, tmp_vec, this->width);
+        delete[] tmp_vec;
       } while (result > eps);
 
-      delete[] tmp_vec;
       return ret_vec;
     }
 
