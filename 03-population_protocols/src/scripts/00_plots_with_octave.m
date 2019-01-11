@@ -4,6 +4,7 @@ output_precision = 34;
 load ../../csv/errors.csv;
 load ../../csv/iterative.csv
 load ../../csv/precisions.csv
+load ../../csv/montecarlo.csv
 
 ### algorithms abs errors all rows
 agent_count = errors(:,1);
@@ -109,27 +110,26 @@ title ("Time execution precisions methods");
 legend ("Gauss-Seidel", "Jacobi", "location", "northwest");
 print -dpng ../../report/plots/06_time_precision_methods_all_rows.png;
 
- ###abs gauss and gauss optimized
- agent_count = errors(:,1);
- abs_results = (errors(:,2) - errors(:,3));
- plot(agent_count, abs_results, "linewidth", 5, "m");
- xlim([3 20]);
- ylabel ("error");
- xlabel ("agents count");
- title  ("ABS Gauss and Gauss Optimized difference");
- legend ("ABS Gauss and Gauss Optimized diff", "location","south");
+###abs gauss and gauss optimized
+agent_count = errors(:,1);
+abs_results = (errors(:,2) - errors(:,3));
+plot(agent_count, abs_results, "linewidth", 5, "m");
+xlim([3 20]);
+ylabel ("error");
+xlabel ("agents count");
+title  ("ABS Gauss and Gauss Optimized difference");
+legend ("ABS Gauss and Gauss Optimized diff", "location","south");
 
- print -dpng ../../report/plots/07_abs_gauss_and_gauss_optimized_all_rows.png;
+print -dpng ../../report/plots/07_abs_gauss_and_gauss_optimized_all_rows.png;
 
+### montecarlo iterations for N = 5
+iteration_count = montecarlo(:,1);
+abs_results = montecarlo(:,2)
+plot(iteration_count, abs_results, "linewidth", 2, "b");
+xlim([10 10000]);
+ylabel ("error");
+xlabel ("iterations count");
+title  ("Monte Carlo iterations for N=5, abs error to PGS method");
+legend ("N=5, abs error to PGS method", "location","north");
 
-
-
-
-
-
-
-
-
-
-
-
+print -dpng ../../report/plots/08_abs_gauss_and_montecarlo_iterations_rows.png;

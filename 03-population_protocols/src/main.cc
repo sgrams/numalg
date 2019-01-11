@@ -33,7 +33,7 @@
 #define DEFAULT_ITERATIONS_STEP       10
 #define DEFAULT_MIN_AGENT_COUNT       3
 #define DEFAULT_MAX_AGENTS_COUNT      20
-#define DEFAULT_VALIDATION_AGENTS_COUNT 10
+#define DEFAULT_VALIDATION_AGENTS_COUNT 5
 
 using namespace std;
 
@@ -322,9 +322,9 @@ run_montecarlo_validation ()
 
 int main (int argc, char *argv[])
 {
-  run_all_methods ();
+  /*run_all_methods ();
   run_precision_methods_only ();
-  run_iterative_methods_only ();
+  run_iterative_methods_only ();*/
   run_montecarlo_validation ();
   return EXIT_SUCCESS;
 }
