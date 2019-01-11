@@ -39,8 +39,8 @@
 Program \textit{„protocols”} został napisany w języku C++, a wyniki działania programu zapisywane są do poszczególnych plików \textit{*.csv}.
 \subsection{Zaimplementowane algorytmy}
 \begin{itemize}
-	\item (PG - Partial Gauss) Algorytm Gaussa z częściowym wyborem elementu
-	\item (PGS - Partial Gauss for Sparse Matrices) Algorytm Gaussa z optymalizacją dla macierzy rzadkich
+	\item Algorytm Gaussa z częściowym wyborem elementu (PG - Partial Gauss)
+	\item Algorytm Gaussa z częściowym wyborem elementu i optymalizacją dla macierzy rzadkich (PGS - Partial Gauss for Sparse Matrices)
 	\item Algorytm Jacobiego
 	\item Algorytm Gaussa-Seidela
 	\item Metoda Monte Carlo
@@ -57,7 +57,10 @@ Generowanie układu równań dla danej liczby agentów $N$ odbywa się w sposób
 	\item Wypełnienie wektora $B$ zerami.
 \end{enumerate}
 \subsection{Prawidłowość implementacji}
-By zweryfikować poprawność implementacji zarówno generowania macierzy jak i obliczania stworzonego w ten sposób układu równań, wszelkie obliczenia porównywane były z wynikami wyliczonymi metodą Monte Carlo. Poniższy wykres obrazuje dokładność wszystkich zaimplementowanych algorytmów względem metody Monte Carlo na podstawie, którego można wnioskować o poprawności zaimplementowanych metod.
+By zweryfikować poprawność implementacji, zarówno generowania macierzy jak i obliczania stworzonego w ten sposób układu równań,
+wszelkie obliczenia porównywane były z wynikami wyliczonymi metodą Monte Carlo.
+Poniższy wykres obrazuje dokładność wszystkich zaimplementowanych algorytmów względem metody Monte Carlo, na podstawie
+którego można wnioskować o poprawności zaimplementowanych metod.
 
 \includegraphics[scale=0.75]{plots/01_abs_all_methods_all_rows.png}
 
@@ -73,7 +76,7 @@ Przeanalizujmy poniższy wykres. Wynika z niego jednoznacznie, że optymalizacja
 \end{figure}
 
 \subsubsection{Algorytmy iteracyjne}
-Obie zaimplementowane przez nasz zespół metody oferują jednakową dokładność.
+Obie zaimplementowane przez nasz zespół metody wykazują się jednakową dokładnością.
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.45]{plots/03_abs_iterative_methods_all_rows.png}
@@ -82,9 +85,9 @@ Obie zaimplementowane przez nasz zespół metody oferują jednakową dokładnoś
 \subsubsection{Wydajność względem wielkości planszy}
 Analizując pierwszy wykres w tym tekście oraz poniższy można wyciągnąć następujące wnioski:\\
 1. Pod względem błędów obliczeń wszystkie metody są bardzo podobne, przy małej wymaganej dokładności wręcz identyczne.\\
-2. Pod względem czasu wykonania wyraźnie wygrywają obie metody na podstawie metody Gaussa jednak wersja z usprawnieniem z racji swojej specyfikacji jest zdecydowanie najszybsza.
+2. Pod względem czasu wykonania wyraźnie wygrywają obie metody na podstawie metody Gaussa, jednak wersja z usprawnieniem z racji swojej specyfikacji jest zdecydowanie najszybsza.
 \\
-Powyższe wnioski wyraźnie wskazują, że w klasie wydajności względem wielkości planszy jako optymalny wybór należy wskazać metodę Gaussa z ulepszeniem dla macierzy rzadkich.
+Powyższe wnioski wyraźnie wskazują, że w klasie wydajności względem wielkości planszy, jako optymalny wybór należy wskazać metodę Gaussa z ulepszeniem dla macierzy rzadkich.
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.75]{plots/02_time_execution_all_methods.png}
@@ -97,9 +100,11 @@ Powyższe wnioski wyraźnie wskazują, że w klasie wydajności względem wielko
 \includegraphics[scale=0.45]{plots/05_abs_precision_methods_all_rows.png}
 \includegraphics[scale=0.45]{plots/06_time_precision_methods_all_rows.png}
 \end{figure}
-W przypadku tego kryterium porównujemy tylko metody Jacobiego oraz Gaussa-Seidela. Na pierwszym wykresie widzimy różnicę błędów między powyższymi metodami, widać że metody te dają wręcz identyczną dokładność. W kwestii czasu wykonania oba algorytmy także plasują się bardzo podobnie jest jednak widoczna różnica na korzyść metody Gaussa-Seidela.
+W przypadku tego kryterium porównujemy tylko metody Jacobiego oraz Gaussa-Seidela.
+Na wykresie \textit{All methods compared to Monte Carlo simulation}, jak i \textit{Absolute difference of Gauss-Seidel and Jacobi precisions} widzimy, że metody te dają wręcz identyczną dokładność.
+W kwestii czasu wykonania oba algorytmy również plasują się bardzo podobnie, jednak istnieje widoczna różnica na korzyść metody Gaussa-Seidela.
 
-Podsumowując, metody są bardzo do siebie zbliżone jednak ze względu na delikatnie lepszy czas wykonania bardziej optymalna jest metoda Gaussa-Seidela.
+Podsumowując, metody Jacobiego oraz Gaussa-Seidela są bardzo do siebie zbliżone, jednak ze względu na nieznacznie lepszy czas wykonania lepszą okazuje się być metoda Gaussa-Seidela.
 
 \section{Podział pracy}
 \centering
@@ -107,8 +112,8 @@ Podsumowując, metody są bardzo do siebie zbliżone jednak ze względu na delik
 		\hline
 		\textbf{Stanisław Grams} & \textbf{Juliusz Korczakowski} & \textbf{Maciej Jezierski} \\ \hline
 		Implementacja algorytmu Gaussa-Seidela & Implementacja algorytmu Jacobiego & Implementacja algorytmu PG oraz PGS  \\ \hline
-		 Implementacja symulacji Monte Carlo& Przygotowanie testów i ich uruchomienie &Analiza wykresów oraz przygotowanie sprawozdania \\ \hline
-		Implementacja algorytmu generowania macierzy & Przygotowanie wykresów końcowych &Praca nad strukturą projektu\\ \hline
+		Implementacja symulacji Monte Carlo & Przygotowanie testów i ich uruchomienie & Analiza wykresów oraz przygotowanie sprawozdania \\ \hline
+		Implementacja algorytmu generowania macierzy & Przygotowanie wykresów końcowych & Praca nad strukturą projektu\\ \hline
 	\end{tabular}
 \
 \end{document}
