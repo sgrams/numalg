@@ -27,8 +27,8 @@
 #define DEFUALT_MIN_ITERATIONS        1
 #define DEFAULT_MAX_ITERATIONS        1000
 #define DEFAULT_ITERATIONS_STEP       10
-#define DEFAULT_MIN_AGENT_COUNT       8
-#define DEFAULT_MAX_AGENTS_COUNT      8
+#define DEFAULT_MIN_AGENT_COUNT       3
+#define DEFAULT_MAX_AGENTS_COUNT      20
 
 using namespace std;
 
@@ -274,8 +274,8 @@ void run_precision_methods_only ()
 int main (int argc, char *argv[])
 {
   run_all_methods ();
-  //run_precision_methods_only ();
-  //run_iterative_methods_only ();
+  run_precision_methods_only ();
+  run_iterative_methods_only ();
 
   return EXIT_SUCCESS;
 }
