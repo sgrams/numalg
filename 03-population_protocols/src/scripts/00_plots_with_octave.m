@@ -1,9 +1,9 @@
 graphics_toolkit ("gnuplot");
 format long;
 output_precision = 34;
-load ../../errors.csv;
-load ../../iterative.csv
-load ../../precisions.csv
+load ../../csv/errors.csv;
+load ../../csv/iterative.csv
+load ../../csv/precisions.csv
 
 ### algorithms abs errors all rows
 agent_count = errors(:,1);
