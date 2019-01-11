@@ -98,7 +98,7 @@ legend ("Gauss Seidel and Jacobi diff", "location", "northwest");
 print -dpng ../../report/plots/05_abs_precision_methods_all_rows.png;
 
 
-### time precision jacobi, seidel
+### time precision seidel, jacobi
 epsi = precisions(273:288,2);
 time_results = [precisions(273:288,5), precisions(273:288,6)];
 semilogx(epsi, time_results, "linewidth", 5);

@@ -238,17 +238,18 @@ void run_precision_methods_only ()
     {
       result = new Result ();
       double epsilon = std::pow(10, counter);
-      // Run jacobi approx method
-      clock_t begin_jacobi_time = clock ();
-      ret_vec_jacobi  = matrix->jacobi_approx (epsilon);
-      clock_t end_jacobi_time   = clock ();
-      double  diff_jacobi_time  = (double)(end_jacobi_time - begin_jacobi_time) / CLOCKS_PER_SEC;
 
       // Run seidel approx method
       clock_t begin_seidel_time = clock ();
       ret_vec_seidel = matrix->gauss_seidel_approx (epsilon);
       clock_t end_seidel_time   = clock ();
       double  diff_seidel_time  = (double)(end_seidel_time - begin_seidel_time) / CLOCKS_PER_SEC;
+
+      // Run jacobi approx method
+      clock_t begin_jacobi_time = clock ();
+      ret_vec_jacobi  = matrix->jacobi_approx (epsilon);
+      clock_t end_jacobi_time   = clock ();
+      double  diff_jacobi_time  = (double)(end_jacobi_time - begin_jacobi_time) / CLOCKS_PER_SEC;
 
       // Set error vector with received values
       result->agent_count  = n;
@@ -273,9 +274,9 @@ void run_precision_methods_only ()
 
 int main (int argc, char *argv[])
 {
-  run_all_methods ();
+  //run_all_methods ();
   run_precision_methods_only ();
-  run_iterative_methods_only ();
+  //run_iterative_methods_only ();
 
   return EXIT_SUCCESS;
 }

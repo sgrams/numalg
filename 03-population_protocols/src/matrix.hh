@@ -330,15 +330,16 @@ class MyMatrix {
         pre_vec = clone_vector (ret_vec, this->width);
         for (int i = 0; i < this->width; ++i)
         {
-          ret_vec[i] = (b[i] / A[i][i]);
-          for (int j = 0; j < this->width; ++j)
+          ret_vec[i] = b[i];
+          for (int j = 0; j < i; ++j)
           {
-            if (i == j) {
-              continue;
-            }
-            ret_vec[i] = ret_vec[i] - ((A[i][j] / A[i][i]) * tmp_vec[j]);
-            tmp_vec[i] = ret_vec[i];
+            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
           }
+          for (int j = i+1; j < this->width; ++j)
+          {
+            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
+          }
+          ret_vec[i] = ret_vec[i] / A[i][i];
         }
         result = vector_norm (ret_vec, pre_vec, this->width);
         delete[] pre_vec;
