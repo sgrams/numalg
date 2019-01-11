@@ -351,7 +351,7 @@ class MyMatrix {
       T  *b = this->vector;
 
       T  *ret_vec = new T[this->width];
-      T  *pre_vec;
+      T  *tmp_vec;
 
       for (int i = 0; i < this->width; ++i)
       {
@@ -361,21 +361,20 @@ class MyMatrix {
       int iterator = iterations;
 
       do {
-        pre_vec = clone_vector (ret_vec, this->width);
+        tmp_vec = clone_vector (ret_vec, this->width);
         for (int i = 0; i < this->width; ++i)
         {
-          double sum = b[i];
+          ret_vec[i] = b[i];
           for (int j = 0; j < this->width; ++j)
           {
             if (i != j) {
-              sum -= A[i][j] * pre_vec[j];
-            }
+              ret_vec[i] -= tmp_vec[j] * A[i][j];
+            }            
           }
-          ret_vec[i] = 1 / A[i][i] * sum;
+          ret_vec[i] /= A[i][i];
         }
-
         iterator--;
-        delete[] pre_vec;
+        delete[] tmp_vec;
       } while (iterator > 0);
 
       return ret_vec;
