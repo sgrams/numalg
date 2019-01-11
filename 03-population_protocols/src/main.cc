@@ -274,9 +274,9 @@ void run_precision_methods_only ()
 
 int main (int argc, char *argv[])
 {
-  //run_all_methods ();
+  run_all_methods ();
   run_precision_methods_only ();
-  //run_iterative_methods_only ();
+  run_iterative_methods_only ();
 
   return EXIT_SUCCESS;
 }
