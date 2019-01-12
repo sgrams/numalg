@@ -35,7 +35,8 @@ using namespace std;
 int main (int argc, char *argv[])
 {
   double *ret_vec;
-  Generator *g = new Generator (200);
+  clock_t begin_gaussian_improved_time = clock ();
+  Generator *g = new Generator (100);
   MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
 
   cout << "starting operations.." << endl;
@@ -44,6 +45,8 @@ int main (int argc, char *argv[])
   clock_t end_sparse_LU_time = clock ();
   double  diff_sparse_LU_time  = (double)(end_sparse_LU_time - begin_sparse_LU_time) / CLOCKS_PER_SEC;
   cout << diff_sparse_LU_time << endl;
+
+
 
   clock_t begin_gaussian_improved_time = clock ();
   ret_vec = matrix->gaussian_improved ();

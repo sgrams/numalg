@@ -8,13 +8,6 @@
  */
 #ifndef PROTOCOLS_MATRIX_HH
 #define PROTOCOLS_MATRIX_HH
-#include <iostream>
-#include <ctime>
-#include <random>
-#include <algorithm>
-#include <vector>
-#include <eigen3/Eigen/Sparse>
-#include "protocol.hh"
 using namespace std;
 
 template <class T>
@@ -234,7 +227,7 @@ class MyMatrix {
         }
 
         if (index != -1) {
-          swap (pivot[i], pivot[index]);
+          std::swap (pivot[i], pivot[index]);
         }
 
         for (int j = i + 1; j < n; ++j)
@@ -282,13 +275,13 @@ class MyMatrix {
         for (int j = i; j <= m; ++j)
         {
           if (fabs (A[pivot[j]][i]) > magnitude ) {
-            magnitude = fabs (A[pivot[j]][i]);
+            magnitude = std::fabs (A[pivot[j]][i]);
             index = j;
           }
         }
 
         if (index != -1) {
-          swap (pivot[i], pivot[index]);
+          std::swap (pivot[i], pivot[index]);
         }
 
         for (int j = i + 1; j < n; ++j)
@@ -468,39 +461,6 @@ class MyMatrix {
 
       delete[] tmp_vec;
       return ret_vec;
-    }
-
-    T *
-    sparse_LU () {
-      Eigen::VectorXd ret_vec (this->width);
-      Eigen::VectorXd tmp_vec = Eigen::Map<Eigen::VectorXd >(this->vector, this->width);
-      Eigen::SparseLU<Eigen::SparseMatrix<T> > solver;
-      
-      Eigen::SparseMatrix<T> mat_A (this->width, this->width);
-      mat_A.reserve (Eigen::VectorXi::Constant(this->width, (int)std::sqrt(this->width)));
-
-      for (int i = 0; i < this->width; ++i)
-      {
-        for (int j = 0; j < this->width; ++j)
-        {
-          if (this->matrix[i][j] != 0) {
-            mat_A.insert (i, j) = this->matrix[i][j];
-          }
-        }
-      }
-
-      // analyze mat_A and solve the system of equations
-      mat_A.makeCompressed ();
-      solver.analyzePattern (mat_A);
-      solver.factorize (mat_A);
-      ret_vec = solver.solve (tmp_vec);
-
-      T *vector = new T[this->width];
-      for (int i = 0; i < this->width; ++i)
-      {
-        vector[i] = ret_vec.coeffRef(i);
-      }
-      return vector;
     }
 
     T

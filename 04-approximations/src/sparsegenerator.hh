@@ -1,13 +1,13 @@
 /*
  *  This file is part of 04-approximations task.
  * 
- *  src/approximations.hh
+ *  src/sparsegenerator.hh
  *  Stanislaw Grams <sgrams@fmdx.pl>
  *  Maciej Jezierski <maciejjezierski4@gmail.com>
  *  Juliusz Korczakowski <iuliuszkor@gmail.com>
  */
-#ifndef APPROXIMATIONS_GENERATOR_HH
-#define APPROXIMATIONS_GENERATOR_HH
+#ifndef APPROXIMATIONS_SPARSE_GENERATOR_HH
+#define APPROXIMATIONS_SPARSE_GENERATOR_HH
 #include <cstdlib>
 #include <random>
 #include <ctime>
@@ -18,15 +18,16 @@
 #include "matrix.hh"
 #include "probability.hh"
 
-class
-Generator {
+template <class T>
+class SparseGenerator : public Generator {
   private:
     int       agents_count;
     int       cases_count;
     Protocol* protocols_vector;
 
-    double **matrix;
-    double  *matrix_vector;
+    Eigen::SparseMatrix<T> matrix;
+    Eigen::VectorXd<T>     vector;
+
     // other procedures
     void
     generate_probability_matrix ();
@@ -35,30 +36,18 @@ Generator {
 
   public:
     // constructors and destructors
-    Generator (int agents_count);
-   ~Generator ();
-    // getters and setters
-    int
-    get_agents_count ();
-    int
-    get_cases_count ();
-    Protocol*
-    get_protocols_vector ();
-    double **
-    get_matrix ();
-    double *
-    get_matrix_vector ();
+    SparseGenerator (int agents_count);
+   ~SparseGenerator ();
 
+    Eigen::SparseMatrix<T>
+    get_matrix ();
+    Eigen::VectorXd<T>
+    get_matrix_vector ();
+    
     void
-    set_agents_count (int agents_count);
+    set_matrix (Eigen::SparseMatrix<T> matrix);
     void
-    set_cases_count (int cases_count);
-    void
-    set_protocols_vector (Protocol* protocols_vector);
-    void
-    set_matrix (double **matrix);
-    void
-    set_matrix_vector (double *matrix_vector);
+    set_matrix_vector (Eigen::VectorXd<T> vector);
 };
 
-#endif // APPROXIMATIONS_GENERATOR_HH
+#endif // APPROXIMATIONS_SPARSE_GENERATOR_HH
