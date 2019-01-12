@@ -474,15 +474,18 @@ class MyMatrix {
     sparse_LU () {
       Eigen::VectorXd ret_vec (this->width);
       Eigen::VectorXd tmp_vec = Eigen::Map<Eigen::VectorXd >(this->vector, this->width);
-      Eigen::SparseMatrix<T, Eigen::RowMajor > mat_A (this->width, this->width);
       Eigen::SparseLU<Eigen::SparseMatrix<T> > solver;
       
-      // initialize matrix with this->matrix
+      Eigen::SparseMatrix<T> mat_A (this->width, this->width);
+      mat_A.reserve (Eigen::VectorXi::Constant(this->width, (int)std::sqrt(this->width)));
+
       for (int i = 0; i < this->width; ++i)
       {
         for (int j = 0; j < this->width; ++j)
         {
-          mat_A.coeffRef(i, j) = this->matrix[i][j];
+          if (this->matrix[i][j] != 0) {
+            mat_A.insert (i, j) = this->matrix[i][j];
+          }
         }
       }
 
