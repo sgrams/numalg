@@ -20,10 +20,10 @@ template <class T>
 class MySparseMatrix {
   public:
     int width;
-    Eigen::SparseMatrix<T> matrix;
-    Eigen::SparseVector<T> vector;
+    Eigen::SparseMatrix<T> *matrix;
+    Eigen::SparseVector<T> *vector;
 
-    MySparseMatrix (Eigen::SparseMatrix<T> matrix, Eigen::SparseVector<T> vector, int width)
+    MySparseMatrix (int width, Eigen::SparseMatrix<T> *matrix, Eigen::SparseVector<T> *vector)
     {
       this->matrix = matrix;
       this->vector = vector;
@@ -35,11 +35,11 @@ class MySparseMatrix {
       Eigen::SparseVector<T> ret_vec (this->width);
       Eigen::SparseLU<Eigen::SparseMatrix<T> > solver;
 
-      // analyze mat_A and solve the system of equations
-      this->matrix.makeCompressed ();
-      solver.analyzePattern (this->matrix);
-      solver.factorize (this->matrix);
-      ret_vec = solver.solve (this->vector);
+      // analyze matrix and solve the system of equations
+      this->matrix->makeCompressed ();
+      solver.analyzePattern (*this->matrix);
+      solver.factorize (*this->matrix);
+      ret_vec = solver.solve (*this->vector);
 
       return ret_vec;
     }

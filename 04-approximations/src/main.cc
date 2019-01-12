@@ -36,9 +36,10 @@ using namespace std;
 
 int main (int argc, char *argv[])
 {
-  SparseGenerator<double> sg = SparseGenerator<double>(100);
-  //MySparseMatrix<double> *sparsematrix = new MySparseMatrix<double>(sg.get_cases_count (), sg.get_matrix (), sg.get_matrix_vector ());
-/*
+  // select 446 for maximum kekk
+  SparseGenerator<double> sg = SparseGenerator<double>(10);
+  MySparseMatrix<double> *sparsematrix = new MySparseMatrix<double>(sg.get_cases_count (), sg.get_matrix (), sg.get_matrix_vector ());
+  
   cout << "starting operations.." << endl;
   clock_t begin_sparse_LU_time = clock ();
   sparsematrix->sparse_LU ();
@@ -47,7 +48,7 @@ int main (int argc, char *argv[])
   cout << diff_sparse_LU_time << endl;
 
   delete sparsematrix;
-  */
+
   cout << sg.get_cases_count () << endl;
   return EXIT_SUCCESS;
 }
