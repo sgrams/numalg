@@ -5,14 +5,15 @@
 #  Stanisław Grams <sgrams@fmdx.pl>
 ##
 CC=g++
-CXXFLAGS=-Wall -Werror -pedantic -std=c++0x -g
-LDFLAGS=-pthread
+CXXFLAGS=-Wall -Werror -pedantic -std=c++0x -g $(pkg-config --cflags eigen3)
+LDFLAGS=-pthread $(pkg-config --cflags eigen3)
 
 # main targets
-all: approximation.o matrix.o generator.o protocol.o util.o main.o
+all: main.o matrix.o util.o protocol.o generator.o probability.o
 
 # *.o: *.cc
-approximation.o: approximation.cc
+#approximation.o: approximation.cc
+probability.o: probability.cc
 generator.o: generator.cc
 protocol.o: protocol.cc
 util.o: util.cc

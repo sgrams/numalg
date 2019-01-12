@@ -5,8 +5,8 @@
 #  Stanisław Grams
 ##
 CC=g++
-CFLAGS=-Wall -Werror -pedantic -std=c++0x
-LDFLAGS=-pthread
+CXXFLAGS=-Wall -Werror -pedantic -std=c++0x $(pkg-config --cflags eigen3)
+LDFLAGS=-pthread $(pkg-config --cflags eigen3)
 
 SRCDIR=src
 OUTNAME=approximations
