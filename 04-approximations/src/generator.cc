@@ -95,18 +95,16 @@ Generator::set_matrix_vector (double *matrix_vector)
 void
 Generator::generate_protocols_vector ()
 {
-  int iter = 0;
   for (int i = 0; i <= this->agents_count; i++)
   {
     for (int j = 0; j <= this->agents_count; j++)
     {
       if ((i + j) <= this->agents_count) {
         this->protocols_vector.push_back(Protocol(i, j, this->agents_count));
-        iter++;
       }
     }
   }
-  this->cases_count = iter; // set cases count to the all generated cases qty
+  this->cases_count = (this->agents_count + 1) * (this->agents_count + 2) / 2; // set cases count to the all generated cases qty
 }
 
 void
