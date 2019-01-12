@@ -12,6 +12,8 @@ SRCDIR=src
 OUTNAME=approximations
 
 # main targets
+build: $(MAKE) all
+rebuild: $(MAKE) clean && $(MAKE) all
 all:
 	+$(MAKE) -C $(SRCDIR)
 	+$(CC) -o $(OUTNAME) $(SRCDIR)/*.o $(CFLAGS) $(LDFLAGS)
