@@ -110,6 +110,15 @@ class MyMatrix {
       }
     }
 
+    void
+    copy_vector (T *vec_to, T *vec_from, int size)
+    {
+      for (int i = 0; i < size; ++i)
+      {
+        vec_to[i] = vec_from[i];
+      }
+    }
+
     // cloning methods for gaussian elimination methods
     T
     **clone_matrix (T **matrix, int width)
@@ -314,17 +323,17 @@ class MyMatrix {
       T  *b = this->vector;
 
       T  *ret_vec = new T[this->width];
-      T  *tmp_vec;
+      T  *tmp_vec = new T[this->width];
 
       for (int i = 0; i < this->width; ++i)
       {
         ret_vec[i] = 0;
+        tmp_vec[i] = 0;
       }
 
       double result = 0.0;
 
       do {
-        tmp_vec = clone_vector (ret_vec, this->width);
         for (int i = 0; i < this->width; ++i)
         {
           ret_vec[i] = b[i];
@@ -339,9 +348,10 @@ class MyMatrix {
           ret_vec[i] = ret_vec[i] / A[i][i];
         }
         result = vector_norm (ret_vec, tmp_vec, this->width);
-        delete[] tmp_vec;
+        copy_vector (tmp_vec, ret_vec, this->width);
       } while (result > eps);
 
+      delete[] tmp_vec;
       return ret_vec;
     }
 
@@ -352,17 +362,17 @@ class MyMatrix {
       T  *b = this->vector;
 
       T  *ret_vec = new T[this->width];
-      T  *tmp_vec;
+      T  *tmp_vec = new T[this->width];
 
       for (int i = 0; i < this->width; ++i)
       {
         ret_vec[i] = 0;
+        tmp_vec[i] = 0;
       }
 
       double result = 0.0;
 
       do {
-        tmp_vec = clone_vector (ret_vec, this->width);
         for (int i = 0; i < this->width; ++i)
         {
           ret_vec[i] = b[i];
@@ -376,9 +386,10 @@ class MyMatrix {
         }
 
         result = vector_norm (ret_vec, tmp_vec, this->width);
-        delete[] tmp_vec;
+        copy_vector (tmp_vec, ret_vec, this->width);
       } while (result > eps);
 
+      delete[] tmp_vec;
       return ret_vec;
     }
 
@@ -389,17 +400,17 @@ class MyMatrix {
       T  *b = this->vector;
 
       T  *ret_vec = new T[this->width];
-      T  *tmp_vec;
+      T  *tmp_vec = new T[this->width];
 
       for (int i = 0; i < this->width; ++i)
       {
         ret_vec[i] = 0;
+        tmp_vec[i] = 0;
       }
 
       int iterator = iterations;
 
       do {
-        tmp_vec = clone_vector (ret_vec, this->width);
         for (int i = 0; i < this->width; ++i)
         {
           ret_vec[i] = b[i];
@@ -413,9 +424,10 @@ class MyMatrix {
         }
 
         iterator--;
-        delete[] tmp_vec;
+        copy_vector (tmp_vec, ret_vec, this->width);
       } while (iterator > 0);
 
+      delete[] tmp_vec;
       return ret_vec;
     }
 
@@ -426,17 +438,17 @@ class MyMatrix {
       T  *b = this->vector;
 
       T  *ret_vec = new T[this->width];
-      T  *tmp_vec;
+      T  *tmp_vec = new T[this->width];
 
       for (int i = 0; i < this->width; ++i)
       {
         ret_vec[i] = 0;
+        tmp_vec[i] = 0;
       }
 
       int iterator = iterations;
 
       do {
-        tmp_vec = clone_vector (ret_vec, this->width);
         for (int i = 0; i < this->width; ++i)
         {
           ret_vec[i] = b[i];
@@ -450,10 +462,11 @@ class MyMatrix {
           }
           ret_vec[i] = ret_vec[i] / A[i][i];
         }
-        delete[] tmp_vec;
+        copy_vector (tmp_vec, ret_vec, this->width);
         iterator--;
       } while (iterator > 0);
 
+      delete[] tmp_vec;
       return ret_vec;
     }
 
