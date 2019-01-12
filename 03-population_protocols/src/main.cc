@@ -322,9 +322,9 @@ run_montecarlo_validation ()
 
 int main (int argc, char *argv[])
 {
-  /*run_all_methods ();
+  run_all_methods ();
   run_precision_methods_only ();
-  run_iterative_methods_only ();*/
+  run_iterative_methods_only ();
   run_montecarlo_validation ();
   return EXIT_SUCCESS;
 }
