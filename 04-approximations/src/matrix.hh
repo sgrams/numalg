@@ -13,8 +13,8 @@
 #include <random>
 #include <algorithm>
 #include <vector>
+#include <eigen3/Eigen/Sparse>
 #include "protocol.hh"
-
 using namespace std;
 
 template <class T>
@@ -468,6 +468,36 @@ class MyMatrix {
 
       delete[] tmp_vec;
       return ret_vec;
+    }
+
+    T *
+    sparse_LU () {
+      Eigen::VectorXd ret_vec (this->width);
+      Eigen::VectorXd tmp_vec = Eigen::Map<Eigen::VectorXd >(this->vector, this->width);
+      Eigen::SparseMatrix<T, Eigen::RowMajor > mat_A (this->width, this->width);
+      Eigen::SparseLU<Eigen::SparseMatrix<T> > solver;
+      
+      // initialize matrix with this->matrix
+      for (int i = 0; i < this->width; ++i)
+      {
+        for (int j = 0; j < this->width; ++j)
+        {
+          mat_A.coeffRef(i, j) = this->matrix[i][j];
+        }
+      }
+
+      // analyze mat_A and solve the system of equations
+      mat_A.makeCompressed ();
+      solver.analyzePattern (mat_A);
+      solver.factorize (mat_A);
+      ret_vec = solver.solve (tmp_vec);
+
+      T *vector = new T[this->width];
+      for (int i = 0; i < this->width; ++i)
+      {
+        vector[i] = ret_vec.coeffRef(i);
+      }
+      return vector;
     }
 
     T
