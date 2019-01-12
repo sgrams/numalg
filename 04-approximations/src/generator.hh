@@ -27,12 +27,6 @@ Generator {
 
     double **matrix;
     double  *matrix_vector;
-    // other procedures
-    void
-    generate_probability_matrix ();
-    void
-    generate_protocols_vector ();
-
   public:
     // constructors and destructors
     Generator (int agents_count);
@@ -59,6 +53,12 @@ Generator {
     set_matrix (double **matrix);
     void
     set_matrix_vector (double *matrix_vector);
+
+    // other procedures
+    void
+    generate_probability_matrix ();
+    void
+    generate_protocols_vector ();
 };
 
 #endif // APPROXIMATIONS_GENERATOR_HH

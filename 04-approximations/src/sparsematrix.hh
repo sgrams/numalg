@@ -10,6 +10,7 @@
 #define APPROXIMATIONS_SPARSE_MATRIX_HH
 #include <iostream>
 #include <ctime>
+#include <cmath>
 #include <random>
 #include <algorithm>
 #include <eigen3/Eigen/Sparse>
@@ -20,22 +21,22 @@ class MySparseMatrix {
   public:
     int width;
     Eigen::SparseMatrix<T> matrix;
-    Eigen::VectorXd<T>     vector;
+    Eigen::SparseVector<T> vector;
 
-    MySparseMatrix (Eigen::SparseMatrix<T> matrix, Eigen::VectorXd vector, int width)
+    MySparseMatrix (Eigen::SparseMatrix<T> matrix, Eigen::SparseVector<T> vector, int width)
     {
       this->matrix = matrix;
       this->vector = vector;
       this->width  = width;
     }
 
-    Eigen::VectorXd
+    Eigen::SparseVector<T>
     sparse_LU () {
-      Eigen::VectorXd ret_vec (this->width);
+      Eigen::SparseVector<T> ret_vec (this->width);
       Eigen::SparseLU<Eigen::SparseMatrix<T> > solver;
 
       // analyze mat_A and solve the system of equations
-      mat_A.makeCompressed ();
+      this->matrix.makeCompressed ();
       solver.analyzePattern (this->matrix);
       solver.factorize (this->matrix);
       ret_vec = solver.solve (this->vector);

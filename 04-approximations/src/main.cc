@@ -12,7 +12,9 @@
 #include "util.hh"
 #include "protocol.hh"
 #include "matrix.hh"
+#include "sparsematrix.hh"
 #include "generator.hh"
+#include "sparsegenerator.hh"
 #include "probability.hh"
 
 #define DEFAULT_MONTECARLO_ITERATIONS 10000 // 10k
@@ -34,28 +36,18 @@ using namespace std;
 
 int main (int argc, char *argv[])
 {
-  double *ret_vec;
-  clock_t begin_gaussian_improved_time = clock ();
-  Generator *g = new Generator (100);
-  MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
-
+  SparseGenerator<double> sg = SparseGenerator<double>(100);
+  //MySparseMatrix<double> *sparsematrix = new MySparseMatrix<double>(sg.get_cases_count (), sg.get_matrix (), sg.get_matrix_vector ());
+/*
   cout << "starting operations.." << endl;
   clock_t begin_sparse_LU_time = clock ();
-  ret_vec = matrix->sparse_LU ();
+  sparsematrix->sparse_LU ();
   clock_t end_sparse_LU_time = clock ();
   double  diff_sparse_LU_time  = (double)(end_sparse_LU_time - begin_sparse_LU_time) / CLOCKS_PER_SEC;
   cout << diff_sparse_LU_time << endl;
 
-
-
-  clock_t begin_gaussian_improved_time = clock ();
-  ret_vec = matrix->gaussian_improved ();
-  clock_t end_gaussian_improved_time = clock ();
-  double  diff_gaussian_improved_time  = (double)(end_gaussian_improved_time - begin_gaussian_improved_time) / CLOCKS_PER_SEC;
-  cout << diff_gaussian_improved_time << endl;
-
-  delete[] ret_vec;
-  delete matrix;
-  delete g;
+  delete sparsematrix;
+  */
+  cout << sg.get_cases_count () << endl;
   return EXIT_SUCCESS;
 }
