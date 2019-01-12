@@ -29,3 +29,5 @@ rmobj:
 	+$(MAKE) -C $(SRCDIR) rmobj
 rmcsv:
 	+rm csv/*.csv
+super:
+	+$(MAKE) clean && $(MAKE) -j8 && $(MAKE) run
