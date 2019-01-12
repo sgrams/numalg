@@ -3,6 +3,7 @@
  *
  * src/main.cc
  * Stanisław Grams <sgrams@fmdx.pl>
+ * Juliusz Korczakowski <iuliuszkor@gmail.com>
  */
 #include <iostream>
 #include <cstdlib>
@@ -31,6 +32,7 @@
 #define DEFAULT_MIN_AGENT_COUNT       3
 #define DEFAULT_MAX_AGENTS_COUNT      20
 #define DEFAULT_VALIDATION_AGENTS_COUNT 5
+#define DEFAULT_ARGUMENTS_LENGTH      10
 
 using namespace std;
 
@@ -46,6 +48,11 @@ int main (int argc, char *argv[])
   clock_t end_sparse_LU_time = clock ();
   double  diff_sparse_LU_time  = (double)(end_sparse_LU_time - begin_sparse_LU_time) / CLOCKS_PER_SEC;
   cout << diff_sparse_LU_time << endl;
+  //vec = approx->perform_operations ();
+  */
+
+
+  
 
   delete sparsematrix;
 

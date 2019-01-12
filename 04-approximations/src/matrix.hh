@@ -156,6 +156,8 @@ class MyMatrix {
       return;
     }
 
+   
+
     void
     delete_vector (T *vector)
     {

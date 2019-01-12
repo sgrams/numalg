@@ -19,39 +19,69 @@ class Approximation
     int size;
 
   public:
-    Approximation (T *arguments, T *values, int size, int polynomial)
+    Approximation (int *arguments, double *values, int polynomial, int size)
     {
       this->arguments  = arguments;
       this->values     = values;
-      this->size       = size;
       this->polynomial = polynomial + 1;
+      this->size = size;
     }
+
+
+/*
+    void printResult(T *results)
+    {
+      cout << "f(x) = " << endl;
+
+      for (int i = 0; i < results.size (); ++i)
+        {
+          if (i != 0) {
+          cout << " + " << endl;
+        }
+        cout << "(" << results[i] << " * x^" << i << ")" << endl;
+        }
+      cout << endl;
+    }
+
+    */
 
     T *
     perform_operations ()
     {
-      T **mat_A = new T[polynomial];
-      T **mat_B = new T[size];
+
+
+      T **mat_A = new T*[size];
+      T **mat_B = new T*[polynomial];
+
 
       // initialize matrices
+      for (int i = 0; i < size; ++i)
+      {
+        mat_A[i] = new T[polynomial];
+      }
+      
       for (int i = 0; i < polynomial; ++i)
       {
-        mat_A[i] = new T[size];
+        mat_B[i] = new T[size];
       }
-      for (int i = 0; i < size; ++i)
-      {
-        mat_B[i] = new T[polynomial];
-      }
-      for (int i = 0; i < size; ++i)
-      {
-        for (int j = 0; j < polynomial; ++j)
-        {
-          mat_B[i][j] = std::pow (this->arguments[i], j);
-          mat_A[j][i] = mat_B[i][j];
-        }
-      }
+  
 
-      T **mat_C = new T[polynomial];
+        for (int i = 0; i < size; ++i)
+        {
+                          cout << "test_1 " << i << endl;
+
+          for (int j = 0; j < polynomial; ++j)
+          {
+            cout << "test_2" << i << endl;
+
+           // mat_B[i][j] = std::pow (this->arguments[i], j);
+           //mat_A[j][i] = mat_B[i][j];
+          }
+        }
+                cout << "end" << endl;
+
+      
+/*
       // initialize mat_C
       for (int i = 0; i < polynomial; ++i)
       {
@@ -72,19 +102,34 @@ class Approximation
           }
         }
       }
-
+*/
       T *vec_A = new T[polynomial];
       for (int i = 0; i < polynomial; ++i)
       {
         // initialize vec_A
         vec_A[i] = 0;
-        for (int j = 0; j < size; ++j)
+        for (int j = 0; j < polynomial; ++j)
         {
-          vec_A[i] += mat_A[i][j] * this->values[j];
+          //vec_A[i] += mat_A[i][j] * this->values[j];
+         // cout << vec_A[i] << endl;
         }
       }
+      
+     // MyMatrix<double> *matrix = new MyMatrix<double>(polynomial, mat_C, vec_A);
+      
+      //T *ret = new T[polynomial];
+     // ret = matrix->gaussian ();
+
+     /* matrix->delete_matrix (mat_A, polynomial);
+      matrix->delete_matrix (mat_B, size);
+      matrix->delete_matrix (mat_C, polynomial);
+      delete[] vec_A;
+      delete matrix; 
+      */     
+
 
       return vec_A;
+      
     }
 };
 #endif // APPROXIMATION_APPROXIMATION_H
