@@ -33,3 +33,9 @@
 
 # IDE
 *.vscode
+
+# Binaries
+01-taylor/taylor
+02-gauss/gauss
+03-population_protocols/protocols
+04-approximations/approximations
