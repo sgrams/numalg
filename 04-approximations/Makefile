@@ -16,7 +16,8 @@ all:
 	+$(MAKE) -C $(SRCDIR)
 	+$(CC) -o $(OUTNAME) $(SRCDIR)/*.o $(CFLAGS) $(LDFLAGS)
 
-build: +$(MAKE) all
+build:
+	+$(MAKE) all
 
 run:
 	+./approximations
@@ -34,4 +35,5 @@ rmcsv:
 super:
 	+$(MAKE) clean && $(MAKE) -j8 && $(MAKE) run
 
-rebuild: +$(MAKE) clean && $(MAKE) all
+rebuild:
+	+$(MAKE) clean && $(MAKE) all
