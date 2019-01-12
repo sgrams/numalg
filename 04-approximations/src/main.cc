@@ -35,7 +35,7 @@ using namespace std;
 int main (int argc, char *argv[])
 {
   double *ret_vec;
-  Generator *g = new Generator (446);
+  Generator *g = new Generator (200);
   MyMatrix<double> *matrix = new MyMatrix<double>(g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
 
   cout << "starting operations.." << endl;

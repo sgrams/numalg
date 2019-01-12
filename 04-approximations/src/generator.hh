@@ -23,7 +23,7 @@ Generator {
   private:
     int       agents_count;
     int       cases_count;
-    std::vector<Protocol> protocols_vector;
+    Protocol* protocols_vector;
 
     double **matrix;
     double  *matrix_vector;
@@ -42,7 +42,7 @@ Generator {
     get_agents_count ();
     int
     get_cases_count ();
-    std::vector<Protocol>
+    Protocol*
     get_protocols_vector ();
     double **
     get_matrix ();
@@ -54,7 +54,7 @@ Generator {
     void
     set_cases_count (int cases_count);
     void
-    set_protocols_vector (std::vector<Protocol> protocols_vector);
+    set_protocols_vector (Protocol* protocols_vector);
     void
     set_matrix (double **matrix);
     void
