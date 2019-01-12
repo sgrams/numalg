@@ -9,9 +9,10 @@ CXXFLAGS=-Wall -Werror -pedantic -std=c++0x -g
 LDFLAGS=-pthread
 
 # main targets
-all: matrix.o generator.o protocol.o util.o main.o
+all: approximation.o matrix.o generator.o protocol.o util.o main.o
 
 # *.o: *.cc
+approximation.o: approximation.cc
 generator.o: generator.cc
 protocol.o: protocol.cc
 util.o: util.cc
