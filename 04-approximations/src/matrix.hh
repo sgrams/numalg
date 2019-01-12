@@ -9,12 +9,8 @@
 #ifndef PROTOCOLS_MATRIX_HH
 #define PROTOCOLS_MATRIX_HH
 #include <iostream>
-#include <ctime>
-#include <random>
 #include <algorithm>
-#include <vector>
-#include <eigen3/Eigen/Sparse>
-#include "protocol.hh"
+#include <cmath>
 using namespace std;
 
 template <class T>
@@ -173,7 +169,7 @@ class MyMatrix {
       double helper;
       for (int i = 0; i < width; ++i)
       {
-        helper  = fabs(ret_vec[i] - tmp_vec[i]);
+        helper  = abs(ret_vec[i] - tmp_vec[i]);
         result += (double)helper * (double)helper;
       }
       return (double)sqrt (result);
@@ -227,14 +223,14 @@ class MyMatrix {
         int index   = -1;
         for (int j = i; j <= m; ++j)
         {
-          if (fabs (A[pivot[j]][i]) > magnitude ) {
-            magnitude = fabs (A[pivot[j]][i]);
+          if (abs (A[pivot[j]][i]) > magnitude ) {
+            magnitude = abs (A[pivot[j]][i]);
             index = j;
           }
         }
 
         if (index != -1) {
-          swap (pivot[i], pivot[index]);
+          std::swap (pivot[i], pivot[index]);
         }
 
         for (int j = i + 1; j < n; ++j)
@@ -281,14 +277,14 @@ class MyMatrix {
         int index   = -1;
         for (int j = i; j <= m; ++j)
         {
-          if (fabs (A[pivot[j]][i]) > magnitude ) {
-            magnitude = fabs (A[pivot[j]][i]);
+          if (abs (A[pivot[j]][i]) > magnitude ) {
+            magnitude = std::abs (A[pivot[j]][i]);
             index = j;
           }
         }
 
         if (index != -1) {
-          swap (pivot[i], pivot[index]);
+          std::swap (pivot[i], pivot[index]);
         }
 
         for (int j = i + 1; j < n; ++j)
@@ -470,39 +466,6 @@ class MyMatrix {
       return ret_vec;
     }
 
-    T *
-    sparse_LU () {
-      Eigen::VectorXd ret_vec (this->width);
-      Eigen::VectorXd tmp_vec = Eigen::Map<Eigen::VectorXd >(this->vector, this->width);
-      Eigen::SparseLU<Eigen::SparseMatrix<T> > solver;
-      
-      Eigen::SparseMatrix<T> mat_A (this->width, this->width);
-      mat_A.reserve (Eigen::VectorXi::Constant(this->width, (int)std::sqrt(this->width)));
-
-      for (int i = 0; i < this->width; ++i)
-      {
-        for (int j = 0; j < this->width; ++j)
-        {
-          if (this->matrix[i][j] != 0) {
-            mat_A.insert (i, j) = this->matrix[i][j];
-          }
-        }
-      }
-
-      // analyze mat_A and solve the system of equations
-      mat_A.makeCompressed ();
-      solver.analyzePattern (mat_A);
-      solver.factorize (mat_A);
-      ret_vec = solver.solve (tmp_vec);
-
-      T *vector = new T[this->width];
-      for (int i = 0; i < this->width; ++i)
-      {
-        vector[i] = ret_vec.coeffRef(i);
-      }
-      return vector;
-    }
-
     T
     count_abs_error (T* exemplary, T* after_test, int width)
     {
@@ -514,38 +477,6 @@ class MyMatrix {
         def = exemplary[i] - after_test[i];
         val = abs (def);
         error_counter = error_counter + val;
-      }
-      error_counter = error_counter / width;
-      return error_counter;
-    }
-
-    T
-    count_abs_error (std::vector<T> exemplary, T* after_test, int width)
-    {
-      T error_counter = 0;
-      T val = 0;
-      T def = 0;
-      for (int i = 0; i < width; ++i)
-      {
-        def = exemplary[i] - after_test[i];
-        val = abs (def);
-        error_counter = error_counter + val;
-      }
-      error_counter = error_counter / width;
-      return error_counter;
-    }
-
-    T
-    count_rel_error (std::vector<T> exemplary, T* after_test, int width)
-    {
-      T error_counter = 0;
-      T val = 0;
-      T def = 0;
-      for (int i = 0; i < width; ++i)
-      {
-        def = exemplary[i] - after_test[i];
-        val = abs (def);
-        error_counter = error_counter + (val / abs (exemplary[i]));
       }
       error_counter = error_counter / width;
       return error_counter;

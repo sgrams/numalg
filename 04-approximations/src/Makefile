@@ -12,6 +12,8 @@ LDFLAGS=-pthread $(pkg-config --cflags eigen3)
 all: main.o matrix.o util.o protocol.o generator.o probability.o
 
 # *.o: *.cc
+sparsematrix.o: sparsematrix.cc
+sparsegenerator.o: sparsegenerator.cc
 #approximation.o: approximation.cc
 probability.o: probability.cc
 generator.o: generator.cc

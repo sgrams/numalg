@@ -11,12 +11,14 @@
 Generator::Generator (int agents_count)
 {
   this->agents_count = agents_count;
+  this->cases_count = (agents_count + 1) * (agents_count + 2) / 2; // set cases count to the all generated cases qty
+  this->protocols_vector = new Protocol[cases_count];
   this->generate_protocols_vector ();
   this->generate_probability_matrix ();
 }
 Generator::~Generator ()
 {
-  protocols_vector.clear ();
+  delete[] protocols_vector;
 
   if (this->matrix) {
     for (int i = 0; i < this->cases_count; ++i)
@@ -43,7 +45,7 @@ Generator::get_cases_count ()
   return this->cases_count;
 }
 
-std::vector<Protocol>
+Protocol *
 Generator::get_protocols_vector ()
 {
   return this->protocols_vector;
@@ -74,7 +76,7 @@ Generator::set_cases_count (int cases_count)
 }
 
 void
-Generator::set_protocols_vector (std::vector<Protocol> protocols_vector)
+Generator::set_protocols_vector (Protocol* protocols_vector)
 {
   this->protocols_vector = protocols_vector;
 }
@@ -95,18 +97,18 @@ Generator::set_matrix_vector (double *matrix_vector)
 void
 Generator::generate_protocols_vector ()
 {
-  int iter = 0;
   for (int i = 0; i <= this->agents_count; i++)
   {
     for (int j = 0; j <= this->agents_count; j++)
     {
       if ((i + j) <= this->agents_count) {
-        this->protocols_vector.push_back(Protocol(i, j, this->agents_count));
-        iter++;
+        this->protocols_vector[i+j].set_yes_votes (i);
+        this->protocols_vector[i+j].set_no_votes (j);
+        this->protocols_vector[i+j].set_all_votes (this->agents_count);
+        this->protocols_vector[i+j].set_undecided_votes (this->agents_count - i - j);
       }
     }
   }
-  this->cases_count = iter; // set cases count to the all generated cases qty
 }
 
 void

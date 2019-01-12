@@ -1,13 +1,13 @@
 /*
- *  This file is part of 03-population_protocols task.
+ *  This file is part of 04-approximations task.
  * 
- *  src/generator.hh
+ *  src/approximations.hh
  *  Stanislaw Grams <sgrams@fmdx.pl>
  *  Maciej Jezierski <maciejjezierski4@gmail.com>
  *  Juliusz Korczakowski <iuliuszkor@gmail.com>
  */
-#ifndef PROTOCOLS_GENERATOR_HH
-#define PROTOCOLS_GENERATOR_HH
+#ifndef APPROXIMATIONS_GENERATOR_HH
+#define APPROXIMATIONS_GENERATOR_HH
 #include <cstdlib>
 #include <random>
 #include <ctime>
@@ -23,16 +23,10 @@ Generator {
   private:
     int       agents_count;
     int       cases_count;
-    std::vector<Protocol> protocols_vector;
+    Protocol* protocols_vector;
 
     double **matrix;
     double  *matrix_vector;
-    // other procedures
-    void
-    generate_probability_matrix ();
-    void
-    generate_protocols_vector ();
-
   public:
     // constructors and destructors
     Generator (int agents_count);
@@ -42,7 +36,7 @@ Generator {
     get_agents_count ();
     int
     get_cases_count ();
-    std::vector<Protocol>
+    Protocol*
     get_protocols_vector ();
     double **
     get_matrix ();
@@ -54,11 +48,17 @@ Generator {
     void
     set_cases_count (int cases_count);
     void
-    set_protocols_vector (std::vector<Protocol> protocols_vector);
+    set_protocols_vector (Protocol* protocols_vector);
     void
     set_matrix (double **matrix);
     void
     set_matrix_vector (double *matrix_vector);
+
+    // other procedures
+    void
+    generate_probability_matrix ();
+    void
+    generate_protocols_vector ();
 };
 
-#endif // PROTOCOLS_GENERATOR_HH
+#endif // APPROXIMATIONS_GENERATOR_HH
