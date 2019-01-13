@@ -16,26 +16,39 @@
 #define PROGRESSBAR_STRING "#################################################"
 #define PROGRESSBAR_WIDTH  50
 
+typedef enum {
+  G,
+  G_SPARSE,
+  GS_1E10,
+  GS_EIGEN,
+  LU_EIGEN,
+} types_t;
+
+typedef struct {
+  double **calculation_measurements;
+  double **generator_measurements;
+  int size;
+} measurement_t;
+
+typedef struct {
+  double *calculation_vector;
+  double *generator_vector;
+  int size;
+} polynomial_t;
+
 class Result {
   public:
-    int agent_count    = 0;
-    int iterations     = 0;
-    double epsilon     = 0.0;
-    // absolutes errors
-    double abs_err_g     = 0.0;
-    double abs_err_gi  = 0.0;   //gauss imporved
-    double abs_err_gs  = 0.0;   //gauss-seidel
-    double abs_err_gsit  = 0.0; //gauss-seidel iterative
-    double abs_err_j = 0.0;     //jacobi
-    double abs_err_jit = 0.0;   //jacobi iterative
-    // times
-    double time_g   = 0.0;
-    double time_gi = 0.0;
-    double time_gs = 0.0; 
-    double time_gsit = 0.0;
-    double time_j = 0.0;
-    double time_jit = 0.0;
-    double time_mc = 0.0;
+    // calculator
+    double x = 0.0;
+    double fx = 0.0;
+    double time = 0.0;
+    double abs_err = 0.0;
+    double rel_err = 0.0;
+    // generator
+    double gfx = 0.0;
+    double gtime = 0.0;
+    double gabs_err = 0.0;
+    double grel_err = 0.0;
 };
 
 typedef struct progressbar_sync {
@@ -50,19 +63,11 @@ namespace Util {
   void
   print_progressbar (int percentage);
 
-  void
-  save_errors_vec_to_file (const std::vector<Result> &result_vec, std::string filename);
-
-  void
-  save_iterative_vec_to_file (const std::vector<Result> &result_vec, std::string filename);
-
-  void
-  save_approx_vec_to_file (const std::vector<Result>&result_vec, std::string filename);
-
-  void
-  save_montecarlo_vec_to_file (const std::vector<Result>&result_vec, std::string filename);
-  
   unsigned int
   calculate_newton (unsigned int n, unsigned int k);
+
+  void
+  save_findings_to_file (measurement_t *gaussian_measurement, double *calculation_approximations,
+                        double *generator_approximations, std::string filepath);
 }
 #endif // _GAUSS_UTIL_H
