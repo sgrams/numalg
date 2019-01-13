@@ -181,7 +181,7 @@ approximation_function_calculation (polynomial_t *polynomial, double *vec_x, int
   for (int i = 0; i < size; ++i)
   {
     double temp = 0.0;
-    for (int j = 0; j < polynomial->size; ++j)
+    for (int j = polynomial->size - 1; j >= 0; --j)
     {
       temp += (vec_x[i] * pow (polynomial->calculation_vector[j], j));
     }
@@ -198,7 +198,7 @@ approximation_function_generator (polynomial_t *polynomial, double *vec_x, int s
   for (int i = 0; i < size; ++i)
   {
     double temp = 0.0;
-    for (int j = 0; j < polynomial->size; ++j)
+    for (int j = polynomial->size - 1; j >= 0; --j)
     {
       temp += (vec_x[i] * pow (polynomial->generator_vector[j], j));
     }
