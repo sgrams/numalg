@@ -75,28 +75,23 @@ class MySparseMatrix {
       Eigen::SparseVector<T> pre_vec (this->width);
 
       double result;
-      //A->makeCompressed ();
-
+      A->makeCompressed ();
       do {
         for (int i = 0; i < this->width; ++i)
         {
           ret_vec.coeffRef (i) = b->coeffRef (i);
-          for (int j = 0; j < i; ++j)
+          for (int j = 0; j < this->width; ++j)
           {
-            ret_vec.coeffRef (i) -= (pre_vec.coeffRef(j) * A->coeffRef(i, j));
-          }          
-          for (int j = i + 1; j < this->width; ++j)
-          {
-            ret_vec.coeffRef (i) -= (pre_vec.coeffRef(j) * A->coeffRef(i, j));
-          }
-          if (ret_vec.coeffRef (i) != 0) {
-            ret_vec.coeffRef (i) /= A->coeffRef (i, i);
+            if (A->coeff (i, j) != 0) {
+              ret_vec.coeffRef (i) -= (pre_vec.coeffRef(j) * A->coeffRef(i, j));
+            }
+            if (ret_vec.coeff(i) != 0) {
+              ret_vec.coeffRef (i) /= A->coeffRef (i, i);
+            }
           }
         }
-
-
-        result = vector_norm (&ret_vec, &pre_vec, this->width);
-        copy_vector (&pre_vec, &ret_vec, this->width);
+        result = abs(ret_vec.squaredNorm () - pre_vec.squaredNorm ());
+        pre_vec = ret_vec;
       } while (result > eps);
 
       return ret_vec;
