@@ -75,7 +75,7 @@ class MySparseMatrix {
       Eigen::SparseVector<T> pre_vec (this->width);
 
       double result;
-      A->makeCompressed ();
+      //A->makeCompressed ();
 
       do {
         for (int i = 0; i < this->width; ++i)
