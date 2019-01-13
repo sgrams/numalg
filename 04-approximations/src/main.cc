@@ -30,7 +30,7 @@
 #define DEFAULT_GS_1E10_POLYNOMIAL  2
 #define DEFAULT_GS_EIGEN_POLYNOMIAL 2
 #define DEFAULT_LU_EIGEN_POLYNOMIAL 1
-#define DEFAULT_100K_LU_EIGEN_CASE  446
+#define DEFAULT_100K_LU_EIGEN_CASE  446 // 447 * 448 / 2 == 100128
 
 #define DEFAULT_G_FILEPATH        "gauss.csv"
 #define DEFAULT_G_SPARSE_FILEPATH "gauss_sparse.csv"
@@ -291,17 +291,18 @@ int main (int argc, char *argv[])
   // SparseLU 100k x 100k! (446 agents)
   measurement_t *lu_eigen_100k_measurement = run_measurement (LU_EIGEN, DEFAULT_100K_LU_EIGEN_CASE, DEFAULT_100K_LU_EIGEN_CASE);
   polynomial_t *lu_eigen_100k_polynomial   = find_polynomial (lu_eigen_100k_measurement, DEFAULT_LU_EIGEN_POLYNOMIAL);
+  
   calculation_approximations = approximation_function_calculation (lu_eigen_100k_polynomial,
-                                lu_eigen_100k_measurement->calculation_measurements[0], size);
+                                lu_eigen_100k_measurement->calculation_measurements[0], 1);
   generator_approximations   = approximation_function_generator (lu_eigen_100k_polynomial,
-                                lu_eigen_100k_measurement->generator_measurements[0], size);
+                                lu_eigen_100k_measurement->generator_measurements[0], 1);
   Util::save_findings_to_file (lu_eigen_100k_polynomial, lu_eigen_100k_measurement,
                               calculation_approximations, generator_approximations, DEFAULT_100K_LU_EIGEN_FILEPATH);
 
   delete[] calculation_approximations;
   delete[] generator_approximations;
-  delete_polynomial  (lu_eigen_polynomial);
-  delete_measurement (lu_eigen_measurement);
+  delete_polynomial  (lu_eigen_100k_polynomial);
+  delete_measurement (lu_eigen_100k_measurement);
 
   return EXIT_SUCCESS;
 }
