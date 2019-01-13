@@ -23,7 +23,7 @@
 #define DEFAULT_GS_EPSILON        0.0000000001 // 1e^-10
 #define DEFAULT_SPARSE_GS_EPSILON 0.0000000001 // 1e^-10
 #define DEFAULT_MIN_AGENTS_COUNT  3
-#define DEFAULT_MAX_AGENTS_COUNT  60
+#define DEFAULT_MAX_AGENTS_COUNT  20
 
 #define DEFAULT_G_POLYNOMIAL        3
 #define DEFAULT_G_SPARSE_POLYNOMIAL 2
@@ -38,6 +38,7 @@
 #define DEFAULT_GS_EIGEN_FILEPATH "gs_eigen.csv"
 #define DEFAULT_LU_EIGEN_FILEPATH "lu_eigen.csv"
 #define DEFAULT_100K_LU_EIGEN_FILEPATH "lu_eigen.csv"
+#define DEFAULT_EXTRAPOLATION_FILEPATH "extrapolation.csv"
 
 using namespace std;
 
@@ -181,9 +182,9 @@ approximation_function_calculation (polynomial_t *polynomial, double *vec_x, int
   for (int i = 0; i < size; ++i)
   {
     double temp = 0.0;
-    for (int j = polynomial->size - 1; j >= 0; --j)
+    for (int j = 0; j < polynomial->size; ++j)
     {
-      temp += (vec_x[i] * pow (polynomial->calculation_vector[j], j));
+      temp += (polynomial->calculation_vector[j] * pow (vec_x[i], j));
     }
     result[i] = temp;
   }
@@ -198,9 +199,9 @@ approximation_function_generator (polynomial_t *polynomial, double *vec_x, int s
   for (int i = 0; i < size; ++i)
   {
     double temp = 0.0;
-    for (int j = polynomial->size - 1; j >= 0; --j)
+    for (int j = 0; j < polynomial->size; ++j)
     {
-      temp += (vec_x[i] * pow (polynomial->generator_vector[j], j));
+      temp += (polynomial->generator_vector[j] * pow (vec_x[i], j));
     }
     result[i] = temp;
   }
@@ -208,9 +209,11 @@ approximation_function_generator (polynomial_t *polynomial, double *vec_x, int s
   return result;
 }
 
+void extrapolate_calculations (polynomial_t *polynomial, )
 
 int main (int argc, char *argv[])
 {
+  vector<Result> r; 
   int size = DEFAULT_MAX_AGENTS_COUNT - DEFAULT_MIN_AGENTS_COUNT + 1;
   double *calculation_approximations;
   double *generator_approximations;
@@ -224,7 +227,7 @@ int main (int argc, char *argv[])
                                 gaussian_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (gaussian_polynomial,
                                 gaussian_measurement->generator_measurements[0], size);
-  Util::save_findings_to_file (gaussian_measurement, calculation_approximations, generator_approximations, DEFAULT_G_FILEPATH);
+  Util::save_findings_to_file (gaussian_polynomial, gaussian_measurement, calculation_approximations, generator_approximations, DEFAULT_G_FILEPATH);
 
   delete[] calculation_approximations;
   delete[] generator_approximations;
@@ -239,7 +242,7 @@ int main (int argc, char *argv[])
                                 gaussian_sparse_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (gaussian_sparse_polynomial,
                                 gaussian_sparse_measurement->generator_measurements[0], size);
-  Util::save_findings_to_file (gaussian_sparse_measurement, calculation_approximations, generator_approximations, DEFAULT_G_SPARSE_FILEPATH);
+  Util::save_findings_to_file (gaussian_sparse_polynomial, gaussian_sparse_measurement, calculation_approximations, generator_approximations, DEFAULT_G_SPARSE_FILEPATH);
 
   delete[] calculation_approximations;
   delete[] generator_approximations;
@@ -254,7 +257,7 @@ int main (int argc, char *argv[])
                                 gauss_seidel_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (gauss_seidel_polynomial,
                                 gauss_seidel_measurement->generator_measurements[0], size);
-  Util::save_findings_to_file (gauss_seidel_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_1E10_FILEPATH);
+  Util::save_findings_to_file (gauss_seidel_polynomial, gauss_seidel_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_1E10_FILEPATH);
 
   delete[] calculation_approximations;
   delete[] generator_approximations;
@@ -268,7 +271,7 @@ int main (int argc, char *argv[])
                                 gs_eigen_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (gs_eigen_polynomial,
                                 gs_eigen_measurement->generator_measurements[0], size);
-  Util::save_findings_to_file (gs_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_EIGEN_FILEPATH);
+  Util::save_findings_to_file (gs_eigen_polynomial, gs_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_EIGEN_FILEPATH);
 
   delete[] calculation_approximations;
   delete[] generator_approximations;
@@ -282,7 +285,7 @@ int main (int argc, char *argv[])
                                 lu_eigen_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (lu_eigen_polynomial,
                                 lu_eigen_measurement->generator_measurements[0], size);
-  Util::save_findings_to_file (lu_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_LU_EIGEN_FILEPATH);
+  Util::save_findings_to_file (lu_eigen_polynomial, lu_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_LU_EIGEN_FILEPATH);
 
   delete[] calculation_approximations;
   delete[] generator_approximations;
@@ -297,7 +300,8 @@ int main (int argc, char *argv[])
                                 lu_eigen_100k_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (lu_eigen_100k_polynomial,
                                 lu_eigen_100k_measurement->generator_measurements[0], size);
-  Util::save_findings_to_file (lu_eigen_100k_measurement, calculation_approximations, generator_approximations, DEFAULT_100K_LU_EIGEN_FILEPATH);
+  Util::save_findings_to_file (lu_eigen_100k_polynomial, lu_eigen_100k_measurement,
+                              calculation_approximations, generator_approximations, DEFAULT_100K_LU_EIGEN_FILEPATH);
 
   delete[] calculation_approximations;
   delete[] generator_approximations;

@@ -21,7 +21,7 @@ Util {
   }
 
   void
-  save_findings_to_file (measurement_t *gaussian_measurement, double *calculation_approximations,
+  save_findings_to_file (polynomial_t *polynomial, measurement_t *gaussian_measurement, double *calculation_approximations,
                         double *generator_approximations, std::string filepath)
   {
     std::ofstream output_file;
@@ -35,15 +35,34 @@ Util {
       
       r->fx       = calculation_approximations[i];
       r->time     = gaussian_measurement->calculation_measurements[1][i];
-      r->abs_err  = abs (r->fx - r->time);
-      r->rel_err  = abs (1 - (r->fx / r->time));
+      r->abs_err  = (double)fabs (r->fx - r->time);
+      r->rel_err  = (double)fabs (1.0 - (r->fx / r->time));
       
       r->gfx      = generator_approximations[i];
       r->gtime    = gaussian_measurement->generator_measurements[1][i];
-      r->gabs_err = abs (r->gfx - r->gtime);
-      r->grel_err = abs (1 - (r->gfx / r->gtime));
+      r->gabs_err = (double)fabs (r->gfx - r->gtime);
+      r->grel_err = (double)fabs (1.0 - (r->gfx / r->gtime));
       
       output_file.precision (1);
+
+      for (int j = 0; j < polynomial->size; ++j)
+      {
+        output_file << polynomial->calculation_vector[j];
+        if (j != polynomial->size - 1) {
+          output_file << ",";
+        }
+      }
+      output_file << std::endl;
+
+      for (int j = 0; j < polynomial->size; ++j)
+      {
+        output_file << polynomial->generator_vector[j];
+        if (j != polynomial->size - 1) {
+          output_file << ",";
+        }
+      }
+      output_file << std::endl;
+
       output_file << r->x   << ",";
       output_file.precision (18);
       output_file << r->fx  << "," << r->time  << "," << r->abs_err  << "," << r->rel_err  << ",";

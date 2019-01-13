@@ -12,6 +12,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 #define PROGRESSBAR_STRING "#################################################"
 #define PROGRESSBAR_WIDTH  50
@@ -67,7 +68,7 @@ namespace Util {
   calculate_newton (unsigned int n, unsigned int k);
 
   void
-  save_findings_to_file (measurement_t *gaussian_measurement, double *calculation_approximations,
+  save_findings_to_file (polynomial_t *polynomial, measurement_t *gaussian_measurement, double *calculation_approximations,
                         double *generator_approximations, std::string filepath);
 }
 #endif // _GAUSS_UTIL_H
