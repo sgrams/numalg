@@ -23,7 +23,7 @@
 #define DEFAULT_GS_EPSILON        0.0000000001 // 1e^-10
 #define DEFAULT_SPARSE_GS_EPSILON 0.0000000001 // 1e^-10
 #define DEFAULT_MIN_AGENTS_COUNT  3
-#define DEFAULT_MAX_AGENTS_COUNT  20
+#define DEFAULT_MAX_AGENTS_COUNT  60
 
 #define DEFAULT_G_POLYNOMIAL        3
 #define DEFAULT_G_SPARSE_POLYNOMIAL 2
@@ -288,7 +288,6 @@ int main (int argc, char *argv[])
   delete_polynomial  (lu_eigen_polynomial);
   delete_measurement (lu_eigen_measurement);
 
-/*
   // SparseLU 100k x 100k! (446 agents)
   measurement_t *lu_eigen_100k_measurement = run_measurement (LU_EIGEN, DEFAULT_100K_LU_EIGEN_CASE, DEFAULT_100K_LU_EIGEN_CASE);
   polynomial_t *lu_eigen_100k_polynomial   = find_polynomial (lu_eigen_100k_measurement, DEFAULT_LU_EIGEN_POLYNOMIAL);
@@ -303,6 +302,6 @@ int main (int argc, char *argv[])
   delete[] generator_approximations;
   delete_polynomial  (lu_eigen_polynomial);
   delete_measurement (lu_eigen_measurement);
-*/
+
   return EXIT_SUCCESS;
 }
