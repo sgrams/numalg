@@ -39,8 +39,8 @@ class SparseGenerator {
       this->cases_count = (agents_count + 1) * (agents_count + 2) / 2; // set cases count to the all generated cases qty
       this->protocols_vector = new Protocol[cases_count];
 
-      this->vector = new Eigen::SparseVector<T> (this->cases_count);
       this->matrix = new Eigen::SparseMatrix<T> (this->cases_count, this->cases_count);
+      this->vector = new Eigen::SparseVector<T> (this->cases_count);
       this->generate_protocols_vector ();
       this->generate_probability_matrix ();
     }
@@ -106,15 +106,17 @@ class SparseGenerator {
     void
     generate_protocols_vector ()
     {
+      int iter = 0;
       for (int i = 0; i <= this->agents_count; i++)
       {
         for (int j = 0; j <= this->agents_count; j++)
         {
           if ((i + j) <= this->agents_count) {
-            this->protocols_vector[i+j].set_yes_votes (i);
-            this->protocols_vector[i+j].set_no_votes (j);
-            this->protocols_vector[i+j].set_all_votes (this->agents_count);
-            this->protocols_vector[i+j].set_undecided_votes (this->agents_count - i - j);
+            this->protocols_vector[iter].set_yes_votes (i);
+            this->protocols_vector[iter].set_no_votes (j);
+            this->protocols_vector[iter].set_all_votes (this->agents_count);
+            this->protocols_vector[iter].set_undecided_votes (this->agents_count - i - j);
+            iter++;
           }
         }
       }
@@ -123,7 +125,7 @@ class SparseGenerator {
     {
       Probability *probability = new Probability (this->agents_count, this->cases_count);
       // create output (generated) vector
-      this->vector->coeffRef (this->cases_count - 1) = 1;
+      this->vector->insert (this->cases_count - 1) = 1;
 
       // create output (generated) matrix
       this->matrix->reserve ((int)std::sqrt (this->cases_count));

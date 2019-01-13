@@ -97,15 +97,17 @@ Generator::set_matrix_vector (double *matrix_vector)
 void
 Generator::generate_protocols_vector ()
 {
+  int iter = 0;
   for (int i = 0; i <= this->agents_count; i++)
   {
     for (int j = 0; j <= this->agents_count; j++)
     {
       if ((i + j) <= this->agents_count) {
-        this->protocols_vector[i+j].set_yes_votes (i);
-        this->protocols_vector[i+j].set_no_votes (j);
-        this->protocols_vector[i+j].set_all_votes (this->agents_count);
-        this->protocols_vector[i+j].set_undecided_votes (this->agents_count - i - j);
+        this->protocols_vector[iter].set_yes_votes (i);
+        this->protocols_vector[iter].set_no_votes (j);
+        this->protocols_vector[iter].set_all_votes (this->agents_count);
+        this->protocols_vector[iter].set_undecided_votes (this->agents_count - i - j);
+        iter++;
       }
     }
   }
@@ -131,7 +133,9 @@ Generator::generate_probability_matrix ()
     for (int j = 0; j < this->cases_count; ++j)
     {
       this->matrix[i][j] = probability->generate_value (this->protocols_vector, i, j);
+      cout << this->matrix[i][j] << " ";
     }
+    cout << endl;
   }
   delete probability;
 }
