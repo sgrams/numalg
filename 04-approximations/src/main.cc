@@ -17,6 +17,7 @@
 #include "generator.hh"
 #include "sparsegenerator.hh"
 #include "probability.hh"
+#include "approximation.hh"
 
 #define DEFAULT_MONTECARLO_ITERATIONS 10000 // 10k
 #define DEFAULT_MIN_VALIDATION_ITERATIONS 10
@@ -38,8 +39,7 @@ using namespace std;
 
 int main (int argc, char *argv[])
 {
-  Approximation *ap = new Approximation();
-  SparseGenerator<double> sg = SparseGenerator<double>(100);
+  SparseGenerator<double> sg = SparseGenerator<double>(30);
   MySparseMatrix<double> *sparsematrix = new MySparseMatrix<double>(sg.get_cases_count (), sg.get_matrix (), sg.get_matrix_vector ());
   clock_t begin_sparse_LU_time = clock ();
   Eigen::VectorXd ret_vec = sparsematrix->sparse_LU ();
@@ -47,8 +47,7 @@ int main (int argc, char *argv[])
   double  diff_sparse_LU_time  = (double)(end_sparse_LU_time - begin_sparse_LU_time) / CLOCKS_PER_SEC;
   cout << diff_sparse_LU_time << endl;
 
-
-  Generator g = Generator(100);
+  Generator g = Generator(30);
   MyMatrix<double> *matrix = new MyMatrix<double>(g.get_cases_count (), g.get_matrix (), g.get_matrix_vector ());
   clock_t begin_gaussian_sparse_time = clock ();
   matrix->gaussian_improved ();
@@ -56,6 +55,16 @@ int main (int argc, char *argv[])
   double  diff_gaussian_sparse_time = (double)(end_gaussian_sparse_time - begin_gaussian_sparse_time) / CLOCKS_PER_SEC;
   cout << diff_gaussian_sparse_time << endl;
 
+  double arguments[] = { 0.0,0.25,0.5,0.75,1.0 };
+  double values[] = { 1.0,1.284,1.6487,2.117,2.7183 };
+  Approximation<double> ap = Approximation<double>(arguments, values, 4, 3);
+  double *ap_vec = ap.perform_operations();
+  
+  for (int i = 0; i < 4; ++i)
+  {
+    cout << ap_vec[i] << " ";
+  }
+  cout << endl;
 
   cout << sg.get_cases_count () << endl;
   delete sparsematrix;
