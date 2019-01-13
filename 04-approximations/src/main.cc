@@ -20,8 +20,8 @@
 #include "probability.hh"
 #include "approximation.hh"
 
-#define DEFAULT_GS_EPSILON        0.0000000001 // 1e^-10
-#define DEFAULT_SPARSE_GS_EPSILON 0.0000000001 // 1e^-10
+#define DEFAULT_GS_EPSILON        (1.0 / 10000000000) // 1e^-10
+#define DEFAULT_SPARSE_GS_EPSILON (1.0 / 10000000000) // 1e^-10
 #define DEFAULT_MIN_AGENTS_COUNT  3
 #define DEFAULT_MAX_AGENTS_COUNT  60
 
