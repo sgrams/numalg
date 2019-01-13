@@ -95,8 +95,29 @@ class Approximation
         iter++;
       }
 
-      MyMatrix<double> *matrix = new MyMatrix<double>(degree_B, result_matrix, result_vec);
-      double *ret_vec_gaussian = matrix->gaussian_improved ();
+      MyMatrix<T> *matrix = new MyMatrix<T>(degree_B, result_matrix, result_vec);
+      double *ret_vec_gaussian = matrix->gaussian ();
+
+      delete[] result_vec;
+      delete[] vec_A;
+      delete[] vec_B;
+
+      for (int i = 0; i < degree_B; ++i)
+      {
+        delete[] result_matrix[i];
+      }
+      delete[] result_matrix;
+      for (int i = 0; i < size; ++i)
+      {
+        delete[] coeff_A[i];
+      }
+      delete[] coeff_A;
+
+      for (int i = 0; i < size; ++i)
+      {
+        delete[] coeff_B[i];
+      }
+      delete[] coeff_B;
       delete matrix;
 
       return ret_vec_gaussian;
