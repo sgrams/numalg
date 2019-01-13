@@ -37,3 +37,6 @@ super:
 
 rebuild:
 	+$(MAKE) clean && $(MAKE) all
+
+valgrind:
+	+valgrind --leak-check=full -v --track-origins=yes ./$(OUTNAME)
