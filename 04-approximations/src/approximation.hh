@@ -34,15 +34,12 @@ class Approximation
     {
       int degree_A = 2 * polynomial + 1;
       int degree_B = polynomial + 1;
-      double *ret_vec_gaussian;
-
 
       T **coeff_A = new T*[size];
       T **coeff_B = new T*[size];
       T *vec_A    = new T[degree_A];
       T *vec_B    = new T[degree_B];
-
-
+      
       // matrix and vectors initialization
       for (int i = 0; i < size; ++i)
       {
@@ -78,8 +75,6 @@ class Approximation
         }
       }
       
-      int tmp = 0;
-
       T **result_matrix = new T*[degree_B];
       T *result_vec     = new T[degree_B];
 
@@ -89,29 +84,22 @@ class Approximation
         result_vec[i]    = 0;
       }
 
+      int iter = 0;
       for (int i = 0; i < degree_B; ++i)
       {
         for (int j = 0; j <degree_B; ++j)
         {
-          result_matrix[i][j] = vec_A[j+tmp];
+          result_matrix[i][j] = vec_A[j+iter];
         }
         result_vec[i] = vec_B[i];
-        tmp++;
+        iter++;
       }
 
       MyMatrix<double> *matrix = new MyMatrix<double>(degree_B, result_matrix, result_vec);
-      ret_vec_gaussian = matrix->gaussian ();
-      
-      matrix->delete_matrix (coeff_A, size);
-      matrix->delete_matrix (coeff_B, size);
-      matrix->delete_matrix (result_matrix, degree_B);
-      matrix->delete_vector (vec_A);
-      matrix->delete_vector (vec_B);
-      matrix->delete_vector (result_vec);
+      double *ret_vec_gaussian = matrix->gaussian_improved ();
+      delete matrix;
 
       return ret_vec_gaussian;
-
-      
     }
 };
 #endif // APPROXIMATION_APPROXIMATION_H

@@ -57,10 +57,10 @@ int main (int argc, char *argv[])
 
   double arguments[] = { 0.0,0.25,0.5,0.75,1.0 };
   double values[] = { 1.0,1.284,1.6487,2.117,2.7183 };
-  Approximation<double> ap = Approximation<double>(arguments, values, 4, 3);
+  Approximation<double> ap = Approximation<double>(arguments, values, 5, 2);
   double *ap_vec = ap.perform_operations();
   
-  for (int i = 0; i < 4; ++i)
+  for (int i = 0; i < 3; ++i)
   {
     cout << ap_vec[i] << " ";
   }
