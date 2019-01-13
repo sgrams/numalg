@@ -19,14 +19,14 @@
 #include "probability.hh"
 #include "approximation.hh"
 
-#define DEFAULT_GS_EPSILON            0.0000000001 // 1e^-10
-#define DEFAULT_SPARSE_GS_EPSILON     0.0000000001 // 1e^-10
-#define DEFAULT_MIN_AGENTS_COUNT       3
-#define DEFAULT_MAX_AGENTS_COUNT      60
+#define DEFAULT_GS_EPSILON        0.0000000001 // 1e^-10
+#define DEFAULT_SPARSE_GS_EPSILON 0.0000000001 // 1e^-10
+#define DEFAULT_MIN_AGENTS_COUNT  3
+#define DEFAULT_MAX_AGENTS_COUNT  5
 
-#define DEFAULT_G_POLYNOMIAL 3
+#define DEFAULT_G_POLYNOMIAL        3
 #define DEFAULT_G_SPARSE_POLYNOMIAL 2
-#define DEFAULT_GS_1E10_POLYNOMIAL 2
+#define DEFAULT_GS_1E10_POLYNOMIAL  2
 #define DEFAULT_GS_EIGEN_POLYNOMIAL 2
 #define DEFAULT_LU_EIGEN_POLYNOMIAL 1
 
@@ -46,14 +46,17 @@ typedef struct {
 } measurement_t;
 
 typedef struct {
-  double *vector;
+  double *calculation_vector;
+  double *generator_vector;
   int size;
 } polynomial_t;
 
 void
 delete_polynomial (polynomial_t *polynomial)
 {
-  delete[] polynomial->vector;
+  delete[] polynomial->calculation_vector;
+  delete[] polynomial->generator_vector;
+  delete polynomial;
 }
 
 void
@@ -171,9 +174,12 @@ find_polynomial (measurement_t *measure, int polynomial)
 {
   polynomial_t *result = new polynomial_t;
 
-  Approximation<double> ap = Approximation<double>(measure->calculation_measurements[0], measure->calculation_measurements[1], measure->size, polynomial);
-  result->vector = ap.run ();
-  result->size   = polynomial + 1;
+  Approximation<double> calculation_ap = Approximation<double>(measure->calculation_measurements[0], measure->calculation_measurements[1], measure->size, polynomial);
+  Approximation<double> generator_ap = Approximation<double>(measure->generator_measurements[0], measure->generator_measurements[1], measure->size, polynomial);
+  
+  result->calculation_vector = calculation_ap.run ();
+  result->generator_vector   = generator_ap.run ();
+  result->size               = polynomial + 1;
 
   return result;
 }
