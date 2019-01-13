@@ -19,11 +19,11 @@ seidel_eigen_time = gs_eigen(3:60,3);
 lu_eigen_time = lu_eigen(3:60,3);
 all_time = [(gauss_time), (gauss_sparse_time), (seidel_1e10_time), (seidel_eigen_time), (lu_eigen_time)];
 
-plot(matrix_size, all_time, "linewidth", 4);
+semilogy(matrix_size, all_time, "linewidth", 4);
 ylabel ("time");
 xlabel ("matrix size");
 title ("calculation time execution");
-legend ("G", "G\\_SPARSE    ", "GS\\_1E10", "GS\\_EIGEN", "LU\\_EIGEN", "location", "northwest");
+legend ("G", "G\\_SPARSE    ", "GS\\_1E-10", "GS\\_EIGEN", "LU\\_EIGEN", "location", "northwest");
 
 print -dpng ../../report/plots/01_calc_time_execution_all_methods.png;
 
@@ -39,7 +39,7 @@ plot(matrix_size, gen_all_time, "linewidth", 4);
 ylabel ("time");
 xlabel ("matrix size");
 title ("generate time execution");
-legend ("G", "G\\_SPARSE    ", "GS\\_1E10", "GS\\_EIGEN", "LU\\_EIGEN", "location", "northwest");
+legend ("G", "G\\_SPARSE    ", "GS\\_1E-10", "GS\\_EIGEN", "LU\\_EIGEN", "location", "northwest");
 
 print -dpng ../../report/plots/02_gen_time_execution_all_methods.png;
 
@@ -55,7 +55,7 @@ plot(matrix_size, all_abs, "linewidth", 4);
 ylabel ("abs error");
 xlabel ("matrix size");
 title ("calculation abs error");
-legend ("G", "G\\_SPARSE    ", "GS\\_1E10", "GS\\_EIGEN", "LU\\_EIGEN", "location", "northwest");
+legend ("G", "G\\_SPARSE    ", "GS\\_1E-10", "GS\\_EIGEN", "LU\\_EIGEN", "location", "northwest");
 
 print -dpng ../../report/plots/03_calc_abs_error_all_methods.png;
 
@@ -85,7 +85,7 @@ plot(matrix_size, gen_all_abs, "linewidth", 4);
 ylabel ("abs error");
 xlabel ("matrix size");
 title ("generate abs error");
-legend ("G", "G\\_SPARSE    ", "GS\\_1E10", "GS\\_EIGEN", "LU\\_EIGEN", "location", "northwest");
+legend ("G", "G\\_SPARSE    ", "GS\\_1E-10", "GS\\_EIGEN", "LU\\_EIGEN", "location", "northwest");
 
 print -dpng ../../report/plots/05_gen_abs_error_all_methods.png;
 
