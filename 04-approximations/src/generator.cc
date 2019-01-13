@@ -133,9 +133,7 @@ Generator::generate_probability_matrix ()
     for (int j = 0; j < this->cases_count; ++j)
     {
       this->matrix[i][j] = probability->generate_value (this->protocols_vector, i, j);
-      cout << this->matrix[i][j] << " ";
     }
-    cout << endl;
   }
   delete probability;
 }
