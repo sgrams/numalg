@@ -232,7 +232,7 @@ int main (int argc, char *argv[])
 
 
   // Partial Gaussian for Sparse Matrices
-  measurement_t *gaussian_sparse_measurement = run_measurement (G, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
+  measurement_t *gaussian_sparse_measurement = run_measurement (G_SPARSE, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
   polynomial_t *gaussian_sparse_polynomial   = find_polynomial (gaussian_sparse_measurement, DEFAULT_G_SPARSE_POLYNOMIAL);
   calculation_approximations = approximation_function_calculation (gaussian_sparse_polynomial,
                                 gaussian_sparse_measurement->calculation_measurements[0], size);
@@ -261,7 +261,7 @@ int main (int argc, char *argv[])
   delete_measurement (gauss_seidel_measurement);
 
   // Gauss-Seidel with 1e-10 precision (Sparse implementation)
-  measurement_t *gs_eigen_measurement = run_measurement (GS_1E10, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
+  measurement_t *gs_eigen_measurement = run_measurement (GS_EIGEN, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
   polynomial_t *gs_eigen_polynomial   = find_polynomial (gs_eigen_measurement, DEFAULT_GS_1E10_POLYNOMIAL);
   calculation_approximations = approximation_function_calculation (gs_eigen_polynomial,
                                 gs_eigen_measurement->calculation_measurements[0], size);
