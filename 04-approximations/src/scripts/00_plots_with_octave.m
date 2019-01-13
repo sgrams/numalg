@@ -59,6 +59,22 @@ legend ("Gauss", "Gauss-Sparse", "Gauss-Seidel 1e-10", "Gauss-Seidel-Sparse 1e-1
 
 print -dpng ../../report/plots/03_calc_abs_error_all_methods.png;
 
+###calc all methods rel error
+gauss_rel = gauss(3:60,5);
+gauss_sparse_rel = gauss_sparse(3:60,5);
+seidel_1e10_rel = gs_1e10(3:60,5);
+seidel_eigen_rel = gs_eigen(3:60,5);
+lu_eigen_rel = lu_eigen(3:60,5);
+all_time = [(gauss_rel), (gauss_sparse_rel), (seidel_1e10_rel), (seidel_eigen_rel), (lu_eigen_rel)];
+
+plot(matrix_size, all_time, "linewidth", 4);
+ylabel ("rel error");
+xlabel ("matrix size");
+title ("Calculation rel error");
+legend ("Gauss", "Gauss-Sparse", "Gauss-Seidel 1e-10", "Gauss-Seidel-Sparse 1e-10", "SparseLU", "location", "northeast");
+
+print -dpng ../../report/plots/04_calc_rel_error_all_methods.png;
+
 
 
 
