@@ -38,7 +38,7 @@ using namespace std;
 
 int main (int argc, char *argv[])
 {
-  //Approximation *ap = new Approximation( );
+  Approximation *ap = new Approximation();
   SparseGenerator<double> sg = SparseGenerator<double>(100);
   MySparseMatrix<double> *sparsematrix = new MySparseMatrix<double>(sg.get_cases_count (), sg.get_matrix (), sg.get_matrix_vector ());
   clock_t begin_sparse_LU_time = clock ();

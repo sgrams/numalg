@@ -1,0 +1,10 @@
+jobs:
+  build:
+    docker:
+      - image: buildpack-deps:trusty
+    branches:
+      only:
+        - master
+      steps:
+        - run: make all
+        - run: make run
