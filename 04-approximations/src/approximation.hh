@@ -9,125 +9,69 @@
 #ifndef APPROXIMATION_APPROXIMATION_H
 #define APPROXIMATION_APPROXIMATION_H
 
+#include "matrix.hh"
+
 template <class T>
 class Approximation
 {
   private:
     T *arguments;
     T *values;
-    int polynomial;
     int size;
+    int polynomial;
 
   public:
-    Approximation (int *arguments, T *values, int polynomial, int size)
+    Approximation (T *arguments, T *values, int size, int polynomial)
     {
       this->arguments  = arguments;
       this->values     = values;
-      this->polynomial = polynomial + 1;
-      this->size = size;
+      this->polynomial = polynomial;
+      this->size       = size;
     }
-
-
-/*
-    void printResult(T *results)
-    {
-      cout << "f(x) = " << endl;
-
-      for (int i = 0; i < results.size (); ++i)
-        {
-          if (i != 0) {
-          cout << " + " << endl;
-        }
-        cout << "(" << results[i] << " * x^" << i << ")" << endl;
-        }
-      cout << endl;
-    }
-
-    */
 
     T *
     perform_operations ()
     {
+      int degree_A = 2 * polynomial + 1;
+      int degree_B = polynomial + 1;
+
+      T **coeff_A = new T*[size];
+      T **coeff_B = new T*[size];
+      T *vec_A    = new T[degree_A];
+      T *vec_B    = new T[degree_B];
 
 
-      T **mat_A = new T*[size];
-      T **mat_B = new T*[polynomial];
-
-
-      // initialize matrices
+      // matrix and vectors initialization
       for (int i = 0; i < size; ++i)
       {
-        mat_A[i] = new T[polynomial];
+        coeff_A[i] = new T[degree_A];
+        coeff_B[i] = new T[degree_B];
+        vec_A      = 0;
+        vec_B      = 0;
       }
-      
-      for (int i = 0; i < polynomial; ++i)
+
+      for (int i = 0; i < size; ++i)
       {
-        mat_B[i] = new T[size];
-      }
-  
-
-        for (int i = 0; i < size; ++i)
+        for (int j = 0; j < degree_A; ++j)
         {
-          cout << "test_1 " << i << endl;
-          for (int j = 0; j < polynomial; ++j)
-          {
-            cout << "test_2" << i << endl;
-
-           // mat_B[i][j] = std::pow (this->arguments[i], j);
-           //mat_A[j][i] = mat_B[i][j];
-          }
-        }
-                cout << "end" << endl;
-
-      
-/*
-      // initialize mat_C
-      for (int i = 0; i < polynomial; ++i)
-      {
-        mat_C[i] = new T[polynomial];
-        for (int j = 0; j < polynomial; ++j)
-        {
-          mat_C[i][j] = 0;
+          coeff_A[i][j] = std::pow (this->arguments[i], j);
+          vec_A[j]     += coeff_A[i][j];
         }
       }
 
-      for (int i = 0; i < polynomial ++i)
+      for (int i = 0; i < size; ++i)
       {
-        for (int j = 0; j < polynomial; ++j)
+        for (int j = 0; j < degree_B; ++j)
         {
-          for (int k = 0; k < size; ++k)
-          {
-            mat_C[i][j] += mat_A[i][k] * mat_B[k][j]; 
-          }
+          coeff_B[i][j] = this->values[i] * coeff_A[i][j];
+          vec_B[j]     += coeff_B[i][j];
         }
       }
-*/
-      T *vec_A = new T[polynomial];
-      for (int i = 0; i < polynomial; ++i)
-      {
-        // initialize vec_A
-        vec_A[i] = 0;
-        for (int j = 0; j < polynomial; ++j)
-        {
-          //vec_A[i] += mat_A[i][j] * this->values[j];
-         // cout << vec_A[i] << endl;
-        }
-      }
-      
-     // MyMatrix<double> *matrix = new MyMatrix<double>(polynomial, mat_C, vec_A);
-      
-      //T *ret = new T[polynomial];
-     // ret = matrix->gaussian ();
 
-     /* matrix->delete_matrix (mat_A, polynomial);
-      matrix->delete_matrix (mat_B, size);
-      matrix->delete_matrix (mat_C, polynomial);
-      delete[] vec_A;
-      delete matrix; 
-      */     
+      MyMatrix<double> *matrix = new MyMatrix<double>(vec_B.size (), coeff_B, vec_B);
 
+      return matrix->gaussian ();
 
-      return vec_A;
       
     }
 };
