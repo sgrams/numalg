@@ -165,6 +165,7 @@ class MyMatrix {
       return;
     }
     
+    static
     double vector_norm (T* ret_vec, T* tmp_vec, int width)
     {
       double result  = 0.0;

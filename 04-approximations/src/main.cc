@@ -209,11 +209,8 @@ approximation_function_generator (polynomial_t *polynomial, double *vec_x, int s
   return result;
 }
 
-void extrapolate_calculations (polynomial_t *polynomial, )
-
 int main (int argc, char *argv[])
 {
-  vector<Result> r; 
   int size = DEFAULT_MAX_AGENTS_COUNT - DEFAULT_MIN_AGENTS_COUNT + 1;
   double *calculation_approximations;
   double *generator_approximations;
@@ -228,7 +225,6 @@ int main (int argc, char *argv[])
   generator_approximations   = approximation_function_generator (gaussian_polynomial,
                                 gaussian_measurement->generator_measurements[0], size);
   Util::save_findings_to_file (gaussian_polynomial, gaussian_measurement, calculation_approximations, generator_approximations, DEFAULT_G_FILEPATH);
-
   delete[] calculation_approximations;
   delete[] generator_approximations;
   delete_polynomial  (gaussian_polynomial);

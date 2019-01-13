@@ -26,6 +26,25 @@ Util {
   {
     std::ofstream output_file;
     output_file.open (filepath);
+    
+    for (int j = 0; j < polynomial->size; ++j)
+    {
+      output_file << polynomial->calculation_vector[j];
+      if (j != polynomial->size - 1) {
+        output_file << ",";
+      }
+    }
+    output_file << std::endl;
+
+    for (int j = 0; j < polynomial->size; ++j)
+    {
+      output_file << polynomial->generator_vector[j];
+      if (j != polynomial->size - 1) {
+        output_file << ",";
+      }
+    }
+    output_file << std::endl;
+    
     for (int i = 0; i < gaussian_measurement->size; ++i)
     {
       Result *r = new Result ();
@@ -44,34 +63,19 @@ Util {
       r->grel_err = (double)fabs (1.0 - (r->gfx / r->gtime));
       
       output_file.precision (1);
-
-      for (int j = 0; j < polynomial->size; ++j)
-      {
-        output_file << polynomial->calculation_vector[j];
-        if (j != polynomial->size - 1) {
-          output_file << ",";
-        }
-      }
-      output_file << std::endl;
-
-      for (int j = 0; j < polynomial->size; ++j)
-      {
-        output_file << polynomial->generator_vector[j];
-        if (j != polynomial->size - 1) {
-          output_file << ",";
-        }
-      }
-      output_file << std::endl;
-
       output_file << r->x   << ",";
       output_file.precision (18);
       output_file << r->fx  << "," << r->time  << "," << r->abs_err  << "," << r->rel_err  << ",";
       output_file << r->gfx << "," << r->gtime << "," << r->gabs_err << "," << r->grel_err << "\n";
       delete r;
     }
-
+    
+    output_file << extrapolate_calculation (polynomial, 100000) << "," << extrapolate_generator (polynomial, 100000) << std::endl;
+    output_file << (double) fabs(MyMatrix<double>::vector_norm (calculation_approximations, gaussian_measurement->calculation_measurements[1], gaussian_measurement->size)) << std::endl;
+    output_file << (double) fabs(MyMatrix<double>::vector_norm (generator_approximations, gaussian_measurement->generator_measurements[1], gaussian_measurement->size)) << std::endl;
     output_file.close ();
   }
+  
   unsigned int
   calculate_newton (unsigned int n, unsigned int k)
   {
@@ -86,5 +90,29 @@ Util {
       ret = ret * (n - i + 1) / i;
     }
     return ret;
+  }
+
+  double
+  extrapolate_generator (polynomial_t *polynomial, int size)
+  {
+    double result = 0.0;
+    for (int i = 0; i < polynomial->size; ++i)
+    {
+      result += (polynomial->generator_vector[i] * pow (size, i));
+    }
+    
+    return result;
+  }
+
+  double
+  extrapolate_calculation (polynomial_t *polynomial, int size)
+  {
+    double result = 0.0;
+    for (int i = 0; i < polynomial->size; ++i)
+    {
+      result += (polynomial->calculation_vector[i] * pow (size, i));
+    }
+    
+    return result;
   }
 }

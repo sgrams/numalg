@@ -14,6 +14,8 @@
 #include <vector>
 #include <cmath>
 
+#include "matrix.hh"
+
 #define PROGRESSBAR_STRING "#################################################"
 #define PROGRESSBAR_WIDTH  50
 
@@ -70,5 +72,9 @@ namespace Util {
   void
   save_findings_to_file (polynomial_t *polynomial, measurement_t *gaussian_measurement, double *calculation_approximations,
                         double *generator_approximations, std::string filepath);
+  double
+  extrapolate_generator (polynomial_t *polynomial, int size);
+  double
+  extrapolate_calculation (polynomial_t *polynomial, int size);
 }
 #endif // _GAUSS_UTIL_H
