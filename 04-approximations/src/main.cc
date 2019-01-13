@@ -37,7 +37,7 @@
 #define DEFAULT_GS_1E10_FILEPATH  "gs_1e10.csv"
 #define DEFAULT_GS_EIGEN_FILEPATH "gs_eigen.csv"
 #define DEFAULT_LU_EIGEN_FILEPATH "lu_eigen.csv"
-#define DEFAULT_100K_LU_EIGEN_FILEPATH "lu_eigen.csv"
+#define DEFAULT_100K_LU_EIGEN_FILEPATH "lu_eigen_100k.csv"
 #define DEFAULT_EXTRAPOLATION_FILEPATH "extrapolation.csv"
 
 using namespace std;
