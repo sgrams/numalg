@@ -29,7 +29,7 @@ Probability
     Probability (int agents_count, int cases_count);
 
     double
-    generate_value (std::vector<Protocol> protocols_vector, int row, int col);
+    generate_value (Protocol *protocols_vector, int row, int col);
     double
     get_agents_count ();
     void
