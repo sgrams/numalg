@@ -80,9 +80,9 @@ get_measurements (types_t type, int min_agents_count, int max_agents_count)
   {
     clock_t begin_generating_time = clock ();
     if (type == GS_EIGEN || type == LU_EIGEN) {
-      sg = new SparseGenerator<double>(i-1);
+      sg = new SparseGenerator<double>(i);
     } else {
-      g = new Generator (i-1);
+      g = new Generator (i);
     }
     clock_t end_generating_time = clock ();
 
@@ -205,6 +205,7 @@ perform_calculations ()
     if (i + 1 < DEFAULT_G_SPARSE_POLYNOMIAL + 1)
       cout << " + ";
   }
+  cout << endl;
 
   for (int i = 0; i < size; ++i)
   {
