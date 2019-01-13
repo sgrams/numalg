@@ -42,9 +42,15 @@ int main (int argc, char *argv[])
   SparseGenerator<double> sg = SparseGenerator<double>(30);
   MySparseMatrix<double> *sparsematrix = new MySparseMatrix<double>(sg.get_cases_count (), sg.get_matrix (), sg.get_matrix_vector ());
   clock_t begin_sparse_LU_time = clock ();
-  Eigen::VectorXd ret_vec = sparsematrix->sparse_LU ();
+  Eigen::VectorXd ret_vec = sparsematrix->sparse_GS (1000);
   clock_t end_sparse_LU_time = clock ();
   double  diff_sparse_LU_time  = (double)(end_sparse_LU_time - begin_sparse_LU_time) / CLOCKS_PER_SEC;
+  cout << diff_sparse_LU_time << endl;
+
+  begin_sparse_LU_time = clock ();
+  Eigen::VectorXd LU_ret_vec = sparsematrix->sparse_LU ();
+  end_sparse_LU_time = clock ();
+  diff_sparse_LU_time  = (double)(end_sparse_LU_time - begin_sparse_LU_time) / CLOCKS_PER_SEC;
   cout << diff_sparse_LU_time << endl;
 /*
   Generator g = Generator(30);
@@ -58,9 +64,9 @@ int main (int argc, char *argv[])
   double arguments[] = { 0.0,0.25,0.5,0.75,1.0 };
   double values[] = { 1.0,1.284,1.6487,2.117,2.7183 };
   Approximation<double> ap = Approximation<double>(arguments, values, 5, 2);
-  double *ap_vec = ap.perform_operations();
+  double *ap_vec = ap.run ();
   
-  for (int i = 0; i < 3; ++i)
+  for (int i = 0; i < 5; ++i)
   {
     cout << ap_vec[i] << " ";
   }

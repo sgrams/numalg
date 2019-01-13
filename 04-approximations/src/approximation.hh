@@ -30,7 +30,7 @@ class Approximation
     }
 
     T *
-    perform_operations ()
+    run ()
     {
       int degree_A = 2 * polynomial + 1;
       int degree_B = polynomial + 1;
@@ -96,7 +96,7 @@ class Approximation
       }
 
       MyMatrix<T> *matrix = new MyMatrix<T>(degree_B, result_matrix, result_vec);
-      double *ret_vec_gaussian = matrix->gaussian ();
+      double *ret_vec_gaussian = matrix->gaussian_improved ();
 
       delete[] result_vec;
       delete[] vec_A;
