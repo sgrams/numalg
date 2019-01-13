@@ -1,0 +1,98 @@
+\documentclass[10pt]{article}
+\usepackage[usenames]{color} %used for font color
+\usepackage{amssymb} %maths
+\usepackage{amsmath} %maths
+\usepackage[utf8]{inputenc} %useful to type directly diacritic characters
+\begin{document}
+\[\documentclass[10pt]{article}
+ 
+\usepackage[margin=1.5cm]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage[font=scriptsize]{caption}
+\usepackage{subcaption} 
+\usepackage{array}
+
+
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+
+ 
+\newenvironment{theorem}[2][Twierdzenie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Pytanie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{hypothesis}[2][Hipoteza]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemat]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Ćwiczenie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Uwaga]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Założenie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Wniosek]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+
+\begin{document}
+
+\title{Aproksymacja}
+\author{Grams, Stanisław\\Jezierski, Maciej\\Korczakowski, Juliusz\\ MFI UG\\Algorytmy Numeryczne}
+
+\maketitle
+\section {Operacje na macierzach}
+\subsection{O implementacji}
+Program \textit{„approximations”} został napisany w języku C++, a wyniki działania programu zapisywane są do poszczególnych plików \textit{*.csv}.
+\subsection{Zaimplementowane algorytmy}
+\begin{itemize}
+	\item Algorytm Gaussa z częściowym wyborem elementu
+	\item Algorytm Gaussa z optymalizacją dla macierzy rzadkich
+	\item Algorytm Gaussa-Seidela
+	\item Algorytm Gaussa-Seidela z optymalizacją dla macierzy rzadkich
+\\
+\\
+Użyto także metody SparseLU z biblioteki Eigen3.
+\end{itemize}
+
+\section{Wnioski}
+
+\subsection{Błąd aproksymacji}
+\centering
+	\begin{tabular}{|C{2.5cm}| C{5cm}|C{5cm}|}
+		\hline
+		\textbf{} & \textbf{Generowanie} & \textbf{Obliczanie} \\ 
+		
+		\hline
+		Gauss & 0 & 0  \\ 
+		
+		\hline
+		Gauss Sparse & 0 & 0 \\ 
+		 
+		 \hline
+		Gauss Seidel & 0 & 0\\ 
+		
+		\hline
+		SpraseLU & 0 & 0\\
+		
+		\hline
+	\end{tabular}
+
+
+\section{Podział pracy}
+\centering
+	\begin{tabular}{| p{5cm} | p{5cm} | p{5cm} |}
+		\hline
+		\textbf{Stanisław Grams} & \textbf{Juliusz Korczakowski} & \textbf{Maciej Jezierski} \\ \hline
+		Implementacja algorytmu Gaussa-Seidela & Implementacja algorytmu Jacobiego & Implementacja algorytmu PG oraz PGS  \\ \hline
+		 Implementacja symulacji Monte Carlo& Przygotowanie testów i ich uruchomienie &Analiza wykresów oraz przygotowanie sprawozdania \\ \hline
+		Implementacja algorytmu generowania macierzy & Przygotowanie wykresów końcowych &Praca nad strukturą projektu\\ \hline
+	\end{tabular}
+\end{document}
+
+\]
+\end{document}
