@@ -41,7 +41,7 @@ typedef struct {
 void
 delete_measurements (measurement_t *measurements, int min_agents_count, int max_agents_count)
 {
-  for (int i = 0; i < max_agents_count - min_agents_count + 1; ++i)
+  for (int i = 0; i < 2; ++i)
   {
     delete[] measurements->calculation_measurements[i];
     delete[] measurements->generator_measurements[i];
@@ -60,16 +60,17 @@ get_measurements (types_t type, int min_agents_count, int max_agents_count)
   SparseGenerator<double> *sg;
   MySparseMatrix<double> *sm;
 
+  // reserve some memory
   measurement_t *measurements = new measurement_t;
-  measurements->calculation_measurements = new double*[max_agents_count - min_agents_count + 1];
-  measurements->generator_measurements   = new double*[max_agents_count - min_agents_count + 1];
-  
+  measurements->calculation_measurements = new double*[2];
+  measurements->generator_measurements   = new double*[2];
+  for (int i = 0; i < 2; ++i)
+  {
+    measurements->generator_measurements[i] = new double[max_agents_count - min_agents_count + 1];
+    measurements->calculation_measurements[i] = new double[max_agents_count - min_agents_count + 1];
+  }
   for (int i = min_agents_count; i <= max_agents_count; ++i)
   {
-    // reserve some memory
-    measurements->generator_measurements[i-min_agents_count] = new double[2];
-    measurements->calculation_measurements[i-min_agents_count] = new double[2];
-
     clock_t begin_generating_time = clock ();
     if (type == GS_EIGEN || type == LU_EIGEN) {
       sg = new SparseGenerator<double>(i);
@@ -79,8 +80,8 @@ get_measurements (types_t type, int min_agents_count, int max_agents_count)
     clock_t end_generating_time = clock ();
 
     // save measurement to measurements structure
-    measurements->generator_measurements[i-min_agents_count][0] = i;
-    measurements->generator_measurements[i-min_agents_count][1] = (double)(end_generating_time - begin_generating_time) / CLOCKS_PER_SEC;
+    measurements->generator_measurements[0][i-min_agents_count] = i;
+    measurements->generator_measurements[1][i-min_agents_count] = (double)(end_generating_time - begin_generating_time) / CLOCKS_PER_SEC;
     // transfer generated structured to MyMatrix/MySparseMatrix object (by pointers -> in almost no time)
     if (type == GS_EIGEN || type == LU_EIGEN) {
       sm = new MySparseMatrix<double> (sg->get_cases_count (), sg->get_matrix (), sg->get_matrix_vector ());
@@ -120,8 +121,8 @@ get_measurements (types_t type, int min_agents_count, int max_agents_count)
         end_calculation_time = clock ();
         break;
     }
-    measurements->calculation_measurements[i-min_agents_count][0] = i;
-    measurements->calculation_measurements[i-min_agents_count][1] = (double)(end_calculation_time - begin_calculation_time) / CLOCKS_PER_SEC;
+    measurements->calculation_measurements[0][i-min_agents_count] = i;
+    measurements->calculation_measurements[1][i-min_agents_count] = (double)(end_calculation_time - begin_calculation_time) / CLOCKS_PER_SEC;
     if (type == GS_EIGEN || type == LU_EIGEN) {
       delete sg;
       delete sm;
@@ -137,18 +138,19 @@ get_measurements (types_t type, int min_agents_count, int max_agents_count)
 void
 perform_calculations ()
 {
-  measurement_t *gaussian = get_measurements (G, DEFAULT_MIN_AGENTS_COUNT, 5);
+  Approximation<double> *ap;
+  measurement_t *gaussian = get_measurements (G, DEFAULT_MIN_AGENTS_COUNT, 60);
+  ap = new Approximation<double>(gaussian->calculation_measurements[0], gaussian->calculation_measurements[1], 60-DEFAULT_MIN_AGENTS_COUNT + 1, 3);
+  double *results = ap->run ();
+
   for (int i = 0; i < 3; ++i)
   {
-    cout << "generator results:\n";
-    cout << gaussian->generator_measurements[i][0] << ": " << gaussian->generator_measurements[i][1] << endl;
+    cout << results[i] << " ";
   }
-  for (int i = 0; i < 3; ++i)
-  {
-    cout << "calculation results:\n";
-    cout << gaussian->calculation_measurements[i][0] << ": " << gaussian->calculation_measurements[i][1] << endl;
-  }
+  cout << endl;
+
   delete_measurements (gaussian, DEFAULT_MIN_AGENTS_COUNT, 5);
+  delete ap;
 }
 
 int main (int argc, char *argv[])
