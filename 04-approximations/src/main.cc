@@ -39,23 +39,18 @@ using namespace std;
 int main (int argc, char *argv[])
 {
   // select 446 for maximum kekk
-  SparseGenerator<double> sg = SparseGenerator<double>(10);
+  //Approximation *ap = new Approximation( );
+  SparseGenerator<double> sg = SparseGenerator<double>(5);
   MySparseMatrix<double> *sparsematrix = new MySparseMatrix<double>(sg.get_cases_count (), sg.get_matrix (), sg.get_matrix_vector ());
   
   cout << "starting operations.." << endl;
   clock_t begin_sparse_LU_time = clock ();
-  sparsematrix->sparse_LU ();
+  Eigen::VectorXd ret_vec = sparsematrix->sparse_LU ();
   clock_t end_sparse_LU_time = clock ();
   double  diff_sparse_LU_time  = (double)(end_sparse_LU_time - begin_sparse_LU_time) / CLOCKS_PER_SEC;
   cout << diff_sparse_LU_time << endl;
-  //vec = approx->perform_operations ();
-  */
-
-
-  
-
-  delete sparsematrix;
 
   cout << sg.get_cases_count () << endl;
+  delete sparsematrix;
   return EXIT_SUCCESS;
 }

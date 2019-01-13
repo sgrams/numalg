@@ -30,9 +30,9 @@ class MySparseMatrix {
       this->width  = width;
     }
 
-    Eigen::SparseVector<T>
+    Eigen::VectorXd
     sparse_LU () {
-      Eigen::SparseVector<T> ret_vec (this->width);
+      Eigen::SparseVector<T> ret_vec;
       Eigen::SparseLU<Eigen::SparseMatrix<T> > solver;
 
       // analyze matrix and solve the system of equations

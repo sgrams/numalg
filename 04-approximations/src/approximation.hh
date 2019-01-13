@@ -19,7 +19,7 @@ class Approximation
     int size;
 
   public:
-    Approximation (int *arguments, double *values, int polynomial, int size)
+    Approximation (int *arguments, T *values, int polynomial, int size)
     {
       this->arguments  = arguments;
       this->values     = values;
@@ -68,8 +68,7 @@ class Approximation
 
         for (int i = 0; i < size; ++i)
         {
-                          cout << "test_1 " << i << endl;
-
+          cout << "test_1 " << i << endl;
           for (int j = 0; j < polynomial; ++j)
           {
             cout << "test_2" << i << endl;
