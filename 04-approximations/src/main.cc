@@ -19,62 +19,142 @@
 #include "probability.hh"
 #include "approximation.hh"
 
-#define DEFAULT_MONTECARLO_ITERATIONS 10000 // 10k
-#define DEFAULT_MIN_VALIDATION_ITERATIONS 10
-#define DEFAULT_MAX_VALIDATION_ITERATIONS 10000 // 1mln
-#define DEFAULT_VALIDATION_ITERATIONS_STEP 10
-#define DEFAULT_JACOBI_ITERATIONS     1000 //  1k
-#define DEFAULT_JACOBI_EPSILON        0.00000000000001 // 10^-14
-#define DEFAULT_SEIDEL_ITERATIONS     1000 //  1k
-#define DEFAULT_SEIDEL_EPSILON        0.00000000000001 // 10^-14
-#define DEFUALT_MIN_ITERATIONS        1
-#define DEFAULT_MAX_ITERATIONS        1000
-#define DEFAULT_ITERATIONS_STEP       10
-#define DEFAULT_MIN_AGENT_COUNT       3
-#define DEFAULT_MAX_AGENTS_COUNT      20
-#define DEFAULT_VALIDATION_AGENTS_COUNT 5
-#define DEFAULT_ARGUMENTS_LENGTH      10
+#define DEFAULT_GS_EPSILON            0.0000000001 // 1e^-10
+#define DEFAULT_SPARSE_GS_EPSILON     0.0000000001 // 1e^-10
+#define DEFAULT_MIN_AGENTS_COUNT       3
+#define DEFAULT_MAX_AGENTS_COUNT      60
 
 using namespace std;
+typedef enum {
+  G,
+  G_SPARSE,
+  GS_1E10,
+  GS_EIGEN,
+  LU_EIGEN,
+} types_t;
+
+typedef struct {
+  double **calculation_measurements;
+  double **generator_measurements;
+} measurement_t;
+
+void
+delete_measurements (measurement_t *measurements, int min_agents_count, int max_agents_count)
+{
+  for (int i = 0; i < max_agents_count - min_agents_count + 1; ++i)
+  {
+    delete[] measurements->calculation_measurements[i];
+    delete[] measurements->generator_measurements[i];
+  }
+  delete[] measurements->calculation_measurements;
+  delete[] measurements->generator_measurements;
+  delete measurements;
+}
+
+measurement_t *
+get_measurements (types_t type, int min_agents_count, int max_agents_count)
+{
+  Generator *g;
+  MyMatrix<double> *m;
+
+  SparseGenerator<double> *sg;
+  MySparseMatrix<double> *sm;
+
+  measurement_t *measurements = new measurement_t;
+  measurements->calculation_measurements = new double*[max_agents_count - min_agents_count + 1];
+  measurements->generator_measurements   = new double*[max_agents_count - min_agents_count + 1];
+  
+  for (int i = min_agents_count; i <= max_agents_count; ++i)
+  {
+    // reserve some memory
+    measurements->generator_measurements[i-min_agents_count] = new double[2];
+    measurements->calculation_measurements[i-min_agents_count] = new double[2];
+
+    clock_t begin_generating_time = clock ();
+    if (type == GS_EIGEN || type == LU_EIGEN) {
+      sg = new SparseGenerator<double>(i);
+    } else {
+      g = new Generator (i);
+    }
+    clock_t end_generating_time = clock ();
+
+    // save measurement to measurements structure
+    measurements->generator_measurements[i-min_agents_count][0] = i;
+    measurements->generator_measurements[i-min_agents_count][1] = (double)(end_generating_time - begin_generating_time) / CLOCKS_PER_SEC;
+    // transfer generated structured to MyMatrix/MySparseMatrix object (by pointers -> in almost no time)
+    if (type == GS_EIGEN || type == LU_EIGEN) {
+      sm = new MySparseMatrix<double> (sg->get_cases_count (), sg->get_matrix (), sg->get_matrix_vector ());
+    } else {
+      m = new MyMatrix<double> (g->get_cases_count (), g->get_matrix (), g->get_matrix_vector ());
+    }
+
+    // begin calculations
+    clock_t begin_calculation_time;
+    clock_t end_calculation_time;
+    double *ret_vec;
+    switch (type)
+    {
+      case G:
+        begin_calculation_time = clock ();
+        ret_vec = m->gaussian ();
+        end_calculation_time = clock ();
+        break;
+      case G_SPARSE:
+        begin_calculation_time = clock ();
+        ret_vec = m->gaussian_improved ();
+        end_calculation_time = clock ();
+        break;
+      case GS_1E10:
+        begin_calculation_time = clock ();
+        ret_vec = m->gauss_seidel_approx (DEFAULT_GS_EPSILON);
+        end_calculation_time = clock ();
+        break;
+      case GS_EIGEN:
+        begin_calculation_time = clock ();
+        sm->sparse_GS_approx (DEFAULT_SPARSE_GS_EPSILON);
+        end_calculation_time = clock ();
+        break;
+      case LU_EIGEN:
+        begin_calculation_time = clock ();
+        sm->sparse_LU ();
+        end_calculation_time = clock ();
+        break;
+    }
+    measurements->calculation_measurements[i-min_agents_count][0] = i;
+    measurements->calculation_measurements[i-min_agents_count][1] = (double)(end_calculation_time - begin_calculation_time) / CLOCKS_PER_SEC;
+    if (type == GS_EIGEN || type == LU_EIGEN) {
+      delete sg;
+      delete sm;
+    } else {
+      delete[] ret_vec;
+      delete g;
+      delete m;
+    }
+  }
+  return measurements;
+}
+
+void
+perform_calculations ()
+{
+  measurement_t *gaussian = get_measurements (G, DEFAULT_MIN_AGENTS_COUNT, 5);
+  for (int i = 0; i < 3; ++i)
+  {
+    cout << "generator results:\n";
+    cout << gaussian->generator_measurements[i][0] << ": " << gaussian->generator_measurements[i][1] << endl;
+  }
+  for (int i = 0; i < 3; ++i)
+  {
+    cout << "calculation results:\n";
+    cout << gaussian->calculation_measurements[i][0] << ": " << gaussian->calculation_measurements[i][1] << endl;
+  }
+  delete_measurements (gaussian, DEFAULT_MIN_AGENTS_COUNT, 5);
+}
 
 int main (int argc, char *argv[])
 {
-  SparseGenerator<double> sg = SparseGenerator<double>(30);
-  MySparseMatrix<double> *sparsematrix = new MySparseMatrix<double>(sg.get_cases_count (), sg.get_matrix (), sg.get_matrix_vector ());
-  clock_t begin_sparse_LU_time = clock ();
-  Eigen::VectorXd ret_vec = sparsematrix->sparse_GS (1000);
-  clock_t end_sparse_LU_time = clock ();
-  double  diff_sparse_LU_time  = (double)(end_sparse_LU_time - begin_sparse_LU_time) / CLOCKS_PER_SEC;
-  cout << diff_sparse_LU_time << endl;
-
-  begin_sparse_LU_time = clock ();
-  Eigen::VectorXd LU_ret_vec = sparsematrix->sparse_LU ();
-  end_sparse_LU_time = clock ();
-  diff_sparse_LU_time  = (double)(end_sparse_LU_time - begin_sparse_LU_time) / CLOCKS_PER_SEC;
-  cout << diff_sparse_LU_time << endl;
-/*
-  Generator g = Generator(30);
-  MyMatrix<double> *matrix = new MyMatrix<double>(g.get_cases_count (), g.get_matrix (), g.get_matrix_vector ());
-  clock_t begin_gaussian_sparse_time = clock ();
-  matrix->gaussian_improved ();
-  clock_t end_gaussian_sparse_time = clock ();
-  double  diff_gaussian_sparse_time = (double)(end_gaussian_sparse_time - begin_gaussian_sparse_time) / CLOCKS_PER_SEC;
-  cout << diff_gaussian_sparse_time << endl;
-*/
-  double arguments[] = { 0.0,0.25,0.5,0.75,1.0 };
-  double values[] = { 1.0,1.284,1.6487,2.117,2.7183 };
-  Approximation<double> ap = Approximation<double>(arguments, values, 5, 2);
-  double *ap_vec = ap.run ();
-  
-  for (int i = 0; i < 5; ++i)
-  {
-    cout << ap_vec[i] << " ";
-  }
-  cout << endl;
-
-  cout << sg.get_cases_count () << endl;
-  delete sparsematrix;
-  delete[] ap_vec;
-  // delete matrix;
+  // Approximation<double> ap = Approximation<double>(arguments, values, 5, 2);
+  // double *ap_vec = ap.run ();
+  perform_calculations ();
   return EXIT_SUCCESS;
 }
