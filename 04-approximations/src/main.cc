@@ -42,10 +42,22 @@ typedef enum {
 typedef struct {
   double **calculation_measurements;
   double **generator_measurements;
+  int size;
 } measurement_t;
 
+typedef struct {
+  double *vector;
+  int size;
+} polynomial_t;
+
 void
-delete_measurements (measurement_t *measurements, int min_agents_count, int max_agents_count)
+delete_polynomial (polynomial_t *polynomial)
+{
+  delete[] polynomial->vector;
+}
+
+void
+delete_measurement (measurement_t *measurements)
 {
   for (int i = 0; i < 2; ++i)
   {
@@ -58,7 +70,7 @@ delete_measurements (measurement_t *measurements, int min_agents_count, int max_
 }
 
 measurement_t *
-get_measurements (types_t type, int min_agents_count, int max_agents_count)
+run_measurement (types_t type, int min_agents_count, int max_agents_count)
 {
   Generator *g;
   MyMatrix<double> *m;
@@ -70,6 +82,7 @@ get_measurements (types_t type, int min_agents_count, int max_agents_count)
   measurement_t *measurements = new measurement_t;
   measurements->calculation_measurements = new double*[2];
   measurements->generator_measurements   = new double*[2];
+  measurements->size = max_agents_count - min_agents_count + 1;
   for (int i = 0; i < 2; ++i)
   {
     measurements->generator_measurements[i] = new double[max_agents_count - min_agents_count + 1];
@@ -153,75 +166,53 @@ get_measurements (types_t type, int min_agents_count, int max_agents_count)
   return measurements;
 }
 
-void
-perform_calculations ()
+polynomial_t *
+find_polynomial (measurement_t *measure, int polynomial)
 {
-  int size = DEFAULT_MAX_AGENTS_COUNT - DEFAULT_MIN_AGENTS_COUNT + 1;
-  Approximation<double> *ap;
-  measurement_t *measure;
-  double *results;
+  polynomial_t *result = new polynomial_t;
 
-/*
-  // GAUSSIAN PARTIAL
-  measure = get_measurements (G, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
-  ap = new Approximation<double>(measure->calculation_measurements[0], measure->calculation_measurements[1], size, DEFAULT_G_POLYNOMIAL);
-  results = ap->run ();
+  Approximation<double> ap = Approximation<double>(measure->calculation_measurements[0], measure->calculation_measurements[1], measure->size, polynomial);
+  result->vector = ap.run ();
+  result->size   = polynomial + 1;
 
-  for (int i = 0; i < 3; ++i)
-  {
-    cout << results[i] << " ";
-  }
-  cout << endl;
-
-  delete_measurements (measure, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
-  delete[] results;
-  delete ap;
-*/
-
-  // GAUSSIAN PARTIAL FOR SPARSE MATRICES
-  measure = get_measurements (G_SPARSE, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
-  ap = new Approximation<double>(measure->calculation_measurements[0], measure->calculation_measurements[1], size, DEFAULT_G_SPARSE_POLYNOMIAL);
-  results = ap->run ();
-
-  for (int i = 0; i < DEFAULT_G_SPARSE_POLYNOMIAL + 1; ++i)
-  {
-    cout << results[i] << " * x^" << i;
-    if (i + 1 < DEFAULT_G_SPARSE_POLYNOMIAL + 1)
-      cout << " + ";
-  }
-  cout << endl;
-  delete_measurements (measure, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
-  delete[] results;
-  delete ap;
-
-  // GAUSSIAN PARTIAL FOR SPARSE MATRICES
-  measure = get_measurements (G_SPARSE, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
-  ap = new Approximation<double>(measure->calculation_measurements[0], measure->calculation_measurements[1], size, DEFAULT_G_SPARSE_POLYNOMIAL);
-  results = ap->run ();
-
-  for (int i = 0; i < DEFAULT_G_SPARSE_POLYNOMIAL + 1; ++i)
-  {
-    cout << results[i] << " * x^" << i;
-    if (i + 1 < DEFAULT_G_SPARSE_POLYNOMIAL + 1)
-      cout << " + ";
-  }
-  cout << endl;
-
-  for (int i = 0; i < size; ++i)
-  {
-    cout << "[" << measure->calculation_measurements[0][i] << "]: " << measure->calculation_measurements[1][i] << endl;
-  }
-
-  cout << endl;
-  delete_measurements (measure, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
-  delete[] results;
-  delete ap;
+  return result;
 }
 
 int main (int argc, char *argv[])
 {
-  // Approximation<double> ap = Approximation<double>(arguments, values, 5, 2);
-  // double *ap_vec = ap.run ();
-  perform_calculations ();
+  // Partial Gaussian
+  measurement_t *gaussian_measurement = run_measurement (G, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
+  polynomial_t *gaussian_polynomial   = find_polynomial (gaussian_measurement, DEFAULT_G_POLYNOMIAL);
+
+  delete_polynomial  (gaussian_polynomial);
+  delete_measurement (gaussian_measurement);
+
+  // Partial Gaussian for Sparse Matrices
+  measurement_t *gaussian_sparse_measurement = run_measurement (G, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
+  polynomial_t *gaussian_sparse_polynomial   = find_polynomial (gaussian_sparse_measurement, DEFAULT_G_SPARSE_POLYNOMIAL);
+
+  delete_polynomial  (gaussian_sparse_polynomial);
+  delete_measurement (gaussian_sparse_measurement);
+
+  // Gauss-Seidel with 1e-10 precision
+  measurement_t *gauss_seidel_measurement = run_measurement (GS_1E10, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
+  polynomial_t *gauss_seidel_polynomial   = find_polynomial (gauss_seidel_measurement, DEFAULT_GS_1E10_POLYNOMIAL);
+
+  delete_polynomial  (gauss_seidel_polynomial);
+  delete_measurement (gauss_seidel_measurement);
+
+  // Gauss-Seidel with 1e-10 precision (Sparse implementation)
+  measurement_t *gs_eigen_measurement = run_measurement (GS_1E10, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
+  polynomial_t *gs_eigen_polynomial   = find_polynomial (gs_eigen_measurement, DEFAULT_GS_1E10_POLYNOMIAL);
+
+  delete_polynomial  (gs_eigen_polynomial);
+  delete_measurement (gs_eigen_measurement);
+
+  // SparseLU from Eigen library
+  measurement_t *lu_eigen_measurement = run_measurement (LU_EIGEN, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
+  polynomial_t *lu_eigen_polynomial   = find_polynomial (lu_eigen_measurement, DEFAULT_LU_EIGEN_POLYNOMIAL);
+
+  delete_polynomial  (lu_eigen_polynomial);
+  delete_measurement (lu_eigen_measurement);
   return EXIT_SUCCESS;
 }
