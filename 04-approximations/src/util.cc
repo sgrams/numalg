@@ -34,6 +34,10 @@ Util {
         output_file << ",";
       }
     }
+    for (int j = polynomial->size - 9; j > 0; --j)
+    {
+      output_file << ",0";
+    }
     output_file << std::endl;
 
     for (int j = 0; j < polynomial->size; ++j)
@@ -42,6 +46,10 @@ Util {
       if (j != polynomial->size - 1) {
         output_file << ",";
       }
+    }
+    for (int j = polynomial->size - 9; j > 0; --j)
+    {
+      output_file << ",0";
     }
     output_file << std::endl;
     
@@ -70,9 +78,9 @@ Util {
       delete r;
     }
     
-    output_file << extrapolate_calculation (polynomial, 100000) << "," << extrapolate_generator (polynomial, 100000) << std::endl;
-    output_file << (double) fabs(MyMatrix<double>::vector_norm (calculation_approximations, gaussian_measurement->calculation_measurements[1], gaussian_measurement->size)) << std::endl;
-    output_file << (double) fabs(MyMatrix<double>::vector_norm (generator_approximations, gaussian_measurement->generator_measurements[1], gaussian_measurement->size)) << std::endl;
+    output_file << extrapolate_calculation (polynomial, 100000) << "," << extrapolate_generator (polynomial, 100000) << ",0,0,0,0,0,0,0"<<std::endl;
+    output_file << (double) fabs(MyMatrix<double>::vector_norm (calculation_approximations, gaussian_measurement->calculation_measurements[1], gaussian_measurement->size)) << ",0,0,0,0,0,0,0,0" << std::endl;
+    output_file << (double) fabs(MyMatrix<double>::vector_norm (generator_approximations, gaussian_measurement->generator_measurements[1], gaussian_measurement->size)) << ",0,0,0,0,0,0,0,0" << std::endl;
     output_file.close ();
   }
   
