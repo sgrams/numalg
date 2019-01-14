@@ -44,7 +44,7 @@
 
 #define DEFAULT_GS_1E10_FILEPATH        "gs_1e10.csv"
 #define DEFAULT_GS_1E10_PLUS_FILEPATH   "gs_1e10_plus.csv"
-#define DEFAULT_GS_1E10_MINUS_FILEPATH  "gs_1e10_plus.csv"
+#define DEFAULT_GS_1E10_MINUS_FILEPATH  "gs_1e10_minus.csv"
 
 
 #define DEFAULT_GS_EIGEN_FILEPATH       "gs_eigen.csv"
