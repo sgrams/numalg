@@ -1,0 +1,139 @@
+\documentclass[10pt]{article}
+ 
+\usepackage[margin=1.5cm]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage[font=scriptsize]{caption}
+\usepackage{subcaption} 
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage[section]{placeins}
+
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\newenvironment{theorem}[2][Twierdzenie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{question}[2][Pytanie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{hypothesis}[2][Hipoteza]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{lemma}[2][Lemat]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{exercise}[2][Ćwiczenie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{reflection}[2][Uwaga]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{proposition}[2][Założenie]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newenvironment{corollary}[2][Wniosek]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2.}]}{\end{trivlist}}
+\newcommand{\expnumber}[2]{{#1}\mathrm{e}{#2}}
+
+\begin{document}
+\title{Aproksymacja średniokwadratowa dyskretna}
+\author{Grams, Stanisław\\Jezierski, Maciej\\Korczakowski, Juliusz\\ MFI UG\\Algorytmy Numeryczne}
+
+\maketitle
+\section {Implementacja}
+Program \textit{„approximations”} został napisany w języku C++ a wyniki działania programu zapisywane są do poszczególnych plików \textit{*.csv}.
+\subsection{Zaimplementowane oraz użyte algorytmy}
+\begin{itemize}
+	\item (\textbf{G}): Algorytm Gaussa z częściowym wyborem elementu
+	\item (\textbf{G\_SPARSE}): Algorytm Gaussa z częściowym wyborem elementu i optymalizacją dla macierzy rzadkich 
+	\item (\textbf{GS\_1E10}): Algorytm Gaussa-Seidela (precyzja \num{1e-10}, struktura macierzy tablicowa)
+	\item (\textbf{GS\_EIGEN}): Algorytm Gaussa-Seidela z implementacją dla biblioteki $Eigen3$ (precyzja \num{1e-10})
+	\footnote{\url{http://komi.web.elte.hu/elektronikus/src/p184-koester.pdf}}
+	\item (\textbf{LU\_EIGEN}): Algorytm SparseLU pochodzący z biblioteki $Eigen3$
+	\footnote{\url{https://eigen.tuxfamily.org/dox/classEigen_1_1SparseLU.html}}
+\end{itemize}
+W celu obsługi metod \textbf{GS\_EIGEN} oraz \textbf{LU\_EIGEN} oparteych o bibliotekę $Eigen3$ należało w dodatku do\\
+zadania nr 3 doimplementować klasy \textit{SparseMatrix} oraz \textit{SparseGenerator} pozwalające na wydajne operacje na nowych typach.\\
+Testy zostały wykonane dla ilości agentów równej $N = 3 .. 60$.\\
+\textbf{Przypomnienie:} rząd macierzy można wyznaczyć ze wzoru $A = \frac{(N+1) * (N+2)}{2}$ 
+\section{Analiza wyników}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.40]{plots/01_calc_time_execution_all_methods.png}
+\includegraphics[scale=0.40]{plots/02_gen_time_execution_all_methods.png}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.45]{plots/03_calc_abs_error_sparse_methods.png}
+\includegraphics[scale=0.45]{plots/04_calc_abs_error_standard_methods.png}
+\includegraphics[scale=0.45]{plots/05_gen_abs_error_sparse_methods.png}
+\includegraphics[scale=0.45]{plots/06_gen_abs_error_standard_methods.png}
+\end{figure}
+
+\section{Aproksymacja}
+\subsection{Wyliczone współczynniki wielomianów}
+\begin{itemize}
+	\item Rozwiązywanie układu równań:
+	\begin{enumerate}
+		\item (\textbf{G}): $f(x) = \expnumber{2.08794}{-9} x^3 + (\expnumber{-8.95133}{-8}) x^2 + \expnumber{8.29139}{-5} x^1 - 0.00728348$
+		\item (\textbf{G\_SPARSE}): $f(x) = \expnumber{1.85075}{-7} x^2 + (\expnumber{-7.88855}{-5}) x^1 + 0.00772861$
+		\item (\textbf{GS\_1E10}): $f(x) = \expnumber{6.81554}{-6} x^2 + (-0.00319507) x^1 + 0.319738$
+		\item (\textbf{GS\_EIGEN}): $f(x) = \expnumber{1.29824}{-7} x^2 + (\expnumber{-3.45283}{-6}) x^1 + 0.000242044$
+		\item (\textbf{LU\_EIGEN}): $f(x) = 0.000129468 x^1 - 0.0128829$
+	\end{enumerate}
+	\item Generowanie macierzy:
+	\begin{enumerate}
+		\item (\textbf{G}): $f(x) = \expnumber{1.04135}{-12} x^3 + (\expnumber{2.25873}{-8}) x^2 + \expnumber{3.36946}{-6} x^1 - 0.000383727$
+		\item (\textbf{G\_SPARSE}): $f(x) = \expnumber{2.51315}{-8} x^2 + \expnumber{1.55354}{-6} x^1 - 0.00028272$
+		\item (\textbf{GS\_1E10}): $f(x) = \expnumber{2.83629}{-8} x^2 + (\expnumber{-2.47976}{-6}) x^1 + 0.000380382$
+		\item (\textbf{GS\_EIGEN}): $f(x) = \expnumber{3.71718}{-8} x^2 + (\expnumber{-2.87381}{-8}) x^1 + 0.000124703$
+		\item (\textbf{LU\_EIGEN}): $f(x) = \expnumber{6.80852}{-5} x^1 - 0.014481$
+	\end{enumerate}
+\end{itemize}
+\subsection{Poprawność wyników aproksymacji – błędy bezwzględne}
+\begin{center}
+		\begin{tabular}{|C{2.5cm}| C{5cm}|C{5cm}|}
+			\hline
+			\textbf{} & \textbf{Obliczanie} & \textbf{Generowanie} \\ \hline
+			{G} & 0.307364774043810629 & 0.009470184227150496  \\ \hline
+			{G\_SPARSE} & 0.043499922329411848 & 0.006761815415625999 \\  \hline
+			{GS\_1E10} & 1.792431959293490085 & 0.013518592473739061 \\  \hline
+			{GS\_EIGEN} & 0.020786725071974720 & 0.009817717627604215\\ \hline
+			{LU\_EIGEN} & 0.055710669049853154 & 0.081653183626553646\\ \hline
+		\end{tabular}
+\end{center}
+\begin{corollary}{1}
+	Uzyskane wyniki znajdują się w granicy tolerancji błędu dla funkcji aproksymującej opartej o aproksymacje średniokwadratową dyskretną.
+
+\end{corollary}
+
+\section{Ekstrapolacja}
+\subsection{Ekstrapolacja czasu obliczeń dla układu o rozmiarze rzędu $100 000$}
+\begin{center}
+	\begin{tabular}{|C{2.5cm}|C{5cm}|}
+		\hline
+		\textbf{} & \textbf{Wyliczony czas [s]}\\ \hline
+		{G} & 2087048.540863713948056102 \\ \hline
+		{G\_SPARSE} & 1842.864744169787172723 \\  \hline
+		{GS\_1E10} & 67836.170996347194886766 \\  \hline
+		{GS\_EIGEN} & 1297.890374618339365043 \\ \hline
+		{LU\_EIGEN} & 12.933910601128554063 \\ \hline
+	\end{tabular}
+\end{center}
+	
+\section{Próba obliczenia układu o rozmiarze rzędu $100 000$ i klasa SparseMatrix}
+	Jako najszybszą metodę uznaliśmy \textbf{LU\_EIGEN} i tą metodą wykonaliśmy test dla macierzy rzędu \num{100128} (\num{446} agentów).
+	Uzyskany czas wynosi \textbf{$63.291921000000002095$} i jest około 4.9x gorszy od aproksymowanego.
+	Metody oparte o bibliotekę $Eigen3$ odznaczają się również znacznie niższym zużyciem pamięci operacyjnej.
+
+\section{Podział pracy}
+\begin{center}
+	\begin{tabular}{| p{6cm} | p{6cm} | p{6cm} |}
+		\hline
+		\textbf{Stanisław Grams} & \textbf{Juliusz Korczakowski} & \textbf{Maciej Jezierski} \\ \hline
+		Implementacja algorytmu Gaussa-Seidela & Implementacja klasy Approximation & Przygotowanie sprawozdania  \\ \hline
+		Implementacja klasy SparseMatrix oraz SparseGenerator w oparciu o $Eigen3$ & Przygotowanie wykresów oraz tabel & Agregacja uzyskanych wyników \\ \hline
+		Przygotowanie prób i ich uruchomienie & Przygotowanie wykresów końcowych & Praca nad strukturą projektu\\ \hline
+	\end{tabular}
+\end{center}
+\end{document}
