@@ -33,12 +33,28 @@
 #define DEFAULT_100K_LU_EIGEN_CASE  446 // 447 * 448 / 2 == 100128
 
 #define DEFAULT_G_FILEPATH        "gauss.csv"
-#define DEFAULT_G_SPARSE_FILEPATH "gauss_sparse.csv"
-#define DEFAULT_GS_1E10_FILEPATH  "gs_1e10.csv"
-#define DEFAULT_GS_EIGEN_FILEPATH "gs_eigen.csv"
-#define DEFAULT_LU_EIGEN_FILEPATH "lu_eigen.csv"
-#define DEFAULT_100K_LU_EIGEN_FILEPATH "lu_eigen_100k.csv"
-#define DEFAULT_EXTRAPOLATION_FILEPATH "extrapolation.csv"
+#define DEFAULT_G_PLUS_FILEPATH   "gauss_plus.csv"
+#define DEFAULT_G_MINUS_FILEPATH  "gauss_minus.csv"
+
+
+#define DEFAULT_G_SPARSE_FILEPATH       "gauss_sparse.csv"
+#define DEFAULT_G_SPARSE_PLUS_FILEPATH  "gauss_sparse_plus.csv"
+#define DEFAULT_G_SPARSE_MINUS_FILEPATH "gauss_sparse_minus.csv"
+
+
+#define DEFAULT_GS_1E10_FILEPATH        "gs_1e10.csv"
+#define DEFAULT_GS_1E10_PLUS_FILEPATH   "gs_1e10_plus.csv"
+#define DEFAULT_GS_1E10_MINUS_FILEPATH  "gs_1e10_plus.csv"
+
+
+#define DEFAULT_GS_EIGEN_FILEPATH       "gs_eigen.csv"
+#define DEFAULT_GS_EIGEN_PLUS_FILEPATH  "gs_eigen_plus.csv"
+#define DEFAULT_GS_EIGEN_MINUS_FILEPATH "gs_eigen_minus.csv"
+
+#define DEFAULT_LU_EIGEN_FILEPATH       "lu_eigen.csv"
+#define DEFAULT_LU_EIGEN_PLUS_FILEPATH  "lu_eigen_plus.csv"
+
+#define DEFAULT_100K_LU_EIGEN_FILEPATH  "lu_eigen_100k.csv"
 
 using namespace std;
 
@@ -219,73 +235,101 @@ int main (int argc, char *argv[])
   // Partial Gaussian
   measurement_t *gaussian_measurement = run_measurement (G, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
   polynomial_t *gaussian_polynomial   = find_polynomial (gaussian_measurement, DEFAULT_G_POLYNOMIAL);
+  polynomial_t *gaussian_polynomial_plus   = find_polynomial (gaussian_measurement, DEFAULT_G_POLYNOMIAL+1);
+  polynomial_t *gaussian_polynomial_minus  = find_polynomial (gaussian_measurement, DEFAULT_G_POLYNOMIAL-1);
   
   calculation_approximations = approximation_function_calculation (gaussian_polynomial,
                                 gaussian_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (gaussian_polynomial,
                                 gaussian_measurement->generator_measurements[0], size);
   Util::save_findings_to_file (gaussian_polynomial, gaussian_measurement, calculation_approximations, generator_approximations, DEFAULT_G_FILEPATH);
+  Util::save_findings_to_file (gaussian_polynomial_plus, gaussian_measurement, calculation_approximations, generator_approximations, DEFAULT_G_PLUS_FILEPATH);
+  Util::save_findings_to_file (gaussian_polynomial_minus, gaussian_measurement, calculation_approximations, generator_approximations, DEFAULT_G_MINUS_FILEPATH);
+
   delete[] calculation_approximations;
   delete[] generator_approximations;
   delete_polynomial  (gaussian_polynomial);
+  delete_polynomial  (gaussian_polynomial_plus);
+  delete_polynomial  (gaussian_polynomial_minus);
   delete_measurement (gaussian_measurement);
 
 
   // Partial Gaussian for Sparse Matrices
   measurement_t *gaussian_sparse_measurement = run_measurement (G_SPARSE, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
   polynomial_t *gaussian_sparse_polynomial   = find_polynomial (gaussian_sparse_measurement, DEFAULT_G_SPARSE_POLYNOMIAL);
+  polynomial_t *gaussian_sparse_polynomial_plus  = find_polynomial (gaussian_sparse_measurement, DEFAULT_G_SPARSE_POLYNOMIAL+1);
+  polynomial_t *gaussian_sparse_polynomial_minus = find_polynomial (gaussian_sparse_measurement, DEFAULT_G_SPARSE_POLYNOMIAL-1);
   calculation_approximations = approximation_function_calculation (gaussian_sparse_polynomial,
                                 gaussian_sparse_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (gaussian_sparse_polynomial,
                                 gaussian_sparse_measurement->generator_measurements[0], size);
   Util::save_findings_to_file (gaussian_sparse_polynomial, gaussian_sparse_measurement, calculation_approximations, generator_approximations, DEFAULT_G_SPARSE_FILEPATH);
+  Util::save_findings_to_file (gaussian_sparse_polynomial_plus, gaussian_sparse_measurement, calculation_approximations, generator_approximations, DEFAULT_G_SPARSE_PLUS_FILEPATH);
+  Util::save_findings_to_file (gaussian_sparse_polynomial_minus, gaussian_sparse_measurement, calculation_approximations, generator_approximations, DEFAULT_G_SPARSE_MINUS_FILEPATH);
 
   delete[] calculation_approximations;
   delete[] generator_approximations;
   delete_polynomial  (gaussian_sparse_polynomial);
+  delete_polynomial  (gaussian_sparse_polynomial_plus);
+  delete_polynomial  (gaussian_sparse_polynomial_minus);
   delete_measurement (gaussian_sparse_measurement);
 
 
   // Gauss-Seidel with 1e-10 precision
   measurement_t *gauss_seidel_measurement = run_measurement (GS_1E10, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
   polynomial_t *gauss_seidel_polynomial   = find_polynomial (gauss_seidel_measurement, DEFAULT_GS_1E10_POLYNOMIAL);
+  polynomial_t *gauss_seidel_polynomial_plus   = find_polynomial (gauss_seidel_measurement, DEFAULT_GS_1E10_POLYNOMIAL+1);
+  polynomial_t *gauss_seidel_polynomial_minus  = find_polynomial (gauss_seidel_measurement, DEFAULT_GS_1E10_POLYNOMIAL-1);
   calculation_approximations = approximation_function_calculation (gauss_seidel_polynomial,
                                 gauss_seidel_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (gauss_seidel_polynomial,
                                 gauss_seidel_measurement->generator_measurements[0], size);
   Util::save_findings_to_file (gauss_seidel_polynomial, gauss_seidel_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_1E10_FILEPATH);
+  Util::save_findings_to_file (gauss_seidel_polynomial_plus, gauss_seidel_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_1E10_PLUS_FILEPATH);
+  Util::save_findings_to_file (gauss_seidel_polynomial_minus, gauss_seidel_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_1E10_MINUS_FILEPATH);
 
   delete[] calculation_approximations;
   delete[] generator_approximations;
   delete_polynomial  (gauss_seidel_polynomial);
+  delete_polynomial  (gauss_seidel_polynomial_plus);
+  delete_polynomial  (gauss_seidel_polynomial_minus);
   delete_measurement (gauss_seidel_measurement);
 
   // Gauss-Seidel with 1e-10 precision (Sparse implementation)
   measurement_t *gs_eigen_measurement = run_measurement (GS_EIGEN, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
   polynomial_t *gs_eigen_polynomial   = find_polynomial (gs_eigen_measurement, DEFAULT_GS_1E10_POLYNOMIAL);
+  polynomial_t *gs_eigen_polynomial_plus   = find_polynomial (gs_eigen_measurement, DEFAULT_GS_1E10_POLYNOMIAL+1);
+  polynomial_t *gs_eigen_polynomial_minus  = find_polynomial (gs_eigen_measurement, DEFAULT_GS_1E10_POLYNOMIAL+1);
   calculation_approximations = approximation_function_calculation (gs_eigen_polynomial,
                                 gs_eigen_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (gs_eigen_polynomial,
                                 gs_eigen_measurement->generator_measurements[0], size);
   Util::save_findings_to_file (gs_eigen_polynomial, gs_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_EIGEN_FILEPATH);
+  Util::save_findings_to_file (gs_eigen_polynomial_plus, gs_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_EIGEN_PLUS_FILEPATH);
+  Util::save_findings_to_file (gs_eigen_polynomial_minus, gs_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_EIGEN_MINUS_FILEPATH);
 
   delete[] calculation_approximations;
   delete[] generator_approximations;
   delete_polynomial  (gs_eigen_polynomial);
+  delete_polynomial  (gs_eigen_polynomial_plus);
+  delete_polynomial  (gs_eigen_polynomial_minus);
   delete_measurement (gs_eigen_measurement);
 
   // SparseLU from Eigen library
   measurement_t *lu_eigen_measurement = run_measurement (LU_EIGEN, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
   polynomial_t *lu_eigen_polynomial   = find_polynomial (lu_eigen_measurement, DEFAULT_LU_EIGEN_POLYNOMIAL);
+  polynomial_t *lu_eigen_polynomial_plus  = find_polynomial (lu_eigen_measurement, DEFAULT_LU_EIGEN_POLYNOMIAL);
   calculation_approximations = approximation_function_calculation (lu_eigen_polynomial,
                                 lu_eigen_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (lu_eigen_polynomial,
                                 lu_eigen_measurement->generator_measurements[0], size);
   Util::save_findings_to_file (lu_eigen_polynomial, lu_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_LU_EIGEN_FILEPATH);
+  Util::save_findings_to_file (lu_eigen_polynomial_plus, lu_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_LU_EIGEN_PLUS_FILEPATH);
 
   delete[] calculation_approximations;
   delete[] generator_approximations;
   delete_polynomial  (lu_eigen_polynomial);
+  delete_polynomial  (lu_eigen_polynomial_plus);
   delete_measurement (lu_eigen_measurement);
 
   // SparseLU 100k x 100k! (446 agents)
