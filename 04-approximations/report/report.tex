@@ -34,7 +34,7 @@
 \newcommand{\expnumber}[2]{{#1}\mathrm{e}{#2}}
 
 \begin{document}
-\title{Aproksymacja średniokwadratowa dyskretna}
+\[\title{Aproksymacja średniokwadratowa dyskretna}
 \author{Grams, Stanisław\\Jezierski, Maciej\\Korczakowski, Juliusz\\ MFI UG\\Algorytmy Numeryczne}
 
 \maketitle
@@ -134,7 +134,7 @@ Testy zostały wykonane dla ilości agentów równej $N = 3 .. 60$.\\
 	
 \section{Próba obliczenia układu o rozmiarze rzędu $100 000$ i klasa SparseMatrix}
 	Jako najszybszą metodę uznaliśmy \textbf{LU\_EIGEN} i tą metodą wykonaliśmy test dla macierzy rzędu \num{100128} (\num{446} agentów).
-	Uzyskany czas wynosi \textbf{$63.291921000000002095$} i jest około 4.9x gorszy od aproksymowanego.
+	Uzyskany czas wynosi \textbf{$58.611972999999998990$} i jest około 4.9x gorszy od aproksymowanego.
 	Metody oparte o bibliotekę $Eigen3$ odznaczają się również znacznie niższym zużyciem pamięci operacyjnej.
 
 \section{Podział pracy}
@@ -147,4 +147,5 @@ Testy zostały wykonane dla ilości agentów równej $N = 3 .. 60$.\\
 		Implementacja wywołania poszczególnych prób ($main.cc$) & Uruchomienie prób i testowanie & Praca nad strukturą projektu\\ \hline
 	\end{tabular}
 \end{center}
+\]
 \end{document}
