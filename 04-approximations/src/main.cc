@@ -299,7 +299,7 @@ int main (int argc, char *argv[])
   measurement_t *gs_eigen_measurement = run_measurement (GS_EIGEN, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
   polynomial_t *gs_eigen_polynomial   = find_polynomial (gs_eigen_measurement, DEFAULT_GS_1E10_POLYNOMIAL);
   polynomial_t *gs_eigen_polynomial_plus   = find_polynomial (gs_eigen_measurement, DEFAULT_GS_1E10_POLYNOMIAL+1);
-  polynomial_t *gs_eigen_polynomial_minus  = find_polynomial (gs_eigen_measurement, DEFAULT_GS_1E10_POLYNOMIAL+1);
+  polynomial_t *gs_eigen_polynomial_minus  = find_polynomial (gs_eigen_measurement, DEFAULT_GS_1E10_POLYNOMIAL-1);
   calculation_approximations = approximation_function_calculation (gs_eigen_polynomial,
                                 gs_eigen_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (gs_eigen_polynomial,
@@ -318,7 +318,7 @@ int main (int argc, char *argv[])
   // SparseLU from Eigen library
   measurement_t *lu_eigen_measurement = run_measurement (LU_EIGEN, DEFAULT_MIN_AGENTS_COUNT, DEFAULT_MAX_AGENTS_COUNT);
   polynomial_t *lu_eigen_polynomial   = find_polynomial (lu_eigen_measurement, DEFAULT_LU_EIGEN_POLYNOMIAL);
-  polynomial_t *lu_eigen_polynomial_plus  = find_polynomial (lu_eigen_measurement, DEFAULT_LU_EIGEN_POLYNOMIAL);
+  polynomial_t *lu_eigen_polynomial_plus  = find_polynomial (lu_eigen_measurement, DEFAULT_LU_EIGEN_POLYNOMIAL+1);
   calculation_approximations = approximation_function_calculation (lu_eigen_polynomial,
                                 lu_eigen_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (lu_eigen_polynomial,
