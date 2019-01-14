@@ -229,7 +229,12 @@ int main (int argc, char *argv[])
 {
   int size = DEFAULT_MAX_AGENTS_COUNT - DEFAULT_MIN_AGENTS_COUNT + 1;
   double *calculation_approximations;
+  double *calculation_approximations_plus;
+  double *calculation_approximations_minus;
+
   double *generator_approximations;
+  double *generator_approximations_plus;
+  double *generator_approximations_minus;
 
 
   // Partial Gaussian
@@ -240,14 +245,28 @@ int main (int argc, char *argv[])
   
   calculation_approximations = approximation_function_calculation (gaussian_polynomial,
                                 gaussian_measurement->calculation_measurements[0], size);
+  calculation_approximations_plus = approximation_function_calculation (gaussian_polynomial_plus,
+                                gaussian_measurement->calculation_measurements[0], size);
+  calculation_approximations_minus = approximation_function_calculation (gaussian_polynomial_minus,
+                                gaussian_measurement->calculation_measurements[0], size);
+
   generator_approximations   = approximation_function_generator (gaussian_polynomial,
                                 gaussian_measurement->generator_measurements[0], size);
+  generator_approximations_plus   = approximation_function_generator (gaussian_polynomial_plus,
+                                gaussian_measurement->generator_measurements[0], size);
+  generator_approximations_minus   = approximation_function_generator (gaussian_polynomial_minus,
+                                gaussian_measurement->generator_measurements[0], size);
+
   Util::save_findings_to_file (gaussian_polynomial, gaussian_measurement, calculation_approximations, generator_approximations, DEFAULT_G_FILEPATH);
-  Util::save_findings_to_file (gaussian_polynomial_plus, gaussian_measurement, calculation_approximations, generator_approximations, DEFAULT_G_PLUS_FILEPATH);
-  Util::save_findings_to_file (gaussian_polynomial_minus, gaussian_measurement, calculation_approximations, generator_approximations, DEFAULT_G_MINUS_FILEPATH);
+  Util::save_findings_to_file (gaussian_polynomial_plus, gaussian_measurement, calculation_approximations_plus, generator_approximations_plus, DEFAULT_G_PLUS_FILEPATH);
+  Util::save_findings_to_file (gaussian_polynomial_minus, gaussian_measurement, calculation_approximations_minus, generator_approximations_minus, DEFAULT_G_MINUS_FILEPATH);
 
   delete[] calculation_approximations;
+  delete[] calculation_approximations_plus;
+  delete[] calculation_approximations_minus;
   delete[] generator_approximations;
+  delete[] generator_approximations_plus;
+  delete[] generator_approximations_minus;
   delete_polynomial  (gaussian_polynomial);
   delete_polynomial  (gaussian_polynomial_plus);
   delete_polynomial  (gaussian_polynomial_minus);
@@ -261,14 +280,28 @@ int main (int argc, char *argv[])
   polynomial_t *gaussian_sparse_polynomial_minus = find_polynomial (gaussian_sparse_measurement, DEFAULT_G_SPARSE_POLYNOMIAL-1);
   calculation_approximations = approximation_function_calculation (gaussian_sparse_polynomial,
                                 gaussian_sparse_measurement->calculation_measurements[0], size);
+  calculation_approximations_plus = approximation_function_calculation (gaussian_sparse_polynomial_plus,
+                                gaussian_sparse_measurement->calculation_measurements[0], size);
+  calculation_approximations_minus = approximation_function_calculation (gaussian_sparse_polynomial_minus,
+                                gaussian_sparse_measurement->calculation_measurements[0], size);
+
   generator_approximations   = approximation_function_generator (gaussian_sparse_polynomial,
                                 gaussian_sparse_measurement->generator_measurements[0], size);
+  generator_approximations_plus   = approximation_function_generator (gaussian_sparse_polynomial_plus,
+                                gaussian_sparse_measurement->generator_measurements[0], size);
+  generator_approximations_minus   = approximation_function_generator (gaussian_sparse_polynomial_minus,
+                                gaussian_sparse_measurement->generator_measurements[0], size);
+
   Util::save_findings_to_file (gaussian_sparse_polynomial, gaussian_sparse_measurement, calculation_approximations, generator_approximations, DEFAULT_G_SPARSE_FILEPATH);
-  Util::save_findings_to_file (gaussian_sparse_polynomial_plus, gaussian_sparse_measurement, calculation_approximations, generator_approximations, DEFAULT_G_SPARSE_PLUS_FILEPATH);
-  Util::save_findings_to_file (gaussian_sparse_polynomial_minus, gaussian_sparse_measurement, calculation_approximations, generator_approximations, DEFAULT_G_SPARSE_MINUS_FILEPATH);
+  Util::save_findings_to_file (gaussian_sparse_polynomial_plus, gaussian_sparse_measurement, calculation_approximations_plus, generator_approximations_plus, DEFAULT_G_SPARSE_PLUS_FILEPATH);
+  Util::save_findings_to_file (gaussian_sparse_polynomial_minus, gaussian_sparse_measurement, calculation_approximations_minus, generator_approximations_minus, DEFAULT_G_SPARSE_MINUS_FILEPATH);
 
   delete[] calculation_approximations;
+  delete[] calculation_approximations_plus;
+  delete[] calculation_approximations_minus;
   delete[] generator_approximations;
+  delete[] generator_approximations_plus;
+  delete[] generator_approximations_minus;
   delete_polynomial  (gaussian_sparse_polynomial);
   delete_polynomial  (gaussian_sparse_polynomial_plus);
   delete_polynomial  (gaussian_sparse_polynomial_minus);
@@ -280,16 +313,30 @@ int main (int argc, char *argv[])
   polynomial_t *gauss_seidel_polynomial   = find_polynomial (gauss_seidel_measurement, DEFAULT_GS_1E10_POLYNOMIAL);
   polynomial_t *gauss_seidel_polynomial_plus   = find_polynomial (gauss_seidel_measurement, DEFAULT_GS_1E10_POLYNOMIAL+1);
   polynomial_t *gauss_seidel_polynomial_minus  = find_polynomial (gauss_seidel_measurement, DEFAULT_GS_1E10_POLYNOMIAL-1);
+  
   calculation_approximations = approximation_function_calculation (gauss_seidel_polynomial,
                                 gauss_seidel_measurement->calculation_measurements[0], size);
+  calculation_approximations_plus = approximation_function_calculation (gauss_seidel_polynomial_plus,
+                                gauss_seidel_measurement->calculation_measurements[0], size);
+  calculation_approximations_minus = approximation_function_calculation (gauss_seidel_polynomial_minus,
+                                gauss_seidel_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (gauss_seidel_polynomial,
+                                gauss_seidel_measurement->generator_measurements[0], size);                        
+  generator_approximations_plus   = approximation_function_generator (gauss_seidel_polynomial_plus,
                                 gauss_seidel_measurement->generator_measurements[0], size);
+  generator_approximations_minus   = approximation_function_generator (gauss_seidel_polynomial_minus,
+                                gauss_seidel_measurement->generator_measurements[0], size);
+
   Util::save_findings_to_file (gauss_seidel_polynomial, gauss_seidel_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_1E10_FILEPATH);
-  Util::save_findings_to_file (gauss_seidel_polynomial_plus, gauss_seidel_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_1E10_PLUS_FILEPATH);
-  Util::save_findings_to_file (gauss_seidel_polynomial_minus, gauss_seidel_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_1E10_MINUS_FILEPATH);
+  Util::save_findings_to_file (gauss_seidel_polynomial_plus, gauss_seidel_measurement, calculation_approximations_plus, generator_approximations_plus, DEFAULT_GS_1E10_PLUS_FILEPATH);
+  Util::save_findings_to_file (gauss_seidel_polynomial_minus, gauss_seidel_measurement, calculation_approximations_minus, generator_approximations_minus, DEFAULT_GS_1E10_MINUS_FILEPATH);
 
   delete[] calculation_approximations;
+  delete[] calculation_approximations_plus;
+  delete[] calculation_approximations_minus;
   delete[] generator_approximations;
+  delete[] generator_approximations_plus;
+  delete[] generator_approximations_minus;
   delete_polynomial  (gauss_seidel_polynomial);
   delete_polynomial  (gauss_seidel_polynomial_plus);
   delete_polynomial  (gauss_seidel_polynomial_minus);
@@ -300,16 +347,32 @@ int main (int argc, char *argv[])
   polynomial_t *gs_eigen_polynomial   = find_polynomial (gs_eigen_measurement, DEFAULT_GS_1E10_POLYNOMIAL);
   polynomial_t *gs_eigen_polynomial_plus   = find_polynomial (gs_eigen_measurement, DEFAULT_GS_1E10_POLYNOMIAL+1);
   polynomial_t *gs_eigen_polynomial_minus  = find_polynomial (gs_eigen_measurement, DEFAULT_GS_1E10_POLYNOMIAL-1);
+
   calculation_approximations = approximation_function_calculation (gs_eigen_polynomial,
                                 gs_eigen_measurement->calculation_measurements[0], size);
+  calculation_approximations_plus = approximation_function_calculation (gs_eigen_polynomial_plus,
+                                gs_eigen_measurement->calculation_measurements[0], size);
+  calculation_approximations_minus = approximation_function_calculation (gs_eigen_polynomial_minus,
+                                gs_eigen_measurement->calculation_measurements[0], size);
+
   generator_approximations   = approximation_function_generator (gs_eigen_polynomial,
                                 gs_eigen_measurement->generator_measurements[0], size);
+  generator_approximations_plus   = approximation_function_generator (gs_eigen_polynomial_plus,
+                                gs_eigen_measurement->generator_measurements[0], size);
+  generator_approximations_minus  = approximation_function_generator (gs_eigen_polynomial_minus,
+                                gs_eigen_measurement->generator_measurements[0], size);
+
   Util::save_findings_to_file (gs_eigen_polynomial, gs_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_EIGEN_FILEPATH);
-  Util::save_findings_to_file (gs_eigen_polynomial_plus, gs_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_EIGEN_PLUS_FILEPATH);
-  Util::save_findings_to_file (gs_eigen_polynomial_minus, gs_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_GS_EIGEN_MINUS_FILEPATH);
+  Util::save_findings_to_file (gs_eigen_polynomial_plus, gs_eigen_measurement, calculation_approximations_plus, generator_approximations_plus, DEFAULT_GS_EIGEN_PLUS_FILEPATH);
+  Util::save_findings_to_file (gs_eigen_polynomial_minus, gs_eigen_measurement, calculation_approximations_minus, generator_approximations_minus, DEFAULT_GS_EIGEN_MINUS_FILEPATH);
+
 
   delete[] calculation_approximations;
+  delete[] calculation_approximations_plus;
+  delete[] calculation_approximations_minus;
   delete[] generator_approximations;
+  delete[] generator_approximations_plus;
+  delete[] generator_approximations_minus;
   delete_polynomial  (gs_eigen_polynomial);
   delete_polynomial  (gs_eigen_polynomial_plus);
   delete_polynomial  (gs_eigen_polynomial_minus);
@@ -321,13 +384,20 @@ int main (int argc, char *argv[])
   polynomial_t *lu_eigen_polynomial_plus  = find_polynomial (lu_eigen_measurement, DEFAULT_LU_EIGEN_POLYNOMIAL+1);
   calculation_approximations = approximation_function_calculation (lu_eigen_polynomial,
                                 lu_eigen_measurement->calculation_measurements[0], size);
+  calculation_approximations_plus = approximation_function_calculation (lu_eigen_polynomial_plus,
+                                lu_eigen_measurement->calculation_measurements[0], size);
   generator_approximations   = approximation_function_generator (lu_eigen_polynomial,
                                 lu_eigen_measurement->generator_measurements[0], size);
+  generator_approximations_plus   = approximation_function_generator (lu_eigen_polynomial,
+                                lu_eigen_measurement->generator_measurements[0], size);
   Util::save_findings_to_file (lu_eigen_polynomial, lu_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_LU_EIGEN_FILEPATH);
-  Util::save_findings_to_file (lu_eigen_polynomial_plus, lu_eigen_measurement, calculation_approximations, generator_approximations, DEFAULT_LU_EIGEN_PLUS_FILEPATH);
+  Util::save_findings_to_file (lu_eigen_polynomial_plus, lu_eigen_measurement, calculation_approximations_plus, generator_approximations_plus, DEFAULT_LU_EIGEN_PLUS_FILEPATH);
+
 
   delete[] calculation_approximations;
+  delete[] calculation_approximations_plus;
   delete[] generator_approximations;
+  delete[] generator_approximations_plus;
   delete_polynomial  (lu_eigen_polynomial);
   delete_polynomial  (lu_eigen_polynomial_plus);
   delete_measurement (lu_eigen_measurement);
@@ -342,6 +412,7 @@ int main (int argc, char *argv[])
                                 lu_eigen_100k_measurement->generator_measurements[0], 1);
   Util::save_findings_to_file (lu_eigen_100k_polynomial, lu_eigen_100k_measurement,
                               calculation_approximations, generator_approximations, DEFAULT_100K_LU_EIGEN_FILEPATH);
+
 
   delete[] calculation_approximations;
   delete[] generator_approximations;
