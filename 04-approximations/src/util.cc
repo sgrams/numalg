@@ -34,7 +34,7 @@ Util {
         output_file << ",";
       }
     }
-    for (int j = polynomial->size - 9; j > 0; --j)
+    for (int j = 9 - polynomial->size; j > 0; --j)
     {
       output_file << ",0";
     }
@@ -47,7 +47,7 @@ Util {
         output_file << ",";
       }
     }
-    for (int j = polynomial->size - 9; j > 0; --j)
+    for (int j = 9 - polynomial->size; j > 0; --j)
     {
       output_file << ",0";
     }
