@@ -4,6 +4,7 @@ output_precision = 34;
 load ../../csv/errors.csv;
 load ../../csv/iterative.csv
 load ../../csv/precisions.csv
+load ../../csv/montecarlo.csv
 
 ### algorithms abs errors all rows
 agent_count = errors(:,1);
@@ -61,10 +62,10 @@ legend ("Gauss", "Gauss Improved", "Gauss-Seidel Approx", "Gauss-Seidel Iterativ
 print -dpng ../../report/plots/02_time_execution_all_methods.png;
 
 ### abs iterative jacobi, seidel
-iterations = iterative(:,2);
-abs_results = (iterative(:,3) - iterative(:,4));
+iterations = iterative(1701:1800,2);
+abs_results = (iterative(1701:1800,3) - iterative(1701:1800,4));
 plot(iterations, abs_results, "linewidth", 5, "k");
-xlim([1 1000]);
+xlim([200 1000]);
 ylim([-1 1]);
 ylabel ("error");
 xlabel ("iterations");
@@ -120,3 +121,15 @@ title  ("Absolute difference of PG and PGS");
 legend ("Absolute difference of PG and PGS", "location","south");
 
 print -dpng ../../report/plots/07_abs_gauss_and_gauss_optimized_all_rows.png;
+
+### montecarlo iterations for N = 5
+iteration_count = montecarlo(:,1);
+abs_results = montecarlo(:,2)
+plot(iteration_count, abs_results, "linewidth", 2, "b");
+xlim([10 10000]);
+ylabel ("error");
+xlabel ("iterations count");
+title  ("Monte Carlo iterations for N=5, abs error to PGS method");
+legend ("N=5, abs error to PGS method", "location","north");
+
+print -dpng ../../report/plots/08_abs_gauss_and_montecarlo_iterations_rows.png;
