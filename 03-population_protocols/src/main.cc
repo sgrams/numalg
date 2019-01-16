@@ -308,7 +308,7 @@ run_montecarlo_validation ()
 
     result->iterations = i;
     result->agent_count  = DEFAULT_VALIDATION_AGENTS_COUNT;
-    result->abs_err_gi   = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_gaussian_improved, size);
+    result->abs_err_gi   = matrix->count_error (monte_carlo->get_result_vector (), ret_vec_gaussian_improved, size);
     result->time_gi   = diff_gaussian_improved_time;
     result->time_mc   = diff_montecarlo_time;
 
