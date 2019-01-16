@@ -333,21 +333,21 @@ class MyMatrix {
       }
 
       double result = 0.0;
-
       do {
         for (int i = 0; i < this->width; ++i)
         {
-          ret_vec[i] = b[i];
+          T delta = 0;
           for (int j = 0; j < i; ++j)
           {
-            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
+            delta += (A[i][j] * ret_vec[j]);
           }
           for (int j = i+1; j < this->width; ++j)
           {
-            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
+            delta += (A[i][j] * tmp_vec[j]);
           }
-          ret_vec[i] = ret_vec[i] / A[i][i];
+          ret_vec[i] = (b[i] - delta) / A[i][i];
         }
+
         result = vector_norm (ret_vec, tmp_vec, this->width);
         copy_vector (tmp_vec, ret_vec, this->width);
       } while (result > eps);
@@ -364,6 +364,7 @@ class MyMatrix {
 
       T  *ret_vec = new T[this->width];
       T  *tmp_vec = new T[this->width];
+      T   tmp     = 0;
 
       for (int i = 0; i < this->width; ++i)
       {
@@ -376,14 +377,14 @@ class MyMatrix {
       do {
         for (int i = 0; i < this->width; ++i)
         {
-          ret_vec[i] = b[i];
+          tmp = 0;
           for (int j = 0; j < this->width; ++j)
           {
             if (i != j) {
-              ret_vec[i] -= tmp_vec[j] * A[i][j];
+              tmp += ret_vec[j] * A[i][j];
             }            
           }
-          ret_vec[i] /= A[i][i];
+          ret_vec[i] = (b[i] - tmp) / A[i][i];
         }
 
         result = vector_norm (ret_vec, tmp_vec, this->width);
@@ -397,16 +398,15 @@ class MyMatrix {
     T
     *jacobi_iterative (int iterations)
     {
+      T tmp;
       T **A = this->matrix;
       T  *b = this->vector;
 
       T  *ret_vec = new T[this->width];
-      T  *tmp_vec = new T[this->width];
 
       for (int i = 0; i < this->width; ++i)
       {
         ret_vec[i] = 0;
-        tmp_vec[i] = 0;
       }
 
       int iterator = iterations;
@@ -414,21 +414,19 @@ class MyMatrix {
       do {
         for (int i = 0; i < this->width; ++i)
         {
-          ret_vec[i] = b[i];
+          tmp = 0;
           for (int j = 0; j < this->width; ++j)
           {
             if (i != j) {
-              ret_vec[i] -= tmp_vec[j] * A[i][j];
+              tmp += ret_vec[j] * A[i][j];
             }            
           }
-          ret_vec[i] /= A[i][i];
+          ret_vec[i] = (b[i] - tmp) / A[i][i];
         }
 
         iterator--;
-        copy_vector (tmp_vec, ret_vec, this->width);
       } while (iterator > 0);
 
-      delete[] tmp_vec;
       return ret_vec;
     }
 
@@ -448,27 +446,56 @@ class MyMatrix {
       }
 
       int iterator = iterations;
-
+      // copy_vector (tmp_vec, b, this->width);
       do {
         for (int i = 0; i < this->width; ++i)
         {
-          ret_vec[i] = b[i];
+          T delta = 0;
           for (int j = 0; j < i; ++j)
           {
-            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
+            delta += (A[i][j] * ret_vec[j]);
           }
           for (int j = i+1; j < this->width; ++j)
           {
-            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
+            delta += (A[i][j] * tmp_vec[j]);
           }
-          ret_vec[i] = ret_vec[i] / A[i][i];
+          ret_vec[i] = (b[i] - delta) / A[i][i];
         }
-        copy_vector (tmp_vec, ret_vec, this->width);
+
         iterator--;
+        copy_vector (tmp_vec, ret_vec, this->width);
       } while (iterator > 0);
 
       delete[] tmp_vec;
       return ret_vec;
+    }
+
+    T
+    count_error (T* exemplary, T* after_test, int width)
+    {
+      T error_counter = 0;
+      T def = 0;
+      for (int i = 0; i < width; ++i)
+      {
+        def = exemplary[i] - after_test[i];
+        error_counter = error_counter + def;
+      }
+      error_counter = error_counter / width;
+      return error_counter;
+    }
+
+    T
+    count_error (std::vector<T> exemplary, T* after_test, int width)
+    {
+      T error_counter = 0;
+      T def = 0;
+      for (int i = 0; i < width; ++i)
+      {
+        def = exemplary[i] - after_test[i];
+        error_counter = error_counter + def;
+      }
+      error_counter = error_counter / width;
+      return error_counter;
     }
 
     T
