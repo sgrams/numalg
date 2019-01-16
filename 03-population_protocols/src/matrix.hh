@@ -324,6 +324,9 @@ class MyMatrix {
 
       T  *ret_vec = new T[this->width];
       T  *tmp_vec = new T[this->width];
+      T  *pre_vec = new T[this->width];
+
+      T   tmp;
 
       for (int i = 0; i < this->width; ++i)
       {
@@ -336,22 +339,25 @@ class MyMatrix {
       do {
         for (int i = 0; i < this->width; ++i)
         {
-          ret_vec[i] = b[i];
+          copy_vector (tmp_vec, ret_vec, this->width);
+          tmp = 0;
           for (int j = 0; j < i; ++j)
           {
-            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
+            tmp += (A[i][j] * ret_vec[j]);
           }
           for (int j = i+1; j < this->width; ++j)
           {
-            ret_vec[i] = ret_vec[i] - (A[i][j] * ret_vec[j]);
+            tmp += (A[i][j] * tmp_vec[j]);
           }
-          ret_vec[i] = ret_vec[i] / A[i][i];
+          ret_vec[i] = (b[i] - tmp) / A[i][i];
         }
-        result = vector_norm (ret_vec, tmp_vec, this->width);
-        copy_vector (tmp_vec, ret_vec, this->width);
+
+        result = vector_norm (ret_vec, pre_vec, this->width);
+        copy_vector (pre_vec, ret_vec, this->width);
       } while (result > eps);
 
       delete[] tmp_vec;
+      delete[] pre_vec;
       return ret_vec;
     }
 
@@ -435,8 +441,10 @@ class MyMatrix {
       T **A = this->matrix;
       T  *b = this->vector;
 
-      T  *ret_vec = new T[this->width];
-      T  *tmp_vec = new T[this->width];
+      T  ret_vec[this->width];
+      T  tmp_vec[this->width];
+
+      T *out_vec = new T[this->width];
 
       T   tmp;
 
@@ -451,8 +459,8 @@ class MyMatrix {
       do {
         for (int i = 0; i < this->width; ++i)
         {
-          copy_vector (tmp_vec, ret_vec, this->width);
           tmp = 0;
+          tmp_vec = ret_vec;
           for (int j = 0; j < i; ++j)
           {
             tmp += (A[i][j] * ret_vec[j]);
@@ -466,8 +474,8 @@ class MyMatrix {
         iterator--;
       } while (iterator > 0);
 
-      delete[] tmp_vec;
-      return ret_vec;
+      copy_vector (out_vec, ret_vec);
+      return out_vec;
     }
 
     T

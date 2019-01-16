@@ -65,7 +65,7 @@ print -dpng ../../report/plots/02_time_execution_all_methods.png;
 iterations = iterative(1701:1800,2);
 abs_results = (iterative(1701:1800,3) - iterative(1701:1800,4));
 plot(iterations, abs_results, "linewidth", 5, "k");
-xlim([3 1000]);
+xlim([200 1000]);
 ylim([-1 1]);
 ylabel ("error");
 xlabel ("iterations");
@@ -89,6 +89,7 @@ print -dpng ../../report/plots/04_time_iterative_methods_all_rows.png;
 epsi = precisions(273:288,2);
 abs_results = (precisions(273:288,3) - precisions(273:288,4));
 semilogx(epsi, abs_results, "linewidth", 5);
+xlim([0.00000000000001 0.0001])
 ylim([-1 1])
 ylabel ("error");
 xlabel ("precision");
