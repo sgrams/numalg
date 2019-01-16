@@ -9,8 +9,12 @@
 #ifndef PROTOCOLS_MATRIX_HH
 #define PROTOCOLS_MATRIX_HH
 #include <iostream>
+#include <ctime>
+#include <random>
 #include <algorithm>
-#include <cmath>
+#include <vector>
+#include "protocol.hh"
+
 using namespace std;
 
 template <class T>
@@ -156,8 +160,6 @@ class MyMatrix {
       return;
     }
 
-   
-
     void
     delete_vector (T *vector)
     {
@@ -172,7 +174,7 @@ class MyMatrix {
       double helper;
       for (int i = 0; i < width; ++i)
       {
-        helper  = abs(ret_vec[i] - tmp_vec[i]);
+        helper  = fabs(ret_vec[i] - tmp_vec[i]);
         result += (double)helper * (double)helper;
       }
       return (double)sqrt (result);
@@ -226,14 +228,14 @@ class MyMatrix {
         int index   = -1;
         for (int j = i; j <= m; ++j)
         {
-          if (abs (A[pivot[j]][i]) > magnitude ) {
-            magnitude = abs (A[pivot[j]][i]);
+          if (fabs (A[pivot[j]][i]) > magnitude ) {
+            magnitude = fabs (A[pivot[j]][i]);
             index = j;
           }
         }
 
         if (index != -1) {
-          std::swap (pivot[i], pivot[index]);
+          swap (pivot[i], pivot[index]);
         }
 
         for (int j = i + 1; j < n; ++j)
@@ -280,14 +282,14 @@ class MyMatrix {
         int index   = -1;
         for (int j = i; j <= m; ++j)
         {
-          if (abs (A[pivot[j]][i]) > magnitude ) {
-            magnitude = std::abs (A[pivot[j]][i]);
+          if (fabs (A[pivot[j]][i]) > magnitude ) {
+            magnitude = fabs (A[pivot[j]][i]);
             index = j;
           }
         }
 
         if (index != -1) {
-          std::swap (pivot[i], pivot[index]);
+          swap (pivot[i], pivot[index]);
         }
 
         for (int j = i + 1; j < n; ++j)
@@ -342,7 +344,7 @@ class MyMatrix {
           }
           for (int j = i+1; j < this->width; ++j)
           {
-            ret_vec[i] = ret_vec[i] - (A[i][j] * ret_vec[j]);
+            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
           }
           ret_vec[i] = ret_vec[i] / A[i][i];
         }
@@ -457,7 +459,7 @@ class MyMatrix {
           }
           for (int j = i+1; j < this->width; ++j)
           {
-            ret_vec[i] = ret_vec[i] - (A[i][j] * ret_vec[j]);
+            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
           }
           ret_vec[i] = ret_vec[i] / A[i][i];
         }
@@ -480,6 +482,38 @@ class MyMatrix {
         def = exemplary[i] - after_test[i];
         val = abs (def);
         error_counter = error_counter + val;
+      }
+      error_counter = error_counter / width;
+      return error_counter;
+    }
+
+    T
+    count_abs_error (std::vector<T> exemplary, T* after_test, int width)
+    {
+      T error_counter = 0;
+      T val = 0;
+      T def = 0;
+      for (int i = 0; i < width; ++i)
+      {
+        def = exemplary[i] - after_test[i];
+        val = abs (def);
+        error_counter = error_counter + val;
+      }
+      error_counter = error_counter / width;
+      return error_counter;
+    }
+
+    T
+    count_rel_error (std::vector<T> exemplary, T* after_test, int width)
+    {
+      T error_counter = 0;
+      T val = 0;
+      T def = 0;
+      for (int i = 0; i < width; ++i)
+      {
+        def = exemplary[i] - after_test[i];
+        val = abs (def);
+        error_counter = error_counter + (val / abs (exemplary[i]));
       }
       error_counter = error_counter / width;
       return error_counter;
