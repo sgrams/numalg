@@ -65,12 +65,12 @@ print -dpng ../../report/plots/02_time_execution_all_methods.png;
 iterations = iterative(1701:1800,2);
 abs_results = (iterative(1701:1800,3) - iterative(1701:1800,4));
 plot(iterations, abs_results, "linewidth", 5, "k");
-xlim([200 1000]);
-ylim([-1 1]);
+xlim([3 1000]);
+%ylim([-1 1]);
 ylabel ("error");
 xlabel ("iterations");
 title ("Absolute difference of Gauss-Seidel and Jacobi iterative");
-legend ("Gauss-Seidel and Jacobi diff", "location", "northwest");
+legend ("Gauss-Seidel and Jacobi diff", "location", "northeast");
 
 print -dpng ../../report/plots/03_abs_iterative_methods_all_rows.png;
 
