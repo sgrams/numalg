@@ -338,13 +338,13 @@ class MyMatrix {
           T delta = 0;
           for (int j = 0; j < i; ++j)
           {
-            delta += (A[i][j] * ret_vec[j]);
+            delta -= (A[i][j] * ret_vec[j]);
           }
           for (int j = i+1; j < this->width; ++j)
           {
-            delta += (A[i][j] * tmp_vec[j]);
+            delta -= (A[i][j] * tmp_vec[j]);
           }
-          ret_vec[i] = (b[i] - delta) / A[i][i];
+          ret_vec[i] = (b[i] + delta) / A[i][i];
         }
 
         result = vector_norm (ret_vec, tmp_vec, this->width);
@@ -363,7 +363,6 @@ class MyMatrix {
 
       T  *ret_vec = new T[this->width];
       T  *tmp_vec = new T[this->width];
-      T   tmp     = 0;
 
       for (int i = 0; i < this->width; ++i)
       {
@@ -376,14 +375,14 @@ class MyMatrix {
       do {
         for (int i = 0; i < this->width; ++i)
         {
-          tmp = 0;
+          ret_vec[i] = b[i];
           for (int j = 0; j < this->width; ++j)
           {
             if (i != j) {
-              tmp += ret_vec[j] * A[i][j];
+              ret_vec[i] -= tmp_vec[j] * A[i][j];
             }            
           }
-          ret_vec[i] = (b[i] - tmp) / A[i][i];
+          ret_vec[i] /= A[i][i];
         }
 
         result = vector_norm (ret_vec, tmp_vec, this->width);
@@ -397,11 +396,11 @@ class MyMatrix {
     T
     *jacobi_iterative (int iterations)
     {
-      T tmp;
       T **A = this->matrix;
       T  *b = this->vector;
 
       T  *ret_vec = new T[this->width];
+      T  *tmp_vec = new T[this->width];
 
       for (int i = 0; i < this->width; ++i)
       {
@@ -413,17 +412,18 @@ class MyMatrix {
       do {
         for (int i = 0; i < this->width; ++i)
         {
-          tmp = 0;
+          ret_vec[i] = b[i];
           for (int j = 0; j < this->width; ++j)
           {
             if (i != j) {
-              tmp += ret_vec[j] * A[i][j];
+              ret_vec[i] -= tmp_vec[j] * A[i][j];
             }            
           }
-          ret_vec[i] = (b[i] - tmp) / A[i][i];
+          ret_vec[i] /= A[i][i];
         }
 
         iterator--;
+        copy_vector (tmp_vec, ret_vec, this->width);
       } while (iterator > 0);
 
       return ret_vec;
@@ -441,31 +441,29 @@ class MyMatrix {
       for (int i = 0; i < this->width; ++i)
       {
         ret_vec[i] = 0;
-        tmp_vec[i] = 0;
       }
 
       int iterator = iterations;
-      // copy_vector (tmp_vec, b, this->width);
+
       do {
         for (int i = 0; i < this->width; ++i)
         {
-          T delta = 0;
+          ret_vec[i] = b[i];
           for (int j = 0; j < i; ++j)
           {
-            delta += (A[i][j] * ret_vec[j]);
+            ret_vec[i] -= ret_vec[j] * A[i][j];
           }
           for (int j = i+1; j < this->width; ++j)
           {
-            delta += (A[i][j] * tmp_vec[j]);
+            ret_vec[i] -= tmp_vec[j] * A[i][j];
           }
-          ret_vec[i] = (b[i] - delta) / A[i][i];
+          ret_vec[i] /= A[i][i];
         }
 
         iterator--;
         copy_vector (tmp_vec, ret_vec, this->width);
       } while (iterator > 0);
 
-      delete[] tmp_vec;
       return ret_vec;
     }
 
@@ -506,7 +504,7 @@ class MyMatrix {
       for (int i = 0; i < width; ++i)
       {
         def = exemplary[i] - after_test[i];
-        val = abs (def);
+        val = fabs (def);
         error_counter = error_counter + val;
       }
       error_counter = error_counter / width;
@@ -522,7 +520,7 @@ class MyMatrix {
       for (int i = 0; i < width; ++i)
       {
         def = exemplary[i] - after_test[i];
-        val = abs (def);
+        val = fabs (def);
         error_counter = error_counter + val;
       }
       error_counter = error_counter / width;
@@ -538,8 +536,8 @@ class MyMatrix {
       for (int i = 0; i < width; ++i)
       {
         def = exemplary[i] - after_test[i];
-        val = abs (def);
-        error_counter = error_counter + (val / abs (exemplary[i]));
+        val = fabs (def);
+        error_counter = error_counter + (val / fabs (exemplary[i]));
       }
       error_counter = error_counter / width;
       return error_counter;

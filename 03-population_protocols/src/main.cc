@@ -28,11 +28,11 @@
 #define DEFAULT_JACOBI_EPSILON        0.00000000000001 // 10^-14
 #define DEFAULT_SEIDEL_ITERATIONS     1000 //  1k
 #define DEFAULT_SEIDEL_EPSILON        0.00000000000001 // 10^-14
-#define DEFUALT_MIN_ITERATIONS        1
-#define DEFAULT_MAX_ITERATIONS        1000
-#define DEFAULT_ITERATIONS_STEP       10
-#define DEFAULT_MIN_AGENT_COUNT       3
-#define DEFAULT_MAX_AGENTS_COUNT      8
+#define DEFAULT_MIN_ITERATIONS        1
+#define DEFAULT_MAX_ITERATIONS        10
+#define DEFAULT_ITERATIONS_STEP       1
+#define DEFAULT_MIN_AGENT_COUNT       10
+#define DEFAULT_MAX_AGENTS_COUNT      10
 #define DEFAULT_VALIDATION_AGENTS_COUNT 5
 
 using namespace std;
@@ -174,7 +174,7 @@ void run_iterative_methods_only ()
     clock_t end_montecarlo_time = clock ();
     double  diff_montecarlo_time  = (double)(end_montecarlo_time - begin_montecarlo_time) / CLOCKS_PER_SEC;
 
-    for (int iterations = DEFUALT_MIN_ITERATIONS; iterations <= DEFAULT_MAX_ITERATIONS; iterations += DEFAULT_ITERATIONS_STEP)
+    for (int iterations = DEFAULT_MIN_ITERATIONS; iterations <= DEFAULT_MAX_ITERATIONS; iterations += DEFAULT_ITERATIONS_STEP)
     {
       result = new Result ();
       // Run jacobi iterative method
@@ -192,8 +192,8 @@ void run_iterative_methods_only ()
       // Set error vector with received values
       result->agent_count  = n;
       result->iterations   = iterations;
-      result->abs_err_gsit = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_seidel_iterative, size);
-      result->abs_err_jit  = matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_jacobi_iterative, size);
+      result->abs_err_gsit = (double)matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_seidel_iterative, size);
+      result->abs_err_jit  = (double)matrix->count_abs_error (monte_carlo->get_result_vector (), ret_vec_jacobi_iterative, size);
       result->time_gsit = diff_seidel_time;
       result->time_jit  = diff_jacobi_time;
       result->time_mc   = diff_montecarlo_time;
@@ -322,9 +322,9 @@ run_montecarlo_validation ()
 
 int main (int argc, char *argv[])
 {
-  run_all_methods ();
-  run_precision_methods_only ();
+  // run_all_methods ();
+  // run_precision_methods_only ();
   run_iterative_methods_only ();
-  //run_montecarlo_validation ();
+  // run_montecarlo_validation ();
   return EXIT_SUCCESS;
 }
