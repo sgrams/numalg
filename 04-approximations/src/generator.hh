@@ -14,7 +14,6 @@
 #include <algorithm>
 #include <iostream>
 #include "util.hh"
-#include "protocol.hh"
 #include "matrix.hh"
 #include "probability.hh"
 

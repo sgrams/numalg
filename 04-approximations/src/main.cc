@@ -12,7 +12,6 @@
 #include <cmath>
 
 #include "util.hh"
-#include "protocol.hh"
 #include "matrix.hh"
 #include "sparsematrix.hh"
 #include "generator.hh"
@@ -128,9 +127,9 @@ run_measurement (types_t type, int min_agents_count, int max_agents_count)
     }
 
     // begin calculations
-    clock_t begin_calculation_time;
-    clock_t end_calculation_time;
-    double *ret_vec;
+    clock_t begin_calculation_time = 0;
+    clock_t end_calculation_time = 0;
+    double *ret_vec = NULL;
     switch (type)
     {
       case G:

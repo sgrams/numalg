@@ -5,7 +5,7 @@
 #  Stanisław Grams
 ##
 CC=g++
-CXXFLAGS=-Wall -Werror -pedantic -std=c++0x $(pkg-config --cflags eigen3)
+CXXFLAGS=-Wall -Werror -pedantic -std=c++0x -g $(pkg-config --cflags eigen3) -O2
 LDFLAGS=-pthread $(pkg-config --cflags eigen3)
 
 SRCDIR=src

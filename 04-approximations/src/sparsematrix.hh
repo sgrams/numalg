@@ -119,7 +119,7 @@ class MySparseMatrix {
           }          
           for (int j = i + 1; j < this->width; ++j)
           {
-            ret_vec.coeffRef (i) -= (pre_vec.coeffRef(j) * A->coeffRef(i, j));
+            ret_vec.coeffRef (i) -= (ret_vec.coeffRef(j) * A->coeffRef(i, j));
           }
           if (ret_vec.coeffRef (i) != 0) {
             ret_vec.coeffRef (i) /= A->coeffRef (i, i);

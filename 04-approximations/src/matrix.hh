@@ -342,7 +342,7 @@ class MyMatrix {
           }
           for (int j = i+1; j < this->width; ++j)
           {
-            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
+            ret_vec[i] = ret_vec[i] - (A[i][j] * ret_vec[j]);
           }
           ret_vec[i] = ret_vec[i] / A[i][i];
         }
@@ -457,7 +457,7 @@ class MyMatrix {
           }
           for (int j = i+1; j < this->width; ++j)
           {
-            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
+            ret_vec[i] = ret_vec[i] - (A[i][j] * ret_vec[j]);
           }
           ret_vec[i] = ret_vec[i] / A[i][i];
         }
