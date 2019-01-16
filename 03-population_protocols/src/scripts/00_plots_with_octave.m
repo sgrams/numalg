@@ -129,7 +129,7 @@ plot(iteration_count, abs_results, "linewidth", 2, "b");
 xlim([10 10000]);
 ylabel ("error");
 xlabel ("iterations count");
-title  ("Monte Carlo iterations for N=5, abs error to PGS method");
+title  ("Monte Carlo iterations for N=5, error to PGS method");
 legend ("N=5, abs error to PGS method", "location","north");
 
 print -dpng ../../report/plots/08_abs_gauss_and_montecarlo_iterations_rows.png;
