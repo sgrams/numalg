@@ -485,6 +485,20 @@ class MyMatrix {
     }
 
     T
+    count_error (std::vector<T> exemplary, T* after_test, int width)
+    {
+      T error_counter = 0;
+      T def = 0;
+      for (int i = 0; i < width; ++i)
+      {
+        def = exemplary[i] - after_test[i];
+        error_counter = error_counter + def;
+      }
+      error_counter = error_counter / width;
+      return error_counter;
+    }
+
+    T
     count_abs_error (T* exemplary, T* after_test, int width)
     {
       T error_counter = 0;
