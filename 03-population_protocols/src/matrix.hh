@@ -376,15 +376,16 @@ class MyMatrix {
         for (int i = 0; i < this->width; ++i)
         {
           ret_vec[i] = b[i];
-          for (int j = 0; j < this->width; ++j)
+          for (int j = 0; j < i; ++j)
           {
-            if (i != j) {
-              ret_vec[i] -= tmp_vec[j] * A[i][j];
-            }            
+            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
           }
-          ret_vec[i] /= A[i][i];
+          for (int j = i+1; j < this->width; ++j)
+          {
+            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
+          }
+          ret_vec[i] = ret_vec[i] / A[i][i];
         }
-
         result = vector_norm (ret_vec, tmp_vec, this->width);
         copy_vector (tmp_vec, ret_vec, this->width);
       } while (result > eps);
@@ -414,17 +415,18 @@ class MyMatrix {
         for (int i = 0; i < this->width; ++i)
         {
           ret_vec[i] = b[i];
-          for (int j = 0; j < this->width; ++j)
+          for (int j = 0; j < i; ++j)
           {
-            if (i != j) {
-              ret_vec[i] -= tmp_vec[j] * A[i][j];
-            }            
+            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
           }
-          ret_vec[i] /= A[i][i];
+          for (int j = i+1; j < this->width; ++j)
+          {
+            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
+          }
+          ret_vec[i] = ret_vec[i] / A[i][i];
         }
-
-        iterator--;
         copy_vector (tmp_vec, ret_vec, this->width);
+        iterator--;
       } while (iterator > 0);
 
       delete[] tmp_vec;
