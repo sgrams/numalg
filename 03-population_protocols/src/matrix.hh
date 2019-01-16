@@ -471,7 +471,7 @@ class MyMatrix {
     }
 
     T
-    count_abs_error (T* exemplary, T* after_test, int width)
+    count_error (T* exemplary, T* after_test, int width)
     {
       T error_counter = 0;
       T def = 0;
