@@ -324,9 +324,6 @@ class MyMatrix {
 
       T  *ret_vec = new T[this->width];
       T  *tmp_vec = new T[this->width];
-      T  *pre_vec = new T[this->width];
-
-      T   tmp;
 
       for (int i = 0; i < this->width; ++i)
       {
@@ -335,29 +332,26 @@ class MyMatrix {
       }
 
       double result = 0.0;
-
       do {
         for (int i = 0; i < this->width; ++i)
         {
-          copy_vector (tmp_vec, ret_vec, this->width);
-          tmp = 0;
+          T delta = 0;
           for (int j = 0; j < i; ++j)
           {
-            tmp += (A[i][j] * ret_vec[j]);
+            delta += (A[i][j] * ret_vec[j]);
           }
           for (int j = i+1; j < this->width; ++j)
           {
-            tmp += (A[i][j] * tmp_vec[j]);
+            delta += (A[i][j] * tmp_vec[j]);
           }
-          ret_vec[i] = (b[i] - tmp) / A[i][i];
+          ret_vec[i] = (b[i] - delta) / A[i][i];
         }
 
-        result = vector_norm (ret_vec, pre_vec, this->width);
-        copy_vector (pre_vec, ret_vec, this->width);
+        result = vector_norm (ret_vec, tmp_vec, this->width);
+        copy_vector (tmp_vec, ret_vec, this->width);
       } while (result > eps);
 
       delete[] tmp_vec;
-      delete[] pre_vec;
       return ret_vec;
     }
 
@@ -441,12 +435,8 @@ class MyMatrix {
       T **A = this->matrix;
       T  *b = this->vector;
 
-      T  ret_vec[this->width];
-      T  tmp_vec[this->width];
-
-      T *out_vec = new T[this->width];
-
-      T   tmp;
+      T  *ret_vec = new T[this->width];
+      T  *tmp_vec = new T[this->width];
 
       for (int i = 0; i < this->width; ++i)
       {
@@ -455,27 +445,28 @@ class MyMatrix {
       }
 
       int iterator = iterations;
-
+      // copy_vector (tmp_vec, b, this->width);
       do {
         for (int i = 0; i < this->width; ++i)
         {
-          tmp = 0;
-          tmp_vec = ret_vec;
+          T delta = 0;
           for (int j = 0; j < i; ++j)
           {
-            tmp += (A[i][j] * ret_vec[j]);
+            delta += (A[i][j] * ret_vec[j]);
           }
           for (int j = i+1; j < this->width; ++j)
           {
-            tmp += (A[i][j] * tmp_vec[j]);
+            delta += (A[i][j] * tmp_vec[j]);
           }
-          ret_vec[i] = (b[i] - tmp) / A[i][i];
+          ret_vec[i] = (b[i] - delta) / A[i][i];
         }
+
         iterator--;
+        copy_vector (tmp_vec, ret_vec, this->width);
       } while (iterator > 0);
 
-      copy_vector (out_vec, ret_vec);
-      return out_vec;
+      delete[] tmp_vec;
+      return ret_vec;
     }
 
     T
