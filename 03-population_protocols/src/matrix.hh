@@ -438,6 +438,8 @@ class MyMatrix {
       T  *ret_vec = new T[this->width];
       T  *tmp_vec = new T[this->width];
 
+      T   tmp;
+
       for (int i = 0; i < this->width; ++i)
       {
         ret_vec[i] = 0;
@@ -449,18 +451,18 @@ class MyMatrix {
       do {
         for (int i = 0; i < this->width; ++i)
         {
-          ret_vec[i] = b[i];
+          copy_vector (tmp_vec, ret_vec, this->width);
+          tmp = 0;
           for (int j = 0; j < i; ++j)
           {
-            ret_vec[i] = ret_vec[i] - (A[i][j] * tmp_vec[j]);
+            tmp += (A[i][j] * ret_vec[j]);
           }
           for (int j = i+1; j < this->width; ++j)
           {
-            ret_vec[i] = ret_vec[i] - (A[i][j] * ret_vec[j]);
+            tmp += (A[i][j] * tmp_vec[j]);
           }
-          ret_vec[i] = ret_vec[i] / A[i][i];
+          ret_vec[i] = (b[i] - tmp) / A[i][i];
         }
-        copy_vector (tmp_vec, ret_vec, this->width);
         iterator--;
       } while (iterator > 0);
 
