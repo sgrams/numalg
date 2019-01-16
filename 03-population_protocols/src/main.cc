@@ -20,7 +20,7 @@
 #define DEFAULT_PRECISIONS_CSV_FILENAME "precisions.csv"
 #define DEFAULT_MONTECARLO_CSV_FILENAME "montecarlo.csv"
 
-#define DEFAULT_MONTECARLO_ITERATIONS 10000 // 10k
+#define DEFAULT_MONTECARLO_ITERATIONS 1000 // 10k
 #define DEFAULT_MIN_VALIDATION_ITERATIONS 10
 #define DEFAULT_MAX_VALIDATION_ITERATIONS 10000 // 1mln
 #define DEFAULT_VALIDATION_ITERATIONS_STEP 10
@@ -30,7 +30,7 @@
 #define DEFAULT_SEIDEL_EPSILON        0.00000000000001 // 10^-14
 #define DEFUALT_MIN_ITERATIONS        1
 #define DEFAULT_MAX_ITERATIONS        1000
-#define DEFAULT_ITERATIONS_STEP       10
+#define DEFAULT_ITERATIONS_STEP       1
 #define DEFAULT_MIN_AGENT_COUNT       3
 #define DEFAULT_MAX_AGENTS_COUNT      20
 #define DEFAULT_VALIDATION_AGENTS_COUNT 5
@@ -155,6 +155,7 @@ void run_iterative_methods_only ()
   MyMatrix<double> *matrix;
   MonteCarlo *monte_carlo;
   Generator  *generator;
+  Result     *result;
   std::vector<Result> iterative_vec;
 
   int size = 0;
@@ -167,7 +168,6 @@ void run_iterative_methods_only ()
     generator   = new Generator  (n);
     matrix      = new MyMatrix<double>(generator->get_cases_count (), generator->get_matrix (), generator->get_matrix_vector ());
     size        = (n + 1) * (n + 2) / 2;
-    
     // Run MonteCarlo iterative method
     clock_t begin_montecarlo_time = clock ();
     monte_carlo = new MonteCarlo (DEFAULT_MONTECARLO_ITERATIONS, n);
@@ -176,7 +176,7 @@ void run_iterative_methods_only ()
 
     for (int iterations = DEFUALT_MIN_ITERATIONS; iterations <= DEFAULT_MAX_ITERATIONS; iterations += DEFAULT_ITERATIONS_STEP)
     {
-      Result *result = new Result ();
+      result = new Result ();
       // Run jacobi iterative method
       clock_t begin_jacobi_time = clock ();
       ret_vec_jacobi_iterative  = matrix->jacobi_iterative (iterations);
@@ -200,6 +200,7 @@ void run_iterative_methods_only ()
       iterative_vec.push_back (*result);
       delete[] ret_vec_seidel_iterative;
       delete[] ret_vec_jacobi_iterative;
+      delete result;
     }
     delete matrix;
     delete generator;
@@ -266,6 +267,7 @@ void run_precision_methods_only ()
       approx_vec.push_back (*result);
       delete[] ret_vec_seidel;
       delete[] ret_vec_jacobi;
+      delete result;
     }
     delete matrix;
     delete generator;
@@ -320,9 +322,9 @@ run_montecarlo_validation ()
 
 int main (int argc, char *argv[])
 {
-  //run_all_methods ();
-  run_precision_methods_only ();
+  // run_all_methods ();
+  // run_precision_methods_only ();
   run_iterative_methods_only ();
-  //run_montecarlo_validation ();
+  // run_montecarlo_validation ();
   return EXIT_SUCCESS;
 }

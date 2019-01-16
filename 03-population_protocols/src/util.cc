@@ -65,6 +65,7 @@ Util {
   {
     std::ofstream output_file;
     output_file.open (filename);
+
     for (auto i: result_vec)
     {
       output_file.precision (18);
@@ -74,7 +75,6 @@ Util {
 
       output_file << i.abs_err_gsit << ",";
       output_file << i.abs_err_jit << ",";
-
 
       output_file << i.time_gsit << ",";
       output_file << i.time_jit << ",";
