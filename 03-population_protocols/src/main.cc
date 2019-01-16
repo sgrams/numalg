@@ -20,7 +20,7 @@
 #define DEFAULT_PRECISIONS_CSV_FILENAME "precisions.csv"
 #define DEFAULT_MONTECARLO_CSV_FILENAME "montecarlo.csv"
 
-#define DEFAULT_MONTECARLO_ITERATIONS 1000 // 10k
+#define DEFAULT_MONTECARLO_ITERATIONS 10000// 10k
 #define DEFAULT_MIN_VALIDATION_ITERATIONS 10
 #define DEFAULT_MAX_VALIDATION_ITERATIONS 10000 // 1mln
 #define DEFAULT_VALIDATION_ITERATIONS_STEP 10
@@ -30,7 +30,7 @@
 #define DEFAULT_SEIDEL_EPSILON        0.00000000000001 // 10^-14
 #define DEFUALT_MIN_ITERATIONS        1
 #define DEFAULT_MAX_ITERATIONS        1000
-#define DEFAULT_ITERATIONS_STEP       1
+#define DEFAULT_ITERATIONS_STEP       10
 #define DEFAULT_MIN_AGENT_COUNT       3
 #define DEFAULT_MAX_AGENTS_COUNT      20
 #define DEFAULT_VALIDATION_AGENTS_COUNT 5
@@ -322,9 +322,9 @@ run_montecarlo_validation ()
 
 int main (int argc, char *argv[])
 {
-  // run_all_methods ();
-  // run_precision_methods_only ();
+  run_all_methods ();
+  run_precision_methods_only ();
   run_iterative_methods_only ();
-  // run_montecarlo_validation ();
+  //run_montecarlo_validation ();
   return EXIT_SUCCESS;
 }
