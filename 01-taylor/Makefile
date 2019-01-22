@@ -4,19 +4,28 @@
 #  Makefile
 #  Stanisław Grams
 ##
-
 CC=gcc
-CFLAGS=$(shell pkg-config --cflags glib-2.0) -pthread -Wall -Werror -std=gnu99
+CFLAGS=$(shell pkg-config --cflags glib-2.0) -Wall -Werror -pedantic -std=gnu11
 LDFLAGS=$(shell pkg-config --libs glib-2.0) -lquadmath -pthread
 
-taylor:	main.o taylor.o util.o
-main.o:	main.c
-util.o: util.c
-taylor.o: taylor.c
+SRCDIR=src
+OUTNAME=taylor
 
-clean: 
-	rm -f taylor main.o taylor.o util.o
-run: taylor
-	./taylor
+# main targets
+all:
+	+$(MAKE) -C $(SRCDIR)
+	+$(CC) -o $(OUTNAME) $(SRCDIR)/*.o $(CFLAGS) $(LDFLAGS)
+
+run:
+	+./$(OUTNAME)
+
+# other procedures
+.PHONY:
+	clean
+clean:
+	+rm -f $(OUTNAME)
+	+$(MAKE) -C $(SRCDIR) clean
 rmobj:
-	rm -f main.o taylor.o util.o
+	+$(MAKE) -C $(SRCDIR) rmobj
+rmcsv:
+	+rm *.csv
